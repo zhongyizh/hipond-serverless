@@ -1,0 +1,135 @@
+/* pages/post/new-post-listing/new-post-listing.wxss */
+.new-listing-page-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: stretch;
+	padding: 0rpx 8rpx 0rpx 8rpx;
+}
+
+.upload-wrapper {
+	padding-top: 25rpx;
+	padding-left: 25rpx;
+	width: 300%;
+}
+
+.upload-component {
+	--td-upload-add-bg-color: #EEF7F6;
+	--td-upload-add-color: #A4C5C2;
+	--td-upload-add-icon-font-size: 42px;
+	--td-upload-radius: 25rpx;
+}
+
+.form-title-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-top: 8rpx;
+	margin-right: 4%;
+	margin-left: 4%;
+	height: 96rpx;
+}
+
+.title-input-wrapper {
+	width: 62%;
+	border-bottom: 1rpx solid #EEEEEE;
+}
+
+.title-input {
+	padding-left: 16rpx;
+	margin-top: 30rpx;
+}
+
+.money-input-wrapper {
+	display: flex;
+	flex-direction: row;
+	width: 34%;
+	background: #EEF7F6;
+	border-radius: 25rpx;
+}
+
+.money-sign {
+	margin-left: 24rpx;
+	margin-top: 25rpx;
+}
+
+.money-input {
+	margin-left: 28rpx;
+	margin-top: 30rpx;
+}
+
+.listing-options-container {
+	display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 30rpx 4% 55rpx 4%;
+	height: 40rpx;
+}
+
+.condition-dropdown, .expiration-dropdown {
+  height: 60rpx;
+  width: 47.5%;
+  border: 1px solid #00B1A2;
+  background: rgba(238, 247, 246, 1);
+  border-radius: 30rpx;
+}
+
+.dropdown-label {
+  width: 100%;
+  height: 100%;
+  color: rgba(89, 149, 150, 1);
+  font-size: small;
+  font-weight: 400;
+  line-height: 60rpx;
+  text-align: center;
+}
+
+.action-sheet-cancel {
+  padding-bottom: 60rpx;
+}
+
+.body-text-container{
+	display: flex;
+	flex-direction: column;
+	margin-right: 4%;
+	margin-left: 4%;
+	height: 500rpx;
+	border: 1px solid #00B1A2;
+	border-radius: 25rpx;
+	padding: 8rpx;
+}
+
+.body-text-textarea {
+	height: 500rpx;
+}
+
+.location-container {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	justify-content: flex-end;
+}
+
+.location-button {
+  appearance: none;
+  margin: 24rpx 4% 0rpx 0rpx !important;
+	height: 50rpx !important;
+	width: 180rpx !important;
+	padding: 7rpx;
+  font-size: small;
+  font-weight: 350;
+	color: #A4C5C2 !important;
+	border: 1px solid #DAECEB !important;
+	border-radius: 25rpx;
+	background: none;
+}
+
+.submit-button {
+	border-radius: 50rpx;
+	background-color: #85e4dc;	
+	color: white;
+	margin-top: 160rpx;
+	font-size: 38rpx;
+	font-weight: 700;
+	width: 42%;
+}

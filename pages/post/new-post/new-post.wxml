@@ -1,0 +1,13 @@
+<!--pages/post/new-post/new-post.wxml-->
+<t-navbar left-arrow />
+<view class="new-post-header">
+    <view style="flex-grow: 1"></view> 
+    <button class="new-post-button" bindtap="onUpload">发布</button>
+</view>
+<view class="new-post-textarea-container">
+    <t-textarea class="new-post-textarea" indicator bordered maxlength="200" placeholder="请输入描述..." disableDefaultPadding="{{true}}" bind:change="textChange"/>
+</view>
+<view class="upload-wrapper">
+  <t-upload media-type="{{['image']}}" files="{{fileList}}" gridConfig="{{gridConfig}}" max="9"
+  	bind:remove="handleRemove" bind:add="handleAdd"/>
+</view>

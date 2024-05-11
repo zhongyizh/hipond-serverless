@@ -1,0 +1,12 @@
+<!--custom-tab-bar/index.wxml-->
+<cover-view class="tab-bar">
+	<cover-view bindtap="switchTab" class="{{item.isSpecial ? 'tab-bar-item-center' : 'tab-bar-item'}}" data-index="{{index}}" data-url="{{item.pagePath}}" wx:for="{{list}}" wx:key="index">
+		<cover-view class="tab-bar-public" wx:if="{{item.isSpecial}}">
+			<cover-view class="tab-bar-public-background">
+				<cover-image class="tab-bar-public-icon" src="{{item.iconPath}}"></cover-image>
+			</cover-view>
+		</cover-view>
+		<cover-image class="tab-bar-item-image" src="{{selected === index ? item.selectedIconPath : item.iconPath}}" wx:else></cover-image>
+		<cover-view class="tab-bar-item-view" style="color: {{selected === index ? selectedColor:color}}; font-weight: {{selected === index ? 700 : 400}}"> {{item.text}}</cover-view>
+	</cover-view>
+</cover-view>

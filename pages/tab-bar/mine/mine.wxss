@@ -1,0 +1,271 @@
+/* pages/mine.wxss */
+.user-background {
+	left: 0;
+	position: absolute;
+	top: 0;
+	width: 100%;
+}
+
+.user-background .banner {
+	animation: fadeIn .6s ease;
+	height: 650rpx;
+	width: 100%;
+}
+
+.user-background .gradient {
+	background-image: linear-gradient(180deg,transparent,rgba(0,0,0,.6));
+	bottom: 0;
+	height: 650rpx;
+	left: 0;
+	position: absolute;
+	width: 100%;
+}
+
+.own-header {
+	top: 132rpx;
+	flex-flow: column nowrap;
+	left: 12.5rpx;
+	position: absolute;
+}
+
+.header-top,.own-header {
+	display: flex;
+}
+
+.header-top {
+	flex-direction: column;
+	height: 280rpx;
+	width: 720rpx;
+	padding-left: 24rpx;
+}
+
+.own-header-img,.own-header-img-div {
+	border-radius: 280rpx;
+	height: 230rpx;
+	width: 230rpx;
+}
+
+.header-middle {
+	color: #fff;
+	display: flex;
+	font-size: 40rpx;
+	font-weight: 700;
+	margin-top: 32rpx;
+	margin-left: 12rpx;
+	letter-spacing: 4rpx;
+}
+
+.verification_icon {
+	width: 30px;
+	height: 30px;
+	vertical-align: -20%;
+	margin-left: 18rpx;
+}
+
+.name-text {
+	margin-left: 4rpx;
+	max-width: 550rpx;
+	font-size: 40rpx;
+}
+
+.header-location,.name-text {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.header-location {
+	color: #fff;
+	font-size: 32rpx;
+	font-weight: 300;
+	margin-top: 20rpx;
+	width: 600rpx;
+	margin-left: 12rpx;
+	letter-spacing: 2.6rpx;
+}
+
+.header-bottom {
+	align-items: flex-start;
+	justify-content: flex-start;
+	width: 100%;
+	display: flex;
+	height: 100rpx;
+}
+
+.header-right-box {
+	bottom: 30rpx;
+	position: absolute;
+	right: 60rpx;
+}
+
+.header-box,.header-right-box {
+	align-items: center;
+	display: flex;
+}
+
+.header-box {
+	background-color: rgba(0,0,0,.3);
+	border: 1px solid #fff;
+	padding: 3.5rpx;
+	border-radius: 500rpx;
+	height: 50rpx;
+	justify-content: center;
+}
+
+.header-right {
+	color: white;
+	font-size: 22rpx;
+	font-weight: 400;
+	width: 160rpx;
+	letter-spacing: 2.2rpx;
+}
+
+.tools {
+	background: var(--main-bg-color);
+	border-radius: 30rpx 30rpx 0 0;
+	left: 0;
+	position: absolute;
+	top: 620rpx;
+	width: 100%;
+}
+
+.nav {
+	background: #fff;
+	border-radius: 30rpx 30rpx 0 0;
+	display: flex;
+	font-size: 30rpx;
+	height: 90rpx;
+	justify-content: space-evenly;
+	line-height: 90rpx;
+	width: 100%;
+}
+
+.tag-box {
+	padding: 0 30rpx;
+}
+
+.tag-box .active {
+	color: #85E4DC !important;
+	font-weight: 700 !important;
+	position: relative;
+}
+
+.tag-box .active:after {
+	background: #85E4DC;
+	border-radius: 6rpx;
+	bottom: 10rpx;
+	content: "";
+	display: block;
+	height: 6rpx;
+	left: 50%;
+	position: absolute;
+	transform: translateX(-50%);
+	transition: all .4s ease;
+	width: 16rpx;
+}
+
+.tags-item-text {
+	color: #A4C5C2;
+	font-size: 30rpx;
+	font-weight: 450;
+}
+
+.tags-item-count {
+	margin-left: 6rpx;
+}
+
+.body-box {
+	margin: 0 auto 100px;
+	width: 100%;
+	height: 100%;
+	background-color: var(--main-bg-color);
+	--card-border-radius: 3%;
+}
+
+.scroll-view-border {
+	margin-top: 4px;
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+.scroll-view {
+	padding-top: 1%;
+}
+
+.grid-box {
+  border-radius: var(--card-border-radius);
+  background-color: white;
+}
+
+.grid-box image {
+	width: 100%;
+	border-radius: var(--card-border-radius) var(--card-border-radius) 0% 0%;
+}
+
+.content-box {
+  margin: 0%;
+  padding-top: 0px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-bottom: 8px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.content-title-box {
+	/* position: relative; */
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2; 
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	line-height: 1.5em; 
+	max-height: 3em; 
+	/* padding-right: 39px; */
+}
+
+.selling-image-container {
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  height: 38vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.selling-image {
+  width: 250px;
+  height: 250px;
+}
+
+.sellingtext {
+  padding-top: 8px;
+  font-size: 16px;
+  color: #A4C5C2;
+}
+
+.saved-image-container {
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  height: 38vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.saved-image {
+  padding-top: 25px;
+  width: 250px;
+  height: 250px;
+}
+
+.savedtext {
+  padding-top: 8px;
+  font-size: 16px;
+  color: #A4C5C2;
+}
+
+.savedtext2 {
+  padding-top: 4px;
+  font-size: 16px;
+  color: #A4C5C2;
+}

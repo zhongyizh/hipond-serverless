@@ -1,0 +1,54 @@
+<!--pages/login/login.wxml-->
+<t-navbar left-arrow />
+<view class="content">
+	<!-- 头像 -->
+	<view class="header">
+		<button class="header-image" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+			<image class="avatar" src="{{avatarUrl}}" mode="scaleToFill"></image>
+		</button>
+	</view>
+	<view class="verification" hidden="{{isVerified}}">
+		<navigator url="/pages/verification/verification">
+			<text>点击进行学生认证</text>
+		</navigator>
+	</view>
+	<view class="verified_text" hidden="{{!isVerified}}">
+		<text>已完成学生认证</text>
+		<image class="verification_icon" src="/image/student_verification_icon.png"></image>
+	</view>
+	<view class="info">
+		<view class="info-title">
+			<text>*昵称</text>
+		</view>
+		<input bindinput="nicknameChange" class="info-text" placeholder="请输入昵称" type="nickname" value="{{nickname}}"></input>
+	</view>
+	<view class="info-line"></view>
+	<view class="info">
+		<view class="info-title">
+			<text>邮编</text>
+		</view>
+		<input bindinput="zipcodeChange" class="info-text" placeholder="请输入常住地邮编" type="text" value="{{zipcode}}"></input>
+	</view>
+	<view class="info-line"></view>
+	<view class="contact-header"><text>*联系方式</text></view>
+	<checkbox-group bindchange="checkboxChange">
+		<view class="info">
+			<view class="info-title">
+				<text>微信号</text>
+			</view>
+			<input bindinput="wechatIdChange" class="info-text" placeholder="请输入微信号" type="text" value="{{wechatId}}"></input>
+			<checkbox value="cb-wechat-id" class="cb" checked="{{isWechatChecked}}"/>
+		</view>
+		<view class="info-line"></view>
+		<view class="info">
+			<view class="info-title">
+				<text>Email</text>
+			</view>
+			<input bindinput="emailChange" class="info-text" placeholder="请输入邮箱地址" type="text" value="{{emailAddress}}"></input>
+			<checkbox value="cb-email" class="cb" checked="{{isEmailChecked}}"/>
+		</view>
+		<view class="info-line"></view>
+		<view class="bottom-info"><text>* 请勾选至少一项联系方式，有意向的买家将获取此联系方式并联系你进行交易。</text></view>
+	</checkbox-group>
+	<button bindtap="saveUserInfo" class="commit" disabled="{{isDisabled}}">保存</button>
+</view>

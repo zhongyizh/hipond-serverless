@@ -1,0 +1,20 @@
+<!--pages/verification/verification.wxml-->
+<t-navbar left-arrow />
+<view class="content">
+	<view class="verification-header">
+		<image class="background-image" src="/image/verification_background.png"></image>
+	</view>
+	<view class="verification-text">
+		<text>请输入你的.edu邮箱</text>
+	</view>
+	<view class="email-info">
+		<input bindinput="emailChange" class="email-input" type="text" value="{{email}}"></input>
+	</view>
+	<view class="notice-text">
+		<text>{{notice}}</text>
+		<icon class="success-icon" type="success" size="12" color="#85E4DC" hidden="{{isSuccessHidden}}"/>
+	</view>
+	<view class="confirm-view">
+		<button class="confirm-button" width="240" height="90 rpx" bind:tap="emailConfirm" disabled="{{!isSuccessHidden}}">确认</button>
+	</view>
+</view>

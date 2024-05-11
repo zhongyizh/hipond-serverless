@@ -1,0 +1,59 @@
+<!--pages/post/new-post-listing/new-post-listing.wxml-->
+<t-navbar left-arrow />
+<view class="new-listing-page-container">
+	<scroll-view class="upload-wrapper" scroll-x enable-flex style="flex-direction: row;">
+		<t-upload class="upload-component" media-type="{{['image']}}" files="{{fileList}}" gridConfig="{{gridConfig}}" max="9"
+			bind:remove="handleRemove" bind:add="handleAdd"/>
+	</scroll-view>
+	<view class="form-title-container">
+		<view class="title-input-wrapper">
+			<input class="title-input" 
+							id="title"
+							placeholder="写标题更容易成功卖出哦"
+							placeholder-style="color: #BBDAD7; font-size: 34rpx;"
+							bindinput="inputText"
+			/>
+		</view>
+		<view class="money-input-wrapper">
+			<view class="money-sign">
+				<text style="color: #00B1A2; font-size: 32rpx;">$</text>
+			</view>
+			<input class="money-input" 
+							id="price"
+							placeholder="默认私聊" 
+							placeholder-style="color: #A4C5C2; font-size: 34rpx;"
+							bindinput="inputText">
+			</input>
+		</view>
+	</view>
+	<view class="listing-options-container">
+		<view class="condition-dropdown" bindtap="actionSheetTap">
+			<view class="dropdown-label">{{condition}}</view>
+		</view>
+		<action-sheet hidden="{{isActionSheetHidden}}" bindchange="actionSheetChange">
+			<block wx:for="{{actionSheetItems}}" wx:key="item">
+				<action-sheet-item bindtap="actionSheetItemTap" data-clicked-Item="{{item}}">{{item}}</action-sheet-item>  
+			</block>
+			<action-sheet-cancel>取消</action-sheet-cancel>
+			<view class="vertical-space" style="padding-bottom: 20rpx;"></view>
+		</action-sheet>
+		<!-- TODO: 急售 -->
+		<!-- <picker class="expiration-dropdown" mode="date" value="{{ddl}}" start="{{ddl}}" end="2050-12-31" bindchange="bindDateChange" bindcancel="">
+			<view class="dropdown-label">{{displayDDL}}</view>
+		</picker> -->
+	</view>
+	<view class="body-text-container">
+		<t-textarea class="body-text-textarea" 
+								id="body"
+								maxlength="200"
+								placeholder="留下更详细的交易细节和物品信息…" 
+								placeholder-style="color: #DAECEB; font-size: 28rpx;"
+								bind:change="inputText"
+		/>
+	</view>
+	<!-- TODO: 添加位置 -->
+	<!-- <view class="location-container">
+		<button class="location-button mini-btn" plain="{{true}}">添加位置</button>
+	</view> -->
+	<button class="submit-button" bind:tap="upload">发 布</button>
+</view>

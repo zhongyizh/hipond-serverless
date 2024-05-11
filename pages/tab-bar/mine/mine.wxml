@@ -1,0 +1,58 @@
+<!--pages/mine.wxml-->
+<view class="user-background">
+	<image class="banner" mode="aspectFill" src="/image/default_user_banner.jpg"></image>
+	<view class="gradient"/>
+	<view class="own-header">
+		<view class="header-top">
+			<navigator class="own-header-img-div" url="/pages/login/login">
+				<image class="own-header-img" lazyLoad="true" mode="aspectFill" src="{{userInfo.avatar_url ? userInfo.avatar_url : '/image/avatar_icon_default_show.png'}}"></image>
+			</navigator>
+			<view class="header-middle">
+				<text class="name-text">{{userInfo.nickname ? userInfo.nickname : '用户未登录'}}</text>
+				<image class="verification_icon" src="/image/student_verification_icon.png" hidden="{{!is_verified}}"></image>
+			</view>
+			<view class="header-location">我的常住地：{{userInfo.postal_code ? userInfo.postal_code : '未知'}}</view>
+		</view>
+			<view class="header-bottom">
+				<view class="header-right-box">
+					<navigator class="header-box header-right" url="/pages/login/login"> 编辑资料 </navigator>
+				</view>
+			</view>
+	</view>
+</view>
+<view class="tools">
+	<t-sticky offset-top="55">
+		<view class="nav">
+			<view bindtap="select" class="tag-box" wx:for="{{tags}}" wx:key="index">
+				<view class="tags-item-text {{currentTagIndex == index ? 'active' : ''}}" data-index="{{index}}"> {{item.text}}
+					<text class="tags-item-count" data-index="{{index}}"> {{item.count}} </text>
+				</view>
+			</view>
+		</view>
+	</t-sticky>
+	<view class="body-box">
+		<view class="scroll-view-border" wx:if="{{currentTagIndex == 0}}" >
+			<!-- 用于测试Sticky吸顶效果 -->
+			<!-- <scroll-view class="scroll-view" type="custom" scroll-y="true" style="height: 950px"> -->
+			<scroll-view class="scroll-view" type="custom" scroll-y="true" style="min-height: 700rpx">
+				<grid-view type="masonry" cross-axis-count="2" cross-axis-gap="4" main-axis-gap="5">
+					<view wx:for="{{posts}}" wx:key="_id" class="grid-box" bindtap="navigateToDetail" data-index="{{index}}">
+						<image src="{{item.image_urls[0]}}" mode="widthFix"></image>
+						<view class="content-box">
+							<view class="content-title-box"> {{item.title}}</view>
+						</view>
+					</view>
+				</grid-view>
+			</scroll-view>
+		</view>
+		<view wx:elif="{{currentTagIndex == 1}}" class="selling-image-container">
+			<image src="/image/button_post_2nd.png" class="selling-image"></image>
+			<text class="sellingtext">你还没有发布任何物品在售哦</text>
+		</view>
+		<view wx:elif="{{currentTagIndex == 2}}" class="saved-image-container">
+			<image src="/image/button_post_life.png" class="saved-image"></image>
+			<text class="savedtext">你还没有收藏任何帖子哦</text>
+			<text class="savedtext2">快去首页逛一逛吧</text>
+		</view>
+	</view>
+</view>

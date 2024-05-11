@@ -1,0 +1,72 @@
+/* pages/verification/verification.wxss */
+.verification-header {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-top: 120rpx;
+	margin-bottom: 116rpx;
+}
+
+.background-image {
+	height: 438rpx;
+	width: 438rpx;
+}
+
+.verification-text {
+	text-align: center;
+	color: #08605F;
+	font-size: 28rpx;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 42rpx;
+	letter-spacing: 1.3rpx;
+}
+
+.email-info {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-top: 12rpx;
+}
+
+.email-input {
+	width: 277px;
+	height: 27px;
+	background-color: #EEF7F6;
+}
+
+.success-icon {
+	vertical-align: middle;
+	margin-left: 4rpx;
+}
+
+.notice-text {
+	text-align: center;
+	vertical-align: center;
+	color: #00B1A2;
+	font-size: 20rpx;
+	margin-top: 40rpx;
+	height: 27rpx;
+}
+
+.confirm-view {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-top: 220rpx;
+}
+
+.confirm-button {
+	align-items: center;
+	justify-content: center;
+	background: #85E4DC;
+	border-radius: 500rpx;
+	color: #fff;
+	display: flex;
+	font-size: 28rpx;
+	font-weight: 700;
+	width: 33%;
+}

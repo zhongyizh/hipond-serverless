@@ -1,0 +1,64 @@
+<!--pages/detail/detail.wxml-->
+<t-navbar left-arrow />
+<view class="container">
+  <!-- Image Carousel -->
+  <swiper class="carousel" autoplay="true" interval="5000" duration="300" indicator-dots="true">
+		<block wx:for="{{postData.image_urls}}" wx:key="*this">
+			<swiper-item>
+				<image src="{{item}}" mode="aspectFit" />
+			</swiper-item>
+		</block>
+  </swiper>
+  <!-- Post Title & Price -->
+  <view class="title-row">
+		<text class="post-text">{{postData.title}}</text>
+		<text class="price-tag" wx:if="{{postData.price}}">$ {{postData.price}}</text>
+  </view>
+  <view class="horizontal-divider"></view>
+  <!-- Post Options -->
+  <view wx:if="{{postData.post_type == 'selling'}}" class="option-row">
+		<view wx:if="{{postData.condition}}" class="condition-container">
+			<image class="condition-circle" src="{{condition_iconPath}}"/>
+			<text class="condition-label">{{condition_forDisplay}}</text>
+		</view>
+		<!-- TODO: 急售 -->
+		<!-- <view wx:if="{{postData.isUrgent}}" class="ddl-container">
+			<text class="ddl-status-label">急售</text>
+			<text class="ddl-date-label">{{"by " + ddl_forDisplay}}</text>
+		</view> -->
+  </view>
+  <!-- Post Body -->
+  <view class="post-body">
+		{{postData.body}}
+  </view>
+</view>
+<!-- User Information -->
+<view class="user-info">
+	<image src="{{postData.avatar_url}}" class="avatar" />
+	<view class="left-content">
+		<view>
+			<text class="nickname">{{postData.nickname}}</text>
+			<image class="verification_icon" src="/image/student_verification_icon.png" hidden="{{!postData.user_verified}}"></image>
+		</view>
+		<text class="post-date">发布于{{postData.post_date}}</text>
+	</view>
+	<text class="location">{{postData.location ? postData.location : '未知地点'}}</text>
+	<image src="/image/location_icon.png" class="location_icon"></image>
+</view>
+
+<!-- Toolbar -->
+<view class="bottom-toolbar">
+	<block wx:if = "{{postData.post_type == 'selling'}}">
+		<text bindtap="onTapContact" class="contact-button" wx:if="{{postData.post_type == 'selling'}}">联系TA</text>
+		<!-- TODO: On Hold/已售出 -->
+		<!-- <text bindtap="onTapContact" class="contact-button" wx:if="{{postData.post_status == 0}}">联系TA</text>
+		<text bindtap="onTapContact" class="contact-button-hold" wx:if="{{postData.post_status == 1}}">On Hold</text>
+		<text class="contact-button-sold" wx:if="{{postData.post_status == 2}}">已售出</text> -->
+	</block>
+	<view class="toolbar-right">
+		<view class="view-count-container">
+			<image class="view-count-image" src="/image/view-count.png"></image>
+			<text>{{postData.view_count + 1}}</text>
+		</view>
+  </view>
+</view>

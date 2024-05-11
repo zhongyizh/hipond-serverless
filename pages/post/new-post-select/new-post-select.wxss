@@ -1,0 +1,74 @@
+/* pages/post/new-post-select/new-post-select.wxss */
+page{
+  background-color: #EEF7F6;
+}
+
+.custom-navbar {
+  --td-navbar-bg-color: #EEF7F6;
+}
+
+.new-post-select-selector {
+  padding-top: 90rpx;
+  padding-left: 15rpx; 
+  padding-right: 15rpx; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center
+}
+
+.new-post-2nd {
+  position: relative;
+  width: 560rpx;
+  height: 560rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  letter-spacing: 18rpx !important;
+  align-self: center
+}
+
+.new-2nd{
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.image-overlay{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%; 
+  background-color: rgba(0, 0, 0, 0.5); /* shade color */
+}
+
+.button-text {
+  position: absolute;
+  width: 159px;
+  white-space: nowrap;
+  top: 50%; /* Centers text vertically */
+  left: 50%; /* Centers text horizontally */
+  transform: translate(-50%, -50%); /* Ensures center alignment */
+  /* color: #BBDAD7; */
+  color: white;
+  font-size: 48px;
+  font-weight: 700;
+}
+
+.new-post-life {
+  position: relative;
+  width: 560rpx;
+  height: 560rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  letter-spacing: 18rpx !important;
+  align-self: center;
+  margin-top: 90rpx;
+}
+
+.new-life{
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}

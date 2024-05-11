@@ -1,0 +1,34 @@
+<!--index.wxml-->
+<t-navbar class="t-navbar" leftIcon="slot" style="--td-navbar-padding-top:88rpx;--td-navbar-height:84rpx;">
+  <view class="search-box" slot="left">
+    <t-search shape="round" placeholder="" />
+  </view>
+</t-navbar>
+<view class="scroll-view-border">
+	<scroll-view class="scroll-view" type="custom" scroll-y="true">
+		<grid-view class="grid-view" type="masonry" cross-axis-count="2" cross-axis-gap="4" main-axis-gap="5">
+			<view wx:for="{{list}}" wx:key="_id" class="grid-box" bindtap="navigateToDetail" data-index="{{index}}">
+        <view class="selling-post-container">
+          <image src="{{item.image_urls[0]}}" mode="widthFix"></image>
+          <view class="content-box">
+            <view class="content-title-box">{{item.title}}</view>
+            <view class="profile-text">
+              <view class="left">
+                <image class="icon" src="{{item.avatar_url}}"></image>
+                <text>{{item.nickname}}</text>
+                <image class="verification_icon" src="/image/student_verification_icon.png" hidden="{{!item.user_verified}}"></image>
+              </view>
+							<view class="price-tag-container" wx:if="{{item.price}}">
+								<view class="price-tag-label">${{item.price}}</view>
+							</view>
+              <view class="view-count-container" wx:if="{{!item.price}}">
+                <image class="view-count-image" src="/image/view-count.png"></image>
+                <text>{{item.view_count}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+			</view>
+		</grid-view>
+	</scroll-view>
+</view>

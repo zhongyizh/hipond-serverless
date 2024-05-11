@@ -1,0 +1,46 @@
+{
+	"useExtendedLib": {
+		"weui": true
+	},
+	"pages": [
+		"pages/tab-bar/index/index",
+		"pages/tab-bar/mine/mine",
+		"pages/login/login",
+		"pages/post/new-post-select/new-post-select",
+		"pages/post/new-post-listing/new-post-listing",
+		"pages/post/new-post/new-post",
+		"pages/detail/detail",
+		"pages/verification/verification"
+	],
+	"window": {
+		"navigationBarTextStyle": "black",
+		"navigationStyle": "custom"
+	},
+	"tabBar": {
+		"custom": true,
+		"color": "#ffffff",
+		"selectedColor": "#333333",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [
+			{
+				"pagePath": "pages/tab-bar/index/index",
+				"iconPath": "image/tab-bar/tab_index_normal.png",
+				"selectedIconPath": "image/tab-bar/tab_index_active.png"
+			},
+			{
+				"pagePath": "pages/tab-bar/mine/mine",
+				"iconPath": "image/tab-bar/tab_user_normal.png",
+				"selectedIconPath": "image/tab-bar/tab_user_active.png"
+			}
+		]
+	},
+	"componentFramework": "glass-easel",
+	"usingComponents": {
+		"t-navbar": "tdesign-miniprogram/navbar/navbar",
+		"t-textarea": "tdesign-miniprogram/textarea/textarea",
+		"t-sticky": "tdesign-miniprogram/sticky/sticky",
+		"t-upload": "tdesign-miniprogram/upload/upload"
+	},
+	"lazyCodeLoading": "requiredComponents"
+}

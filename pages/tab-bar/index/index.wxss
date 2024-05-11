@@ -1,0 +1,148 @@
+/**index.wxss**/
+page {
+  height: 100vh;
+  display: flex;
+	flex-direction: column;
+	background-color: var(--main-bg-color);
+	--card-border-radius: 3%;
+}
+
+.search-box {
+  --td-search-height: 60rpx;
+  width: 530rpx;
+}
+
+.scroll-view-border {
+	margin-top: 4px;
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+.grid-box {
+	border-radius: var(--card-border-radius);
+	background-color: white;
+}
+
+.grid-box image {
+	width: 100%;
+	border-radius: var(--card-border-radius) var(--card-border-radius) 0% 0%;
+}
+
+.content-box {
+	margin: 0%;
+	padding-top: 4px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-bottom: 8px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	font-size: 16px;
+	font-style: normal;
+}
+
+.content-title-box {
+	/* position: relative; */
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2; 
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	line-height: 1.5em; 
+	max-height: 3em; 
+	/* padding-right: 39px; */
+}
+
+.profile-text {
+	display: flex;
+	flex-direction: row;
+	padding-top: 6px;
+	/* justify-content: center; */
+	align-items: center;
+}
+
+.profile-text view {
+	display: flex;
+	color: #888;
+	font-size: 14px;
+	flex-direction: row;
+	align-items: center;
+}
+
+.left {
+	width: 70%;
+	min-height: 28px;
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+}
+
+.left .icon {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	margin-right: 4px;
+}
+
+.left .verification_icon {
+	width: 14px;
+	height: 14px;
+	vertical-align: center;
+	margin-left: 6rpx;
+}
+
+.view-count-container {
+	text-align: right;
+	color: #888;
+	font-size: 14px;
+}
+
+.view-count-container .view-count-image {
+	width: 20px;
+	height: 20px;
+	background-size: cover;
+	opacity: .5;
+	color: rgba(0,0,0,.5);
+	margin: 0 6px;
+}
+
+.index-header {
+	background: #fff;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	height: 80rpx;
+	left: 0;
+	padding-left: 0%;
+	position: fixed;
+	width: 100%;
+	z-index: 9999;
+}
+
+.selling-post-container {
+	position: relative;
+	border-radius: var(--card-border-radius);
+	overflow: hidden !important;
+}
+
+.price-tag-container {
+	background: #71BEBF;
+	display: flex;
+	align-items: center !important;
+	justify-content: center !important;
+	position: absolute;
+	height: 126rpx;
+	width: 126rpx;
+	border-radius: 50%;
+	bottom: -55rpx;
+	right: -5rpx;
+}
+
+.price-tag-label {
+	position: absolute;
+	padding-bottom: 22px;
+	font-size: 30rpx !important;
+	font-weight: 700;
+	color: #FFFFFF !important;
+}
