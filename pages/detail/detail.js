@@ -8,7 +8,9 @@ const conditionIconPath = new Map([
 
 Page({
 	data: {
-		postData: []
+		postData: [],
+		conditionForDisplay: '',
+		conditionIconPath: ''
 	},
 	onLoad(options) {
 		const data = options.data
@@ -18,6 +20,7 @@ Page({
 
 		// wxml里有个本地的+1，这里去改数据库
 		this.incrementViewCount()
+		this.showCondition()
 	},
 	parseDate(date) {
 		var dateObject = new Date(parseInt(date));
@@ -26,6 +29,13 @@ Page({
 		const month = ('0' + (dateObject.getMonth() + 1)).slice(-2); // Adding 1 because getMonth() returns 0-indexed month
 		const day = ('0' + dateObject.getDate()).slice(-2);
 		return month + '/' + day + '/' + year
+	},
+	showCondition() {
+		const condition = this.data.postData.condition
+		this.setData({
+			conditionForDisplay: condition.replace('/', '\n'),
+			conditionIconPath: '/../../image/condition_circle/' + conditionIconPath.get(condition)
+		})
 	},
 	async incrementViewCount() {
 		const _id = this.data.postData._id
