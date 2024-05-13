@@ -7,6 +7,7 @@
 			<image class="avatar" src="{{avatarUrl}}" mode="scaleToFill"></image>
 		</button>
 	</view>
+	<!-- TODO: 没注册的用户学生认证？ -->
 	<view class="verification" hidden="{{isVerified}}">
 		<navigator url="/pages/verification/verification">
 			<text>点击进行学生认证</text>
@@ -51,4 +52,10 @@
 		<view class="bottom-info"><text>* 请勾选至少一项联系方式，有意向的买家将获取此联系方式并联系你进行交易。</text></view>
 	</checkbox-group>
 	<button bindtap="saveUserInfo" class="commit" disabled="{{isDisabled}}">保存</button>
+	<!-- TODO: 隐私弹窗UI -->
+	<view wx:if="{{isShowPrivacy}}">
+		<view>隐私弹窗内容....</view>
+		<button bindtap="handleOpenPrivacyContract">查看隐私协议</button>
+		<button id="agree-btn" open-type="agreePrivacyAuthorization" bindagreeprivacyauthorization="handleAgreePrivacyAuthorization">同意</button>
+	</view>
 </view>

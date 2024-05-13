@@ -13,33 +13,15 @@ Page({
 		isWechatChecked: false,
 		isEmailChecked: false,
 		isDisabled: true,
+		isShowPrivacy: false,
 	},
 	async onLoad() {
 		wx.showLoading({
 			title: '获取用户信息中，请耐心等待...',
 			mask: true
 		})
-		const userData = await getMyUserInfo()
-		if (userData && userData.nickname) {
-			this.setData({
-				nickname: userData.nickname,
-				avatarUrl: userData.avatar_url,
-				wechatId: userData.wechat_id,
-				zipcode: userData.postal_code,
-				emailAddress: userData.email_address
-			})
-			if (userData.wechat_id != "") {
-				this.setData({
-					isWechatChecked: true
-				});
-			}
-			if (userData.email_address != "") {
-				this.setData({
-					isEmailChecked: true
-				});
-			}
-			this.updateButtonStatus();
-		}
+		await this.loadUserInfoData()
+		this.getPrivacySettingHelper()
 		wx.hideLoading()
 	},
 	onChooseAvatar(e) {
@@ -66,7 +48,6 @@ Page({
 		this.updateButtonStatus();
 	},
 	checkboxChange: function (e) {
-		// TODO: 这个好像有逻辑漏洞
 		const items = e.detail.value;
 		const isChecked = (id) => items.includes(id);
 		const isWechatChecked = isChecked("cb-wechat-id");
@@ -90,6 +71,30 @@ Page({
 			emailAddress: textVal
 		})
 		this.updateButtonStatus();
+	},
+	async loadUserInfoData() {
+		const userData = await getMyUserInfo()
+		if (userData && userData.nickname) {
+			this.setData({
+				nickname: userData.nickname,
+				avatarUrl: userData.avatar_url,
+				wechatId: userData.wechat_id,
+				zipcode: userData.postal_code,
+				emailAddress: userData.email_address
+			})
+			// TODO: 这个好像有逻辑漏洞
+			if (userData.wechat_id != "") {
+				this.setData({
+					isWechatChecked: true
+				});
+			}
+			if (userData.email_address != "") {
+				this.setData({
+					isEmailChecked: true
+				});
+			}
+			this.updateButtonStatus();
+		}
 	},
 	updateButtonStatus() {
 		// 按钮启用条件: nickname不为空，两个复选框至少选中一个且对应的输入框不为空
@@ -155,5 +160,38 @@ Page({
 				}
 			})
 		})
-	}
+	},
+	// TODO: 隐私协议
+	getPrivacySettingHelper() {
+		// 隐私协议
+		wx.getPrivacySetting({
+      success: res => {
+        console.log(res) // 返回结果为: res = { needAuthorization: true/false, privacyContractName: '《xxx隐私保护指引》' }
+        if (res.needAuthorization) {
+          // 需要弹出隐私协议
+          this.setData({
+            isShowPrivacy: true
+          })
+        }
+      },
+      fail: () => {},
+      complete: () => {}
+    })
+	},
+	handleAgreePrivacyAuthorization() {
+    // 用户同意隐私协议事件回调
+		// 用户点击了同意，之后所有已声明过的隐私接口和组件都可以调用了
+		console.log('用户同意隐私协议')
+		this.setData({
+			isShowPrivacy: false
+		})
+  },
+  handleOpenPrivacyContract() {
+    // 打开隐私协议页面
+    wx.openPrivacyContract({
+      success: () => {}, // 打开成功
+      fail: () => {}, // 打开失败
+      complete: () => {}
+    })
+  }
 })

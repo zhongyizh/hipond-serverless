@@ -29,9 +29,7 @@ Page({
 			})
 		}
 
-		this.getMyProfile()
-	},
-	onShow() {
+		await this.getMyProfile()
 		this.getTagsCount()
 		this.getRelevantPosts()
 	},
@@ -102,9 +100,11 @@ Page({
 		wx.hideLoading()
 	},
 	async getTagsCount() {
+		// TODO: 不知道为什么_openid: undefined也能拿到数据
 		const db = wx.cloud.database()
+		const userId = this.data.userInfo._id ? this.data.userInfo._id : ''
 		const countResult = await db.collection('posts').where({
-			_openid: this.data.userInfo._id
+			_openid: userId
 		}).count()
 		const total = countResult.total
 		let newTags = this.data.tags
@@ -114,9 +114,12 @@ Page({
 		})
 	},
 	async getUserPostData(limit = 20, offset = 0) {
+		// TODO: 不知道为什么_openid: undefined也能拿到数据
 		const db = wx.cloud.database()
+		const userId = this.data.userInfo._id ? this.data.userInfo._id : ''
+		console.log('getUserPostData for user: ' + userId)
 		const postsListResult = await db.collection('posts').where({
-			_openid: this.data.userInfo._id
+			_openid: userId
 		}).limit(limit).skip(offset).get()
 		return postsListResult.data
 	},

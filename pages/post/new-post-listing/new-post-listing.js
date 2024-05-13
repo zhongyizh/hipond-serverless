@@ -66,7 +66,7 @@ Page({
 				this.data.title = res.detail.value;
 				break;
 			default: 
-				console.error("Unrecognized Input Box id");
+				console.log("Unrecognized Input Box id");
 				break;
 		}
 	},
