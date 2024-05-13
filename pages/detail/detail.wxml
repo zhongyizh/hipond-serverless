@@ -18,8 +18,8 @@
   <!-- Post Options -->
   <view wx:if="{{postData.post_type == 'selling'}}" class="option-row">
 		<view wx:if="{{postData.condition}}" class="condition-container">
-			<image class="condition-circle" src="{{condition_iconPath}}"/>
-			<text class="condition-label">{{condition_forDisplay}}</text>
+			<image class="condition-circle" src="{{conditionIconPath}}"/>
+			<text class="condition-label">{{conditionForDisplay}}</text>
 		</view>
 		<!-- TODO: 急售 -->
 		<!-- <view wx:if="{{postData.isUrgent}}" class="ddl-container">

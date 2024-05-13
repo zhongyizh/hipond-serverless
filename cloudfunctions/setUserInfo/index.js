@@ -9,8 +9,12 @@ exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext()
 	const openid = wxContext.OPENID
 
-	const record = await db.collection('user_info').doc(openid).get()
-	if (record) {
+	// TODO: .doc匹配不到的情况会报error，看看有没有解决方法
+	const record = await db.collection('user_info').where({
+		_id: openid
+	}).get()
+	const data = record.data
+	if (data.length == 1) {
 		const result = await db.collection('user_info').doc(openid).update({
 			data: {
 				email_address: event.email_address,

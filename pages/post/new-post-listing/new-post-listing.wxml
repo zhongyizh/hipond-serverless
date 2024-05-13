@@ -18,10 +18,11 @@
 			<view class="money-sign">
 				<text style="color: #00B1A2; font-size: 32rpx;">$</text>
 			</view>
+			<!-- TODO: 默认的placeholder-style好像没生效 -->
 			<input class="money-input" 
 							id="price"
-							placeholder="默认私聊" 
-							placeholder-style="color: #A4C5C2; font-size: 34rpx;"
+							placeholder="价格面议" 
+							placeholder-style="color: #A4C5C2; font-size: 34rpx;" 
 							bindinput="inputText">
 			</input>
 		</view>

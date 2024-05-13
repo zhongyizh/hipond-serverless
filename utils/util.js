@@ -14,7 +14,7 @@ function getMyUserInfo() {
 				resolve(res.result);
 			},
 			fail: err => {
-				console.error('Failed to get userinfo: ' + user_id)
+				console.error('Failed to get current userinfo')
 				reject(err);
 			}
 		})
@@ -33,6 +33,7 @@ async function getPostDisplayData(limit = 20, offset = 0) {
 				resolve(res.result);
 			},
 			fail: err => {
+				console.error(err)
 				reject(err);
 			}
 		})
