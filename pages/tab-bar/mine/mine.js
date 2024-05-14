@@ -117,7 +117,6 @@ Page({
 		// TODO: 不知道为什么_openid: undefined也能拿到数据
 		const db = wx.cloud.database()
 		const userId = this.data.userInfo._id ? this.data.userInfo._id : ''
-		console.log('getUserPostData for user: ' + userId)
 		const postsListResult = await db.collection('posts').where({
 			_openid: userId
 		}).limit(limit).skip(offset).get()

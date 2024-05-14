@@ -5,12 +5,12 @@ Page({
 	data: {
 		nickname: "",
 		zipcode: "",
-		wechatId: "",
+		phone: "",
 		emailAddress: "",
 		avatarUrl: "/image/avatar_icon_default_show.png",
 		isChangeAvatar: false,
 		isVerified: false,
-		isWechatChecked: false,
+		isPhoneChecked: false,
 		isEmailChecked: false,
 		isDisabled: true,
 		isShowPrivacy: false,
@@ -50,18 +50,18 @@ Page({
 	checkboxChange: function (e) {
 		const items = e.detail.value;
 		const isChecked = (id) => items.includes(id);
-		const isWechatChecked = isChecked("cb-wechat-id");
+		const isPhoneChecked = isChecked("cb-phone");
 		const isEmailChecked = isChecked("cb-email");
 		this.setData({
-			isWechatChecked: isWechatChecked,
+			isPhoneChecked: isPhoneChecked,
 			isEmailChecked: isEmailChecked
 		});
 		this.updateButtonStatus();
 	},
-	wechatIdChange(res) {
+	phoneChange(res) {
 		var textVal = res.detail.value;
 		this.setData({
-			wechatId: textVal
+			phone: textVal
 		})
 		this.updateButtonStatus();
 	},
@@ -78,14 +78,14 @@ Page({
 			this.setData({
 				nickname: userData.nickname,
 				avatarUrl: userData.avatar_url,
-				wechatId: userData.wechat_id,
+				phone: userData.phone,
 				zipcode: userData.postal_code,
 				emailAddress: userData.email_address
 			})
 			// TODO: 这个好像有逻辑漏洞
-			if (userData.wechat_id != "") {
+			if (userData.phone != "") {
 				this.setData({
-					isWechatChecked: true
+					isPhoneChecked: true
 				});
 			}
 			if (userData.email_address != "") {
@@ -100,7 +100,7 @@ Page({
 		// 按钮启用条件: nickname不为空，两个复选框至少选中一个且对应的输入框不为空
 		let isDisabled = true;
 		if (this.data.nickname !== "" &&
-		((this.data.isWechatChecked && this.data.wechatId !== "") || (this.data.isEmailChecked && this.data.emailAddress !== ""))) {
+		((this.data.isPhoneChecked && this.data.phone !== "") || (this.data.isEmailChecked && this.data.emailAddress !== ""))) {
 			isDisabled = false;
 		}
 		this.setData({
@@ -110,7 +110,7 @@ Page({
 	async saveUserInfo() {
     const nickname = this.data.nickname
     const emailAddress = this.data.emailAddress
-    const wechatId = this.data.wechatId
+    const phone = this.data.phone
     const isChangeAvatar = this.data.isChangeAvatar
 		const zipcode = this.data.zipcode
 
@@ -122,7 +122,7 @@ Page({
 			email_address: emailAddress,
 			nickname: nickname,
 			postal_code: zipcode,
-			wechat_id: wechatId,
+			phone: phone,
 			avatar_url: avatarUrl
 		}
 

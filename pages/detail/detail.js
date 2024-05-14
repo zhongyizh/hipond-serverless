@@ -32,10 +32,12 @@ Page({
 	},
 	showCondition() {
 		const condition = this.data.postData.condition
-		this.setData({
-			conditionForDisplay: condition.replace('/', '\n'),
-			conditionIconPath: '/../../image/condition_circle/' + conditionIconPath.get(condition)
-		})
+		if (condition) {
+			this.setData({
+				conditionForDisplay: condition.replace('/', '\n'),
+				conditionIconPath: '/../../image/condition_circle/' + conditionIconPath.get(condition)
+			})
+		}
 	},
 	async incrementViewCount() {
 		const _id = this.data.postData._id
@@ -53,17 +55,17 @@ Page({
 	onTapContact() {
 		// TODO: On Hold/已售出
 		const postData = this.data.postData
-		const wechatId = postData.wechat_id ? '微信: ' + postData.wechat_id : '';
+		const phone = postData.phone ? '手机号: ' + postData.phone : '';
 		const email = postData.email_address ? '邮箱：' + postData.email_address : '';
 		let contact = '';
-		if (wechatId && email) {
-			contact = wechatId + '\n' + email;
-		} else if (wechatId) {
-			contact = wechatId;
+		if (phone && email) {
+			contact = phone + '\n' + email;
+		} else if (phone) {
+			contact = phone;
 		} else if (email) {
 			contact = email;
 		}
-		console.log(contact)
+		console.log('成功复制到剪贴板：' + contact)
 		wx.setClipboardData({
 			data: contact,
 			success: function(){

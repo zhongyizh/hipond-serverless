@@ -35,10 +35,10 @@
 	<checkbox-group bindchange="checkboxChange">
 		<view class="info">
 			<view class="info-title">
-				<text>微信号</text>
+				<text>手机号</text>
 			</view>
-			<input bindinput="wechatIdChange" class="info-text" placeholder="请输入微信号" type="text" value="{{wechatId}}"></input>
-			<checkbox value="cb-wechat-id" class="cb" checked="{{isWechatChecked}}"/>
+			<input bindinput="phoneChange" class="info-text" placeholder="请输入手机号" type="text" value="{{phone}}"></input>
+			<checkbox value="cb-phone" class="cb" checked="{{isPhoneChecked}}"/>
 		</view>
 		<view class="info-line"></view>
 		<view class="info">

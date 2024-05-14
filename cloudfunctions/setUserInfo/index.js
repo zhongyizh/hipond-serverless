@@ -20,7 +20,7 @@ exports.main = async (event, context) => {
 				email_address: event.email_address,
 				nickname: event.nickname,
 				postal_code: event.postal_code,
-				wechat_id: event.wechat_id,
+				phone: event.phone,
 				avatar_url: event.avatar_url
 			},
 			success: function(res) {
@@ -37,7 +37,7 @@ exports.main = async (event, context) => {
 				email_address: event.email_address,
 				nickname: event.nickname,
 				postal_code: event.postal_code,
-				wechat_id: event.wechat_id,
+				phone: event.phone,
 				avatar_url: event.avatar_url
 			},
 			success: function(res) {
