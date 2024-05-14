@@ -21,7 +21,9 @@
 		<view class="info-title">
 			<text>*昵称</text>
 		</view>
-		<input bindinput="nicknameChange" class="info-text" placeholder="请输入昵称" type="nickname" value="{{nickname}}"></input>
+		<view catch:touchstart="handleTouchInput">
+			<input model:value="{{nickname}}" type="nickname" focus="{{isFocusNickname}}" placeholder="请输入昵称" bindblur="nicknameChange" class="info-text"/>
+		</view>
 	</view>
 	<view class="info-line"></view>
 	<view class="info">
@@ -52,10 +54,4 @@
 		<view class="bottom-info"><text>* 请勾选至少一项联系方式，有意向的买家将获取此联系方式并联系你进行交易。</text></view>
 	</checkbox-group>
 	<button bindtap="saveUserInfo" class="commit" disabled="{{isDisabled}}">保存</button>
-	<!-- TODO: 隐私弹窗UI -->
-	<view wx:if="{{isShowPrivacy}}">
-		<view>隐私弹窗内容....</view>
-		<button bindtap="handleOpenPrivacyContract">查看隐私协议</button>
-		<button id="agree-btn" open-type="agreePrivacyAuthorization" bindagreeprivacyauthorization="handleAgreePrivacyAuthorization">同意</button>
-	</view>
 </view>

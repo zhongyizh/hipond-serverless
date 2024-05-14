@@ -13,7 +13,7 @@ Page({
 		isPhoneChecked: false,
 		isEmailChecked: false,
 		isDisabled: true,
-		isShowPrivacy: false,
+		isFocusNickname: false
 	},
 	async onLoad() {
 		wx.showLoading({
@@ -39,6 +39,26 @@ Page({
 			nickname: textVal
 		})
 		this.updateButtonStatus();
+	},
+	handleTouchInput() {
+		if (wx.requirePrivacyAuthorize) {
+			wx.requirePrivacyAuthorize({
+				success: res => {
+					console.log('用户同意了隐私协议 或 无需用户同意隐私协议')
+					// 用户同意隐私协议后给昵称input聚焦
+					this.setData({
+						isFocusNickname: true
+					})
+				},
+				fail: res => {
+					console.log('用户拒绝了隐私协议')
+				}
+			})
+		} else {
+			this.setData({
+				isFocusNickname: true
+			})
+		}
 	},
 	zipcodeChange(res) {
 		var textVal = res.detail.value;
