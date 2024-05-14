@@ -125,7 +125,16 @@ Page({
 	navigateToDetail(event) {
 		const postIndex = event.currentTarget.dataset.index
 		let postData = this.data.posts[postIndex]
-		Object.assign(postData, this.data.userInfo)
+		const currentUserInfo = this.data.userInfo
+		const userData = {
+			avatar_url: currentUserInfo.avatar_url,
+			email_address: currentUserInfo.email_address,
+			phone: currentUserInfo.phone,
+			nickname: currentUserInfo.nickname,
+			postal_code: currentUserInfo.postal_code,
+			user_verified: currentUserInfo.user_verified,
+		}
+		Object.assign(postData, userData)
 		const data = JSON.stringify(postData)
 		wx.navigateTo({
 			url: `/pages/detail/detail?data=${data}`
