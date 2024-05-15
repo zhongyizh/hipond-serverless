@@ -1,7 +1,4 @@
 {
-	"useExtendedLib": {
-		"weui": true
-	},
 	"pages": [
 		"pages/tab-bar/index/index",
 		"pages/tab-bar/mine/mine",
