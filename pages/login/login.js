@@ -100,6 +100,7 @@ Page({
 				avatarUrl: userData.avatar_url,
 				phone: userData.phone,
 				zipcode: userData.postal_code,
+				isVerified: userData.user_verified,
 				emailAddress: userData.email_address
 			})
 			// TODO: 这个好像有逻辑漏洞
