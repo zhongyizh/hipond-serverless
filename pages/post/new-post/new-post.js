@@ -47,8 +47,9 @@ Page({
 		wx.navigateBack()
 	},
 	getTitleFromBody(body, length = 24) {
+		// TODO: 好像有一些中文符号没匹配？或者是不用匹配？
 		// 取正文的前一部分作为标题，匹配中文、英文、数字和常见中英文标点符号
-		const pattern = /^[\u4e00-\u9fa5\w\d\s,.?!:;—-‘’“”"()（）【】《》<>【】「」]+/;
+		const pattern = /^[\u4e00-\u9fa5\w\d\s,.?!:;，。？！：；—-‘’“”"()（）【】《》<>【】「」]+/;
 		const match = body.match(pattern);
 		let title = '';
 		if (match) {
