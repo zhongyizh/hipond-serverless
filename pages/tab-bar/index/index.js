@@ -6,8 +6,7 @@ Page({
 		list: [],
 		currentTabbarIndex: 0,
 		maxLimit: 20,
-		offset: 0,
-		isEnd: false,
+		offset: 0
 	},
 	onLoad() {
 		if(typeof this.getTabBar === 'function' &&
@@ -24,14 +23,17 @@ Page({
 		this.getPostList()
 	},
 	async getPostList() {
-		if (!this.data.isEnd) {
+		const db = wx.cloud.database()
+		const countResult = await db.collection('posts').count()
+		const total = countResult.total
+		const isEnd = this.data.offset >= total
+		if (!isEnd) {
 			const postData = await getPostDisplayData(this.data.maxLimit, this.data.offset)
 			const currentLength = postData.length
 			const newOffset = this.data.offset + currentLength
 			this.setData({
 				list: [...this.data.list, ...postData],
-				offset: newOffset,
-				isEnd: currentLength < this.data.maxLimit
+				offset: newOffset
 			})
 		}
 	},

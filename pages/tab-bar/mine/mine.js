@@ -18,8 +18,7 @@ Page({
 		userInfo: {},
 		posts: [],
 		maxLimit: 20,
-		offset: 0,
-		isEnd: false,
+		offset: 0
 	},
 	async onLoad() {
     if(typeof this.getTabBar === 'function' &&
@@ -28,9 +27,10 @@ Page({
 				selected: this.data.currentTabbarIndex
 			})
 		}
-
+	},
+	async onShow() {
 		await this.getMyProfile()
-		this.getTagsCount()
+		await this.getTagsCount()
 		this.getRelevantPosts()
 	},
 	async onReachBottom() {
@@ -64,14 +64,14 @@ Page({
 		}
 	},
 	async getMyPosts() {
-		if (!this.data.isEnd) {
+		const isEnd = this.data.offset >= this.data.tags[0].count
+		if (!isEnd) {
 			const postData = await this.getUserPostData(this.data.maxLimit, this.data.offset)
 			const currentLength = postData.length
 			const newOffset = this.data.offset + currentLength
 			this.setData({
 				posts: [...this.data.posts, ...postData],
-				offset: newOffset,
-				isEnd: currentLength < this.data.maxLimit
+				offset: newOffset
 			})
 		}
 	},
