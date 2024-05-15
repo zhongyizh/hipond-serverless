@@ -42,5 +42,6 @@
 		"t-sticky": "tdesign-miniprogram/sticky/sticky",
 		"t-upload": "tdesign-miniprogram/upload/upload"
 	},
-	"lazyCodeLoading": "requiredComponents"
+	"lazyCodeLoading": "requiredComponents",
+	"__usePrivacyCheck__": true
 }
