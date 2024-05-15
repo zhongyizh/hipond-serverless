@@ -127,12 +127,12 @@ Page({
 		let postData = this.data.posts[postIndex]
 		const currentUserInfo = this.data.userInfo
 		const userData = {
-			avatar_url: currentUserInfo.avatar_url,
-			email_address: currentUserInfo.email_address,
+			avatarUrl: currentUserInfo.avatarUrl,
+			emailAddress: currentUserInfo.emailAddress,
 			phone: currentUserInfo.phone,
 			nickname: currentUserInfo.nickname,
-			postal_code: currentUserInfo.postal_code,
-			user_verified: currentUserInfo.user_verified,
+			zipcode: currentUserInfo.zipcode,
+			isUserVerified: currentUserInfo.isUserVerified,
 		}
 		Object.assign(postData, userData)
 		const data = JSON.stringify(postData)

@@ -15,7 +15,7 @@ Page({
 	onLoad(options) {
 		const data = options.data
 		const postData = JSON.parse(data)
-		postData.post_date = this.parseDate(postData.post_date)
+		postData.postDate = this.parseDate(postData.postDate)
 		this.setData({ postData })
 
 		// wxml里有个本地的+1，这里去改数据库
@@ -45,7 +45,7 @@ Page({
 		const _ = db.command
 		await db.collection('posts').doc(_id).update({
 			data: {
-				view_count: _.inc(1)
+				viewCount: _.inc(1)
 			},
 			success: function(res) {
 				console.log('incrementViewCount id: ' + _id + ' updated: ' + res.stats.updated + ' doc')
@@ -56,7 +56,7 @@ Page({
 		// TODO: On Hold/已售出
 		const postData = this.data.postData
 		const phone = postData.phone ? '手机号: ' + postData.phone : '';
-		const email = postData.email_address ? '邮箱：' + postData.email_address : '';
+		const email = postData.emailAddress ? '邮箱：' + postData.emailAddress : '';
 		let contact = '';
 		if (phone && email) {
 			contact = phone + '\n' + email;

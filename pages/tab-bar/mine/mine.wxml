@@ -5,13 +5,13 @@
 	<view class="own-header">
 		<view class="header-top">
 			<navigator class="own-header-img-div" url="/pages/login/login">
-				<image class="own-header-img" lazyLoad="true" mode="aspectFill" src="{{userInfo.avatar_url ? userInfo.avatar_url : '/image/avatar_icon_default_show.png'}}"></image>
+				<image class="own-header-img" lazyLoad="true" mode="aspectFill" src="{{userInfo.avatarUrl ? userInfo.avatarUrl : '/image/avatar_icon_default_show.png'}}"></image>
 			</navigator>
 			<view class="header-middle">
 				<text class="name-text">{{userInfo.nickname ? userInfo.nickname : '用户未登录'}}</text>
-				<image class="verification_icon" src="/image/student_verification_icon.png" hidden="{{!userInfo.user_verified}}"></image>
+				<image class="verification_icon" src="/image/student_verification_icon.png" hidden="{{!userInfo.isUserVerified}}"></image>
 			</view>
-			<view class="header-location">我的常住地：{{userInfo.postal_code ? userInfo.postal_code : '未知'}}</view>
+			<view class="header-location">我的常住地：{{userInfo.zipcode ? userInfo.zipcode : '未知'}}</view>
 		</view>
 			<view class="header-bottom">
 				<view class="header-right-box">
@@ -37,7 +37,7 @@
 			<scroll-view class="scroll-view" type="custom" scroll-y="true" style="min-height: 700rpx">
 				<grid-view type="masonry" cross-axis-count="2" cross-axis-gap="4" main-axis-gap="5">
 					<view wx:for="{{posts}}" wx:key="_id" class="grid-box" bindtap="navigateToDetail" data-index="{{index}}">
-						<image src="{{item.image_urls[0]}}" mode="widthFix"></image>
+						<image src="{{item.imageUrls[0]}}" mode="widthFix"></image>
 						<view class="content-box">
 							<view class="content-title-box"> {{item.title}}</view>
 						</view>

@@ -11,18 +11,18 @@ exports.main = async (event, context) => {
 
 	// TODO: 改一下doc里面的attribute名称cammelCase
 	// TODO: .doc匹配不到的情况会报error，看看有没有解决方法
-	const record = await db.collection('user_info').where({
+	const record = await db.collection('userInfo').where({
 		_id: openid
 	}).get()
 	const data = record.data
 	if (data.length == 1) {
-		const result = await db.collection('user_info').doc(openid).update({
+		const result = await db.collection('userInfo').doc(openid).update({
 			data: {
-				email_address: event.email_address,
+				emailAddress: event.emailAddress,
 				nickname: event.nickname,
-				postal_code: event.postal_code,
+				zipcode: event.zipcode,
 				phone: event.phone,
-				avatar_url: event.avatar_url
+				avatarUrl: event.avatarUrl
 			},
 			success: function(res) {
 				console.log(res)
@@ -32,14 +32,14 @@ exports.main = async (event, context) => {
 			result
 		}
 	} else {
-		const result = await db.collection('user_info').add({
+		const result = await db.collection('userInfo').add({
 			data: {
-				_id: openid, // Use openid as id for users in user_info collection
-				email_address: event.email_address,
+				_id: openid, // Use openid as id for users in userInfo collection
+				emailAddress: event.emailAddress,
 				nickname: event.nickname,
-				postal_code: event.postal_code,
+				zipcode: event.zipcode,
 				phone: event.phone,
-				avatar_url: event.avatar_url
+				avatarUrl: event.avatarUrl
 			},
 			success: function(res) {
 				console.log(res)

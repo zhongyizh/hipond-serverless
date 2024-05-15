@@ -11,7 +11,7 @@ Page({
 			mask: true
 		})
 		const userData = await getMyUserInfo()
-		if (userData && userData.nickname && (userData.phone || userData.email_address)) {
+		if (userData && userData.nickname && (userData.phone || userData.emailAddress)) {
 			console.log("用户已填写信息，符合发帖条件")
 		} else {
 			wx.navigateTo({

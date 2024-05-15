@@ -3,7 +3,7 @@
 <view class="container">
   <!-- Image Carousel -->
   <swiper class="carousel" autoplay="true" interval="5000" duration="300" indicator-dots="true">
-		<block wx:for="{{postData.image_urls}}" wx:key="*this">
+		<block wx:for="{{postData.imageUrls}}" wx:key="*this">
 			<swiper-item>
 				<image src="{{item}}" mode="aspectFit" />
 			</swiper-item>
@@ -16,7 +16,7 @@
   </view>
   <view class="horizontal-divider"></view>
   <!-- Post Options -->
-  <view wx:if="{{postData.post_type == 'selling'}}" class="option-row">
+  <view wx:if="{{postData.postType == 'selling'}}" class="option-row">
 		<view wx:if="{{postData.condition}}" class="condition-container">
 			<image class="condition-circle" src="{{conditionIconPath}}"/>
 			<text class="condition-label">{{conditionForDisplay}}</text>
@@ -34,13 +34,13 @@
 </view>
 <!-- User Information -->
 <view class="user-info">
-	<image src="{{postData.avatar_url}}" class="avatar" />
+	<image src="{{postData.avatarUrl}}" class="avatar" />
 	<view class="left-content">
 		<view>
 			<text class="nickname">{{postData.nickname}}</text>
-			<image class="verification_icon" src="/image/student_verification_icon.png" hidden="{{!postData.user_verified}}"></image>
+			<image class="verification_icon" src="/image/student_verification_icon.png" hidden="{{!postData.isUserVerified}}"></image>
 		</view>
-		<text class="post-date">发布于{{postData.post_date}}</text>
+		<text class="post-date">发布于{{postData.postDate}}</text>
 	</view>
 	<text class="location">{{postData.location ? postData.location : '未知地点'}}</text>
 	<image src="/image/location_icon.png" class="location_icon"></image>
@@ -48,8 +48,8 @@
 
 <!-- Toolbar -->
 <view class="bottom-toolbar">
-	<block wx:if = "{{postData.post_type == 'selling'}}">
-		<text bindtap="onTapContact" class="contact-button" wx:if="{{postData.post_type == 'selling'}}">联系TA</text>
+	<block wx:if = "{{postData.postType == 'selling'}}">
+		<text bindtap="onTapContact" class="contact-button" wx:if="{{postData.postType == 'selling'}}">联系TA</text>
 		<!-- TODO: On Hold/已售出 -->
 		<!-- <text bindtap="onTapContact" class="contact-button" wx:if="{{postData.post_status == 0}}">联系TA</text>
 		<text bindtap="onTapContact" class="contact-button-hold" wx:if="{{postData.post_status == 1}}">On Hold</text>
@@ -58,7 +58,7 @@
 	<view class="toolbar-right">
 		<view class="view-count-container">
 			<image class="view-count-image" src="/image/view-count.png"></image>
-			<text>{{postData.view_count + 1}}</text>
+			<text>{{postData.viewCount + 1}}</text>
 		</view>
   </view>
 </view>

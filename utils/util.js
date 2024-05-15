@@ -1,6 +1,6 @@
 async function getUserInfo(userid) {
 	const db = wx.cloud.database();
-	const userInfo = await db.collection('user_info').doc(userid).get()
+	const userInfo = await db.collection('userInfo').doc(userid).get()
 	const userData = userInfo.data
 	return userData
 }

@@ -21,7 +21,6 @@ Page({
 			mask: true
 		})
 		await this.loadUserInfoData()
-		this.getPrivacySettingHelper()
 		wx.hideLoading()
 	},
 	onChooseAvatar(e) {
@@ -97,11 +96,11 @@ Page({
 		if (userData && userData.nickname) {
 			this.setData({
 				nickname: userData.nickname,
-				avatarUrl: userData.avatar_url,
+				avatarUrl: userData.avatarUrl,
 				phone: userData.phone,
-				zipcode: userData.postal_code,
-				isVerified: userData.user_verified,
-				emailAddress: userData.email_address
+				zipcode: userData.zipcode,
+				isVerified: userData.isUserVerified,
+				emailAddress: userData.emailAddress
 			})
 			// TODO: 这个好像有逻辑漏洞
 			if (userData.phone != "") {
@@ -109,7 +108,7 @@ Page({
 					isPhoneChecked: true
 				});
 			}
-			if (userData.email_address != "") {
+			if (userData.emailAddress != "") {
 				this.setData({
 					isEmailChecked: true
 				});
@@ -140,11 +139,11 @@ Page({
 			avatarUrl = await this.uploadAvatar()
 		}
 		const data = {
-			email_address: emailAddress,
+			emailAddress: emailAddress,
 			nickname: nickname,
-			postal_code: zipcode,
+			zipcode: zipcode,
 			phone: phone,
-			avatar_url: avatarUrl
+			avatarUrl: avatarUrl
 		}
 
 		wx.cloud.callFunction({
@@ -182,37 +181,4 @@ Page({
 			})
 		})
 	},
-	// TODO: 隐私协议
-	getPrivacySettingHelper() {
-		// 隐私协议
-		wx.getPrivacySetting({
-      success: res => {
-        console.log(res) // 返回结果为: res = { needAuthorization: true/false, privacyContractName: '《xxx隐私保护指引》' }
-        if (res.needAuthorization) {
-          // 需要弹出隐私协议
-          this.setData({
-            isShowPrivacy: true
-          })
-        }
-      },
-      fail: () => {},
-      complete: () => {}
-    })
-	},
-	handleAgreePrivacyAuthorization() {
-    // 用户同意隐私协议事件回调
-		// 用户点击了同意，之后所有已声明过的隐私接口和组件都可以调用了
-		console.log('用户同意隐私协议')
-		this.setData({
-			isShowPrivacy: false
-		})
-  },
-  handleOpenPrivacyContract() {
-    // 打开隐私协议页面
-    wx.openPrivacyContract({
-      success: () => {}, // 打开成功
-      fail: () => {}, // 打开失败
-      complete: () => {}
-    })
-  }
 })

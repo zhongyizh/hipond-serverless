@@ -9,21 +9,21 @@
 		<grid-view class="grid-view" type="masonry" cross-axis-count="2" cross-axis-gap="4" main-axis-gap="5">
 			<view wx:for="{{list}}" wx:key="_id" class="grid-box" bindtap="navigateToDetail" data-index="{{index}}">
         <view class="selling-post-container">
-          <image src="{{item.image_urls[0]}}" mode="widthFix"></image>
+          <image src="{{item.imageUrls[0]}}" mode="widthFix"></image>
           <view class="content-box">
             <view class="content-title-box">{{item.title}}</view>
             <view class="profile-text">
               <view class="left">
-                <image class="icon" src="{{item.avatar_url}}"></image>
+                <image class="icon" src="{{item.avatarUrl}}"></image>
                 <text>{{item.nickname}}</text>
-                <image class="verification_icon" src="/image/student_verification_icon.png" hidden="{{!item.user_verified}}"></image>
+                <image class="verification_icon" src="/image/student_verification_icon.png" hidden="{{!item.isUserVerified}}"></image>
               </view>
 							<view class="price-tag-container" wx:if="{{item.price}}">
 								<view class="price-tag-label">${{item.price}}</view>
 							</view>
               <view class="view-count-container" wx:if="{{!item.price}}">
                 <image class="view-count-image" src="/image/view-count.png"></image>
-                <text>{{item.view_count}}</text>
+                <text>{{item.viewCount}}</text>
               </view>
             </view>
           </view>

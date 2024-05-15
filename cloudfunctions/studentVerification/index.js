@@ -11,9 +11,9 @@ exports.main = async (event, context) => {
 	const email = event.email
 
 	// TODO: 现在还没用第三方验证
-	const res = await db.collection('user_info').doc(openid).update({
+	const res = await db.collection('userInfo').doc(openid).update({
 		data: {
-			user_verified: true
+			isUserVerified: true
 		}
 	})
 	return {

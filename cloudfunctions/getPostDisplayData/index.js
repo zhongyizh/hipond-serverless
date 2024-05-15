@@ -11,7 +11,7 @@ exports.main = async (event, context) => {
 	const offset = event.offset
 	const result = await db.collection('posts').aggregate().limit(limit).skip(offset)
 		.lookup({
-			from: 'user_info',
+			from: 'userInfo',
 			localField: '_openid',
 			foreignField: '_id',
 			as: 'userInfo',

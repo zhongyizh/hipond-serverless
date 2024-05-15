@@ -10,7 +10,7 @@ exports.main = async (event, context) => {
 	const openid = wxContext.OPENID
 	const userid = event.userid ? event.userid : openid
 
-	const userInfo = await db.collection('user_info').where({
+	const userInfo = await db.collection('userInfo').where({
 		_id: userid
 	}).get()
 	return userInfo.data.length == 1 ? userInfo.data[0] : {}

@@ -99,9 +99,9 @@ Page({
 			'price': this.data.price,
 			'location': '',
 			'condition': this.data.condition,
-			'post_date': Date.now(),
-			'post_type': 'selling',
-			'view_count': 0
+			'postDate': Date.now(),
+			'postType': 'selling',
+			'viewCount': 0
 		}
 		var images = this.data.fileList
 		if (!this.validateForm([payload, images])) return false
@@ -116,7 +116,7 @@ Page({
 			const fileId = await this.uploadImage(postId, img.url)
 			imageUrls.push(fileId)
 		}
-		// 最后再去update对应的Post的image_urls
+		// 最后再去update对应的Post的imageUrls
 		result = await this.updatePostImageUrls(postId, imageUrls)
 		wx.navigateBack()
 	},
@@ -137,7 +137,7 @@ Page({
 	uploadImage(postId = '', filePath = '') {
 		return new Promise((resolve, reject) => {
 			wx.cloud.uploadFile({
-				cloudPath: 'post_images/' + postId + '/' + filePath.split('/').pop(),
+				cloudPath: 'postImages/' + postId + '/' + filePath.split('/').pop(),
 				filePath: filePath,
 				success: res => {
 					resolve(res.fileID);
@@ -153,7 +153,7 @@ Page({
 		return new Promise((resolve, reject) => {
 			db.collection('posts').doc(postId).update({
 				data: {
-					image_urls: urls
+					imageUrls: urls
 				},
 				success: res => {
 					resolve(res.result);
