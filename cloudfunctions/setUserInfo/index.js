@@ -9,8 +9,7 @@ exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext()
 	const openid = wxContext.OPENID
 
-	// TODO: 改一下doc里面的attribute名称cammelCase
-	// TODO: .doc匹配不到的情况会报error，看看有没有解决方法
+	// TODO: .doc匹配不到的情况会报error，应该要用Try Catch
 	const record = await db.collection('userInfo').where({
 		_id: openid
 	}).get()
