@@ -1,4 +1,6 @@
 // pages/post/new-post/new-post.js
+import { getPostTitleFromBody } from '../../../utils/util'
+
 Page({
 	data: {
 		fileList: [],
@@ -32,6 +34,10 @@ Page({
 		});
 	},
 	async onUpload() {
+		wx.showLoading({
+			title: '上传中...',
+			mask: true
+		})
 		// 先去add Post的内容，数据库随机给一个id
 		let result = await this.uploadPostData()
 		const postId = result._id
@@ -44,23 +50,8 @@ Page({
 		}
 		// 最后再去update对应的Post的imageUrls
 		result = await this.updatePostImageUrls(postId, imageUrls)
+		wx.hideLoading()
 		wx.navigateBack()
-	},
-	getTitleFromBody(body, length = 24) {
-		// TODO: 好像有一些中文符号没匹配？或者是不用匹配？
-		// 取正文的前一部分作为标题，匹配中文、英文、数字和常见中英文标点符号
-		const pattern = /^[\u4e00-\u9fa5\w\d\s,.?!:;，。？！：；—-‘’“”"()（）【】《》<>【】「」]+/;
-		const match = body.match(pattern);
-		let title = '';
-		if (match) {
-			title = match[0].slice(0, length)
-		} else {
-			title = body.slice(0, length)
-		}
-		if (body.length >= length) {
-			title += '...'
-		}
-		return title
 	},
 	uploadImage(postId = '', filePath = '') {
 		return new Promise((resolve, reject) => {
@@ -83,7 +74,7 @@ Page({
 			db.collection('posts').add({
 				data: {
 					body: body,
-					title: this.getTitleFromBody(body),
+					title: getPostTitleFromBody(body),
 					location: '',
 					postDate: Date.now(),
 					postType: 'life',

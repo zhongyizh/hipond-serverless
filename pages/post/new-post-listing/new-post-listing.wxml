@@ -21,7 +21,7 @@
 			<!-- TODO: 默认的placeholder-style好像没生效 -->
 			<input class="money-input" 
 							id="price"
-							placeholder="价格面议" 
+							placeholder="价格" 
 							placeholder-style="color: #A4C5C2; font-size: 34rpx;" 
 							bindinput="inputText">
 			</input>

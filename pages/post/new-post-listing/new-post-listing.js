@@ -1,4 +1,6 @@
 // pages/post/new-post-listing/new-post-listing.js
+import { getPostTitleFromBody } from '../../../utils/util'
+
 const errMsg = new Map([
 	["text", "标题不能为空"],
 	["body", "需要物品描述"],
@@ -60,7 +62,7 @@ Page({
 				this.data.body = res.detail.value;
 				break;
 			case "price":
-				this.data.price = res.detail.value; //TODO: 确认价格的输入限制
+				this.data.price = res.detail.value; //TODO: 确认价格的输入限制，而且现在必须输入价格
 				break;
 			case "title":
 				this.data.title = res.detail.value;
@@ -94,7 +96,7 @@ Page({
 	},
 	async upload() {
 		var payload = {
-			'title': this.data.title,
+			'title': this.data.title ? this.data.title : getPostTitleFromBody(this.data.body),
 			'body': this.data.body,
 			'price': this.data.price,
 			'location': '',
@@ -106,6 +108,10 @@ Page({
 		var images = this.data.fileList
 		if (!this.validateForm([payload, images])) return false
 
+		wx.showLoading({
+			title: '上传中...',
+			mask: true
+		})
 		// 先去add Post的内容，数据库随机给一个id
 		let result = await this.uploadPostData(payload)
 		const postId = result._id
@@ -118,6 +124,7 @@ Page({
 		}
 		// 最后再去update对应的Post的imageUrls
 		result = await this.updatePostImageUrls(postId, imageUrls)
+		wx.hideLoading()
 		wx.navigateBack()
 	},
 	uploadPostData(payload) {
