@@ -18,6 +18,7 @@
   <!-- Post Options -->
   <view wx:if="{{postData.postType == 'selling'}}" class="option-row">
 		<view wx:if="{{postData.condition}}" class="condition-container">
+			<!-- TODO: 真机上图没了 -->
 			<image class="condition-circle" src="{{conditionIconPath}}"/>
 			<text class="condition-label">{{conditionForDisplay}}</text>
 		</view>
