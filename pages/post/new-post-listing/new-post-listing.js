@@ -1,5 +1,5 @@
 // pages/post/new-post-listing/new-post-listing.js
-import { getPostTitleFromBody } from '../../../utils/util'
+import { getPostTitleFromBody, msgSecCheck } from '../../../utils/util'
 
 const errMsg = new Map([
 	["text", "标题不能为空"],
@@ -15,6 +15,11 @@ Page({
       column: 9,
       width: 213,
       height: 213,
+		},
+		sizeLimit: {
+			size: 5,
+			unit: 'MB',
+			message: '图片大小不超过5MB'
 		},
 		condition: '全新/仅开箱',
 		title: '',
@@ -108,6 +113,17 @@ Page({
 		var images = this.data.fileList
 		if (!this.validateForm([payload, images])) return false
 
+		const isBodyChecked = await msgSecCheck(payload.body)
+		const isTitleChecked = await msgSecCheck(payload.title)
+		if (!isBodyChecked || !isTitleChecked) {
+			wx.showToast({
+				title: '内容含违规信息',
+				icon: 'error',
+				duration: 2000
+			})
+			return false
+		}
+
 		wx.showLoading({
 			title: '上传中...',
 			mask: true
@@ -170,5 +186,5 @@ Page({
 				}
 			})
 		})
-	}
+	},
 })

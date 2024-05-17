@@ -57,9 +57,36 @@ function getPostTitleFromBody(body, length = 24) {
 	return title
 }
 
+async function msgSecCheck(content) {
+	const res = await new Promise((resolve, reject) => {
+		wx.cloud.callFunction({
+			name: 'msgSecCheck',
+			data: {
+				content: content
+			},
+			success: res => {
+				resolve(res.result);
+			},
+			fail: err => {
+				console.error(err)
+				reject(err);
+			}
+		})
+	})
+	if (res.errCode !== 0) {
+		console.error('内容安全检查错误：' + res.errCode)
+		return false
+	}
+	if (res.result.suggest !== 'pass') {
+		return false
+	}
+	return true
+}
+
 module.exports = {
 	getUserInfo,
 	getMyUserInfo,
 	getPostDisplayData,
 	getPostTitleFromBody,
+	msgSecCheck
 }

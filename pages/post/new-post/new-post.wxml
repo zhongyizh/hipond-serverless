@@ -9,5 +9,5 @@
 </view>
 <view class="upload-wrapper">
   <t-upload media-type="{{['image']}}" files="{{fileList}}" gridConfig="{{gridConfig}}" max="9"
-  	bind:remove="handleRemove" bind:add="handleAdd"/>
+		size-limit="{{sizeLimit}}" bind:remove="handleRemove" bind:add="handleAdd"/>
 </view>

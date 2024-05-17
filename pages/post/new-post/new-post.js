@@ -1,5 +1,5 @@
 // pages/post/new-post/new-post.js
-import { getPostTitleFromBody } from '../../../utils/util'
+import { getPostTitleFromBody, msgSecCheck } from '../../../utils/util'
 
 Page({
 	data: {
@@ -8,6 +8,11 @@ Page({
       column: 3,
       width: 213,
       height: 213,
+		},
+		sizeLimit: {
+			size: 5,
+			unit: 'MB',
+			message: '图片大小不超过5MB'
 		},
 		textVal: ''
 	},
@@ -34,6 +39,17 @@ Page({
 		});
 	},
 	async onUpload() {
+		const body = this.data.textVal;
+		const isBodyChecked = await msgSecCheck(body)
+		if (!isBodyChecked) {
+			wx.showToast({
+				title: '内容含违规信息',
+				icon: 'error',
+				duration: 2000
+			})
+			return false
+		}
+
 		wx.showLoading({
 			title: '上传中...',
 			mask: true

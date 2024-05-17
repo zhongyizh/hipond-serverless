@@ -103,12 +103,12 @@ Page({
 				emailAddress: userData.emailAddress
 			})
 			// TODO: 这个好像有逻辑漏洞
-			if (userData.phone != "") {
+			if (userData.phone !== "") {
 				this.setData({
 					isPhoneChecked: true
 				});
 			}
-			if (userData.emailAddress != "") {
+			if (userData.emailAddress !== "") {
 				this.setData({
 					isEmailChecked: true
 				});
