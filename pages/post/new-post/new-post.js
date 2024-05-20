@@ -1,5 +1,5 @@
 // pages/post/new-post/new-post.js
-import { getPostTitleFromBody, msgSecCheck } from '../../../utils/util'
+import { getPostTitleFromBody, msgSecCheck, uploadImage, imgSecCheck } from '../../../utils/util'
 
 Page({
 	data: {
@@ -61,27 +61,14 @@ Page({
 		const { fileList } = this.data;
 		let imageUrls = []
 		for (let img of fileList) {
-			const fileId = await this.uploadImage(postId, img.url)
+			const fileId = await uploadImage(postId, img.url)
 			imageUrls.push(fileId)
+			await imgSecCheck(postId, fileId)
 		}
 		// 最后再去update对应的Post的imageUrls
 		result = await this.updatePostImageUrls(postId, imageUrls)
 		wx.hideLoading()
 		wx.navigateBack()
-	},
-	uploadImage(postId = '', filePath = '') {
-		return new Promise((resolve, reject) => {
-			wx.cloud.uploadFile({
-				cloudPath: 'postImages/' + postId + '/' + filePath.split('/').pop(),
-				filePath: filePath,
-				success: res => {
-					resolve(res.fileID);
-				},
-				fail: err => {
-					reject(err);
-				}
-			})
-		})
 	},
 	uploadPostData() {
 		const db = wx.cloud.database();
@@ -94,6 +81,7 @@ Page({
 					location: '',
 					postDate: Date.now(),
 					postType: 'life',
+					isImgChecked: this.data.fileList.length === 0,
 					viewCount: 0
 				},
 				success: res => {

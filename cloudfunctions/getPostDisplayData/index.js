@@ -10,6 +10,9 @@ exports.main = async (event, context) => {
 	const limit = event.limit
 	const offset = event.offset
 	const result = await db.collection('posts').aggregate().limit(limit).skip(offset)
+		.match({
+			isImgChecked: true
+		})
 		.lookup({
 			from: 'userInfo',
 			localField: '_openid',

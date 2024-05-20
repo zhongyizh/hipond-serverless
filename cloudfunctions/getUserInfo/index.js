@@ -13,5 +13,5 @@ exports.main = async (event, context) => {
 	const userInfo = await db.collection('userInfo').where({
 		_id: userid
 	}).get()
-	return userInfo.data.length == 1 ? userInfo.data[0] : {}
+	return userInfo.data.length === 1 ? userInfo.data[0] : {}
 }

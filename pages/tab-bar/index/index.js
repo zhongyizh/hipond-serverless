@@ -24,7 +24,9 @@ Page({
 	},
 	async getPostList() {
 		const db = wx.cloud.database()
-		const countResult = await db.collection('posts').count()
+		const countResult = await db.collection('posts').where({
+			isImgChecked: true
+		}).count()
 		const total = countResult.total
 		const isEnd = this.data.offset >= total
 		if (!isEnd) {

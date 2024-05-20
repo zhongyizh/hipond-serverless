@@ -14,7 +14,7 @@ exports.main = async (event, context) => {
 		_id: openid
 	}).get()
 	const data = record.data
-	if (data.length == 1) {
+	if (data.length === 1) {
 		const result = await db.collection('userInfo').doc(openid).update({
 			data: {
 				emailAddress: event.emailAddress,

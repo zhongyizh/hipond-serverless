@@ -74,7 +74,7 @@ async function msgSecCheck(content) {
 		})
 	})
 	if (res.errCode !== 0) {
-		console.error('内容安全检查错误：' + res.errCode)
+		console.error('文字内容安全检查错误：' + res.errCode)
 		return false
 	}
 	if (res.result.suggest !== 'pass') {
@@ -83,10 +83,66 @@ async function msgSecCheck(content) {
 	return true
 }
 
+function uploadImage(postId = '', filePath = '') {
+	return new Promise((resolve, reject) => {
+		wx.cloud.uploadFile({
+			cloudPath: 'postImages/' + postId + '/' + filePath.split('/').pop(),
+			filePath: filePath,
+			success: res => {
+				resolve(res.fileID);
+			},
+			fail: err => {
+				reject(err);
+			}
+		})
+	})
+}
+
+async function imgSecCheck(postId = '', url='') {
+	const fileList = []
+	fileList.push(url)
+	const tempUrl = await new Promise((resolve, reject) => {
+		wx.cloud.getTempFileURL({
+			fileList: fileList,
+			success: res => {
+				const tempUrl = res.fileList[0].tempFileURL
+				resolve(tempUrl)
+			},
+			fail: err => {
+				console.error(err)
+				reject(err)
+			}
+		})
+	})
+	console.log('imgSecCheck tempUrl: ' + tempUrl)
+	const res = await new Promise((resolve, reject) => {
+		wx.cloud.callFunction({
+			name: 'mediaCheckAsync',
+			data: {
+				postId: postId,
+				url: tempUrl
+			},
+			success: res => {
+				resolve(res.result)
+			},
+			fail: err => {
+				console.error(err)
+				reject(err)
+			}
+		})
+	})
+	if (res.errCode !== 0) {
+		console.error('图像内容安全检查错误：' + res.errCode)
+	}
+	return
+}
+
 module.exports = {
 	getUserInfo,
 	getMyUserInfo,
 	getPostDisplayData,
 	getPostTitleFromBody,
-	msgSecCheck
+	msgSecCheck,
+	uploadImage,
+	imgSecCheck
 }
