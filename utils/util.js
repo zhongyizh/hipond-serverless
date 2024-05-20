@@ -98,12 +98,11 @@ function uploadImage(postId = '', filePath = '') {
 	})
 }
 
-async function imgSecCheck(postId = '', url='') {
-	const fileList = []
-	fileList.push(url)
+async function imgSecCheck(postId = '', url = '') {
+	// TODO: 因传fileId给mediaCheckAsync的话不管什么图片都能pass，原因未知，故只能用https开头的tempUrl
 	const tempUrl = await new Promise((resolve, reject) => {
 		wx.cloud.getTempFileURL({
-			fileList: fileList,
+			fileList: [url],
 			success: res => {
 				const tempUrl = res.fileList[0].tempFileURL
 				resolve(tempUrl)
@@ -114,7 +113,6 @@ async function imgSecCheck(postId = '', url='') {
 			}
 		})
 	})
-	console.log('imgSecCheck tempUrl: ' + tempUrl)
 	const res = await new Promise((resolve, reject) => {
 		wx.cloud.callFunction({
 			name: 'mediaCheckAsync',
