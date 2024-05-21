@@ -14,6 +14,7 @@ Page({
 	},
 	onLoad(options) {
 		const data = options.data
+		// TODO: 处理特殊符号
 		const postData = JSON.parse(data)
 		postData.postDate = this.parseDate(postData.postDate)
 		this.setData({ postData })
@@ -40,6 +41,7 @@ Page({
 		}
 	},
 	async incrementViewCount() {
+		// TODO: 数据权限，改不了别人的post
 		const _id = this.data.postData._id
 		const db = wx.cloud.database()
 		const _ = db.command
