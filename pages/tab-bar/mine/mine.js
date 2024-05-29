@@ -7,18 +7,18 @@ Page({
 		currentTagIndex: 0,
 		tags: [{
 			text: "动态",
-			count: "0"
+			count: 0
 		}, {
 			text: "在售",
-			count: "0"
+			count: 0
 		}, {
 			text: "收藏",
-			count: "0"
+			count: 0
 		}],
 		userInfo: {},
 		posts: [],
 		maxLimit: 20,
-		offset: 0
+    offset: 0
 	},
 	async onLoad() {
     if(typeof this.getTabBar === 'function' &&
@@ -26,7 +26,7 @@ Page({
 			this.getTabBar().setData({
 				selected: this.data.currentTabbarIndex
 			})
-		}
+    }
 	},
 	async onShow() {
 		await this.getMyProfile()
@@ -86,7 +86,7 @@ Page({
 		this.setData({
 			posts: []
 		})
-	},
+  },
 	async getMyProfile() {
 		// 要先执行这个，这个拿了userInfo里面有openid！
 		wx.showLoading({
@@ -105,10 +105,20 @@ Page({
 		const userId = this.data.userInfo._id ? this.data.userInfo._id : ''
 		const countResult = await db.collection('posts').where({
 			_openid: userId
-		}).count()
+    }).count()
+    // 分别计算两种帖子的数量
+    const lifeCount = await db.collection('posts').where({
+      _openid: userId,
+      postType: "life"
+    }).count()
+    const sellingCount = await db.collection('posts').where({
+      _openid: userId,
+      postType: "selling"
+    }).count()
 		const total = countResult.total
 		let newTags = this.data.tags
-		newTags[0].count = total
+    newTags[0].count = lifeCount.total
+    newTags[1].count = sellingCount.total
 		this.setData({
 			tags: newTags
 		})

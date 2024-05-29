@@ -20,7 +20,7 @@ Page({
 		this.setData({ postData })
 
 		// wxml里有个本地的+1，这里去改数据库
-		this.incrementViewCount()
+    this.incrementViewCount()
 		this.showCondition()
 	},
 	parseDate(date) {
@@ -41,18 +41,18 @@ Page({
 		}
 	},
 	async incrementViewCount() {
-		// TODO: 数据权限，改不了别人的post
-		const _id = this.data.postData._id
-		const db = wx.cloud.database()
-		const _ = db.command
-		await db.collection('posts').doc(_id).update({
-			data: {
-				viewCount: _.inc(1)
-			},
-			success: function(res) {
-				console.log('incrementViewCount id: ' + _id + ' updated: ' + res.stats.updated + ' doc')
-			}
-		})
+    wx.cloud.callFunction ({
+      name: 'incrementViewCount',
+      data: {
+        postId: this.data.postData._id
+      },
+      success: res => {
+        console.log('View count updated', res);
+      },
+      fail: err => {
+        console.error('Failed to update view count', err);
+      }
+    });
 	},
 	onTapContact() {
 		// TODO: On Hold/已售出
