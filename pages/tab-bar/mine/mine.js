@@ -7,18 +7,18 @@ Page({
 		currentTagIndex: 0,
 		tags: [{
 			text: "动态",
-			count: "0"
+			count: 0
 		}, {
 			text: "在售",
-			count: "0"
+			count: 0
 		}, {
 			text: "收藏",
-			count: "0"
+			count: 0
 		}],
 		userInfo: {},
 		posts: [],
 		maxLimit: 20,
-		offset: 0
+    offset: 0
 	},
 	async onLoad() {
     if(typeof this.getTabBar === 'function' &&
@@ -26,7 +26,7 @@ Page({
 			this.getTabBar().setData({
 				selected: this.data.currentTabbarIndex
 			})
-		}
+    }
 	},
 	async onShow() {
 		await this.getMyProfile()
@@ -43,7 +43,8 @@ Page({
 				currentTagIndex: index, // Update the current item to control active class
 				// offset: 0,
 				// isEnd: false
-			})
+      })
+      // this.getMyPosts
 			this.getRelevantPosts()
 		}
 	},
@@ -54,7 +55,7 @@ Page({
 				break;
 			case 1: // 在售页面
 				// 目前没写下面这两个functions
-				// this.getMySellings()
+				// this.getMyPosts()
 				break;
 			case 2: // 收藏页面
 				// this.getMySaves()
@@ -64,7 +65,7 @@ Page({
 		}
 	},
 	async getMyPosts() {
-		const isEnd = this.data.offset >= this.data.tags[0].count
+		const isEnd = this.data.offset >= (this.data.tags[0].count + this.data.tags[1].count)
 		if (!isEnd) {
 			const postData = await this.getUserPostData(this.data.maxLimit, this.data.offset)
 			const currentLength = postData.length
@@ -86,7 +87,7 @@ Page({
 		this.setData({
 			posts: []
 		})
-	},
+  },
 	async getMyProfile() {
 		// 要先执行这个，这个拿了userInfo里面有openid！
 		wx.showLoading({
@@ -103,12 +104,18 @@ Page({
 		// TODO: 不知道为什么_openid: undefined也能拿到数据
 		const db = wx.cloud.database()
 		const userId = this.data.userInfo._id ? this.data.userInfo._id : ''
-		const countResult = await db.collection('posts').where({
-			_openid: userId
-		}).count()
-		const total = countResult.total
+    // 分别计算两种帖子的数量
+    const lifeCount = await db.collection('posts').where({
+      _openid: userId,
+      postType: "life"
+    }).count()
+    const sellingCount = await db.collection('posts').where({
+      _openid: userId,
+      postType: "selling"
+    }).count()
 		let newTags = this.data.tags
-		newTags[0].count = total
+    newTags[0].count = lifeCount.total
+    newTags[1].count = sellingCount.total
 		this.setData({
 			tags: newTags
 		})
