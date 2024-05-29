@@ -3,6 +3,7 @@ import { getPostDisplayData } from '../../../utils/util'
 
 Page({
 	data: {
+		scrollHeight: wx.getWindowInfo().windowHeight * 1.8,
 		list: [],
 		currentTabbarIndex: 0,
 		maxLimit: 20,
