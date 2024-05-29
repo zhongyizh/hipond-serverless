@@ -43,7 +43,8 @@ Page({
 				currentTagIndex: index, // Update the current item to control active class
 				// offset: 0,
 				// isEnd: false
-			})
+      })
+      // this.getMyPosts
 			this.getRelevantPosts()
 		}
 	},
@@ -54,7 +55,7 @@ Page({
 				break;
 			case 1: // 在售页面
 				// 目前没写下面这两个functions
-				// this.getMySellings()
+				// this.getMyPosts()
 				break;
 			case 2: // 收藏页面
 				// this.getMySaves()
@@ -64,7 +65,7 @@ Page({
 		}
 	},
 	async getMyPosts() {
-		const isEnd = this.data.offset >= this.data.tags[0].count
+		const isEnd = this.data.offset >= (this.data.tags[0].count + this.data.tags[1].count)
 		if (!isEnd) {
 			const postData = await this.getUserPostData(this.data.maxLimit, this.data.offset)
 			const currentLength = postData.length
@@ -103,9 +104,6 @@ Page({
 		// TODO: 不知道为什么_openid: undefined也能拿到数据
 		const db = wx.cloud.database()
 		const userId = this.data.userInfo._id ? this.data.userInfo._id : ''
-		const countResult = await db.collection('posts').where({
-			_openid: userId
-    }).count()
     // 分别计算两种帖子的数量
     const lifeCount = await db.collection('posts').where({
       _openid: userId,
@@ -115,7 +113,6 @@ Page({
       _openid: userId,
       postType: "selling"
     }).count()
-		const total = countResult.total
 		let newTags = this.data.tags
     newTags[0].count = lifeCount.total
     newTags[1].count = sellingCount.total
