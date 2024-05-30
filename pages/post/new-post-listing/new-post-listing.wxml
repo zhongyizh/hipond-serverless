@@ -9,10 +9,11 @@
 	<view class="form-title-container">
 		<view class="title-input-wrapper">
 			<input class="title-input" 
-							id="title"
-							placeholder="写标题更容易成功卖出哦"
-							placeholder-style="color: #BBDAD7; font-size: 34rpx;"
-							bindinput="inputText"
+                   id="title"
+                   value="{{title}}"
+                   placeholder="写标题更容易成功卖出哦"
+                   placeholder-style="color: #BBDAD7; font-size: 34rpx;"
+                   bindinput="inputText"
 			/>
 		</view>
 		<view class="money-input-wrapper">
@@ -21,10 +22,11 @@
 			</view>
 			<!-- TODO: 默认的placeholder-style好像没生效 -->
 			<input class="money-input" 
-							id="price"
-							placeholder="价格" 
-							placeholder-style="color: #A4C5C2; font-size: 34rpx;" 
-							bindinput="inputText">
+                   id="price"
+                   value="{{price}}"
+                   placeholder="价格" 
+                   placeholder-style="color: #A4C5C2; font-size: 34rpx;" 
+                   bindinput="inputText">
 			</input>
 		</view>
 	</view>
@@ -46,11 +48,12 @@
 	</view>
 	<view class="body-text-container">
 		<t-textarea class="body-text-textarea" 
-								id="body"
-								maxlength="200"
-								placeholder="留下更详细的交易细节和物品信息…" 
-								placeholder-style="color: #DAECEB; font-size: 28rpx;"
-								bind:change="inputText"
+                    id="body"
+                    value="{{body}}"
+                    maxlength="200"
+                    placeholder="留下更详细的交易细节和物品信息…" 
+                    placeholder-style="color: #DAECEB; font-size: 28rpx;"
+                    bind:change="inputText"
 		/>
 	</view>
 	<!-- TODO: 添加位置 -->

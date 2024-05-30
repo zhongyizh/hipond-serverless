@@ -241,6 +241,9 @@
 }
 
 .view-count-container {
+    display: flex;
+    align-content: center;
+
 	text-align: right;
 	color: #888;
 	font-size: 14px;
@@ -256,5 +259,12 @@
 	background-size: cover;
 	opacity: .5;
 	color: rgba(0,0,0,.5);
-	margin: 0 6px;
+    margin: 0 6px 2px 6px;
+}
+
+.edit-btn{
+    font-size: 10pt;
+    color: #727A7A;
+    font-weight: 700;
+    margin-top: 1px;
 }

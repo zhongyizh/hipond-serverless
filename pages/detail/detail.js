@@ -1,4 +1,5 @@
 // pages/detail/detail.js
+import { ListingConditions } from "../../models/posts.model"
 const conditionIconPath = new Map([
 	["全新/仅开箱", "full-pie.svg"],
 	["良好/轻微使用", "75-percent-pie.svg"],
@@ -39,20 +40,20 @@ Page({
 				conditionIconPath: '/../../image/condition_circle/' + conditionIconPath.get(condition)
 			})
 		}
-	},
+    },
 	async incrementViewCount() {
-    wx.cloud.callFunction ({
-      name: 'incrementViewCount',
-      data: {
-        postId: this.data.postData._id
-      },
-      success: res => {
-        console.log('View count updated', res);
-      },
-      fail: err => {
-        console.error('Failed to update view count', err);
-      }
-    });
+        wx.cloud.callFunction ({
+        name: 'incrementViewCount',
+        data: {
+            postId: this.data.postData._id
+        },
+        success: res => {
+            console.log('View count updated', res);
+        },
+        fail: err => {
+            console.error('Failed to update view count', err);
+        }
+        });
 	},
 	onTapContact() {
 		// TODO: On Hold/已售出
@@ -78,5 +79,30 @@ Page({
 				});
 			}
 		})
-	}
+    },
+    editPost: function() {
+        console.log("detail.js: editPost(): ",this.data.postData);
+        wx.navigateTo({
+            url: '/pages/post/new-post-listing/new-post-listing',
+            success: (res)=>{
+                // 发送帖子编辑event和当前详情页数据至帖子编辑页
+                res.eventChannel.emit('onPageEdit',
+                    {
+                        fileList: this.data.postData.imageUrls.map((i) => {
+                            return {
+                                url: i,
+                                imageSize: 0,
+                                overSize: false
+                            }
+                        }),
+                        price: this.data.postData.price,
+                        condition: this.data.postData.condition || ListingConditions.UNKNOWN,
+                        // ddl: this.data.postData.ddl,
+                        body: this.data.postData.body,
+                        title: this.data.postData.title
+                    }
+                );
+            }
+        })
+    },
 })

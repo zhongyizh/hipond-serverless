@@ -57,9 +57,10 @@
 		<text class="contact-button-sold" wx:if="{{postData.post_status == 2}}">已售出</text> -->
 	</block>
 	<view class="toolbar-right">
+        <text class="edit-btn" bindtap="editPost">编辑</text>
 		<view class="view-count-container">
 			<image class="view-count-image" src="/image/view-count.png"></image>
 			<text>{{postData.viewCount + 1}}</text>
 		</view>
-  </view>
+    </view>
 </view>
