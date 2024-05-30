@@ -6,12 +6,12 @@ export class User {
     zip;
     email;
 
-    constructor({ user_id, avatar_url, nickname, postal_code, wechat_id, email_address }) {
-        this.userId = user_id ?? "ortx2500000000000000000000000";
-        this.wechatId = wechat_id ?? "Unknown Wechat User";
-        this.avatarUrl = avatar_url ?? "";
+    constructor({ userId, avatarUrl, nickname, postalCode, wechatId, emailAddress }) {
+        this.userId = userId ?? "ortx2500000000000000000000000";
+        this.wechatId = wechatId ?? "Unknown Wechat User";
+        this.avatarUrl = avatarUrl ?? "";
         this.nickname = nickname ?? "未知用户";
-        this.zip = postal_code ?? 10000;
-        this.email = email_address ?? "unknown@example.com";
+        this.zip = postalCode ?? 10000;
+        this.email = emailAddress ?? "unknown@example.com";
     }
 }
