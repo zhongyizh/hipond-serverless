@@ -88,6 +88,7 @@ Page({
 			}
 		})
     },
+
     isOwner: async function() {
         // 先获取当前帖子作者的openId
         let authorOpenId = this.data.postData._openid;
@@ -109,6 +110,7 @@ Page({
             })
         });
     },
+
     editPost: function() {
         console.log("detail.js: editPost(): ",this.data.postData);
         wx.navigateTo({
@@ -134,24 +136,47 @@ Page({
             }
         })
     },
+    
     deletePost: function() {
         const db = wx.cloud.database();
-        wx.showLoading({
-			title: '删除中...',
-			mask: true
-		})
-        return new Promise((resolve, reject) => {
-			db.collection('posts').doc(this.data.postData._id).remove({
-				success: res => {
-                    resolve(res);
-                    console.log("detail.js: deletePost(): successfully deleted the post: ", res.data);
-                    wx.hideLoading();
-                    wx.navigateBack();
-                },
-				fail: err => {
-					reject(err);
-				}
+        new Promise((resolve, reject) => {
+            wx.showModal({
+                title: "确认删除？",
+                content: "删除的帖子将不可恢复",
+                success: function(res) {
+                    resolve(res.confirm);
+                }
             })
-		});
+        })
+        .then(isConfirmed => {
+            if (!isConfirmed) return;
+            wx.showLoading({
+                title: '删除中...',
+                mask: true
+            })
+            return new Promise((resolve, reject) => {
+                db.collection('posts').doc(this.data.postData._id).remove({
+                    success: res => {
+                        resolve(res);
+                        console.log("🚮 detail.js: deletePost(): deleting post images: ", this.data.postData.imageUrls);
+                        wx.cloud.deleteFile({
+                            fileList: this.data.postData.imageUrls,
+                            success: res => {
+                                console.log("🚮 detail.js: deletePost(): successfully deleted post images: ", res.fileList);
+                            },
+                            fail: console.error
+                        })
+                        console.log("🚮 detail.js: deletePost(): successfully deleted the post: ", res.data);
+                        wx.hideLoading();
+                        wx.navigateBack();
+                    },
+                    fail: err => {
+                        reject(err);
+                    }
+                })
+            });
+        })
+        
+        
     }
 })
