@@ -105,4 +105,24 @@ Page({
             }
         })
     },
+    deletePost: function() {
+        const db = wx.cloud.database();
+        wx.showLoading({
+			title: '删除中...',
+			mask: true
+		})
+        return new Promise((resolve, reject) => {
+			db.collection('posts').doc(this.data.postData._id).remove({
+				success: res => {
+                    resolve(res);
+                    console.log("detail.js: deletePost(): successfully deleted the post: ", res.data);
+                    wx.hideLoading();
+                    wx.navigateBack();
+                },
+				fail: err => {
+					reject(err);
+				}
+            })
+		});
+    }
 })
