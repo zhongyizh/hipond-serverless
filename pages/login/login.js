@@ -154,6 +154,11 @@ Page({
 					wx.showToast({
 						title: '保存成功',
 						icon: 'success',
+						duration: 1000,
+						mask: true,
+						complete: function() {
+							setTimeout(function() { wx.navigateBack() }, 1000)
+						}
 					})
 				}
 			},
@@ -161,10 +166,14 @@ Page({
 				wx.showToast({
 					title: '保存失败',
 					icon: 'error',
+					duration: 1000,
+					mask: true,
+					complete: function() {
+						setTimeout(function() { wx.navigateBack() }, 1000)
+					}
 				})
 			}
 		})
-		wx.navigateBack()
 	},
 	uploadAvatar() {
 		// TODO: 需要把同一个用户的头像存到同一个云端的位置

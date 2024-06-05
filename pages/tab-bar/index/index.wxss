@@ -1,6 +1,5 @@
 /**index.wxss**/
 page {
-  height: 100vh;
   display: flex;
 	flex-direction: column;
 	background-color: var(--main-bg-color);
