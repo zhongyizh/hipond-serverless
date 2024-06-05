@@ -1,4 +1,5 @@
 // pages/detail/detail.js
+import { ListingConditions } from "../../models/posts.model"
 const conditionIconPath = new Map([
 	["全新/仅开箱", "full-pie.svg"],
 	["良好/轻微使用", "75-percent-pie.svg"],
@@ -10,18 +11,26 @@ Page({
 	data: {
 		postData: [],
 		conditionForDisplay: '',
-		conditionIconPath: ''
-	},
+		conditionIconPath: '',
+        isOwnerFlag: false
+    },
 	onLoad(options) {
 		const data = options.data
 		// TODO: 处理特殊符号
 		const postData = JSON.parse(data)
 		postData.postDate = this.parseDate(postData.postDate)
-		this.setData({ postData })
+        this.setData({ postData })
+        
+        // 判定当前用户是不是帖子的所有者：
+        this.isOwner().then(isOwner => {
+            this.setData({ isOwnerFlag: isOwner });
+        }).catch(error => {
+            this.setData({ isOwnerFlag: false }); 
+        });
 
 		// wxml里有个本地的+1，这里去改数据库
-		this.incrementViewCount()
-		this.showCondition()
+        this.incrementViewCount()
+        this.showCondition()
 	},
 	parseDate(date) {
 		var dateObject = new Date(parseInt(date));
@@ -39,20 +48,20 @@ Page({
 				conditionIconPath: '/../../image/condition_circle/' + conditionIconPath.get(condition)
 			})
 		}
-	},
+    },
 	async incrementViewCount() {
-		// TODO: 数据权限，改不了别人的post
-		const _id = this.data.postData._id
-		const db = wx.cloud.database()
-		const _ = db.command
-		await db.collection('posts').doc(_id).update({
-			data: {
-				viewCount: _.inc(1)
-			},
-			success: function(res) {
-				console.log('incrementViewCount id: ' + _id + ' updated: ' + res.stats.updated + ' doc')
-			}
-		})
+        wx.cloud.callFunction ({
+        name: 'incrementViewCount',
+        data: {
+            postId: this.data.postData._id
+        },
+        success: res => {
+            console.log('View count updated', res);
+        },
+        fail: err => {
+            console.error('Failed to update view count', err);
+        }
+        });
 	},
 	onTapContact() {
 		// TODO: On Hold/已售出
@@ -78,5 +87,96 @@ Page({
 				});
 			}
 		})
-	}
+    },
+
+    isOwner: async function() {
+        // 先获取当前帖子作者的openId
+        let authorOpenId = this.data.postData._openid;
+        return new Promise((resolve, reject) => {
+            wx.cloud.callFunction({
+                name: 'getUserInfo',
+                success: function(res) {
+                    // 再使用云函数获取用户的openId
+                    let userOpenId = res.result._id;
+                    // 比较是不是一个人，如果是的话就说明当前用户是帖子的所有者
+                    console.log("detail.js: isOwner(): trynna check if current user owns the post: " + userOpenId + 
+                                (userOpenId == authorOpenId ? " 是 " : " 不是 ") + authorOpenId);
+                    resolve(userOpenId == authorOpenId);
+                },
+                fail: function(res) {
+                    console.log("detail.js: isOwner(): get user info failed! ");
+                    reject(false);
+                }
+            })
+        });
+    },
+
+    editPost: function() {
+        console.log("detail.js: editPost(): ",this.data.postData);
+        wx.navigateTo({
+            url: '/pages/post/new-post-listing/new-post-listing',
+            success: (res)=>{
+                // 发送帖子编辑event和当前详情页数据至帖子编辑页
+                res.eventChannel.emit('onPageEdit',
+                    {
+                        fileList: this.data.postData.imageUrls.map((i) => {
+                            return {
+                                url: i,
+                                imageSize: 0,
+                                overSize: false
+                            }
+                        }),
+                        price: this.data.postData.price,
+                        condition: this.data.postData.condition || ListingConditions.UNKNOWN,
+                        // ddl: this.data.postData.ddl,
+                        body: this.data.postData.body,
+                        title: this.data.postData.title
+                    }
+                );
+            }
+        })
+    },
+    
+    deletePost: function() {
+        const db = wx.cloud.database();
+        new Promise((resolve, reject) => {
+            wx.showModal({
+                title: "确认删除？",
+                content: "删除的帖子将不可恢复",
+                success: function(res) {
+                    resolve(res.confirm);
+                }
+            })
+        })
+        .then(isConfirmed => {
+            if (!isConfirmed) return;
+            wx.showLoading({
+                title: '删除中...',
+                mask: true
+            })
+            return new Promise((resolve, reject) => {
+                db.collection('posts').doc(this.data.postData._id).remove({
+                    success: res => {
+                        resolve(res);
+                        console.log("🚮 detail.js: deletePost(): deleting post images: ", this.data.postData.imageUrls);
+                        wx.cloud.deleteFile({
+                            fileList: this.data.postData.imageUrls,
+                            success: res => {
+                                console.log("🚮 detail.js: deletePost(): successfully deleted post images: ", res.fileList);
+                            },
+                            fail: console.error
+                        })
+                        console.log("🚮 detail.js: deletePost(): successfully deleted the post: ", res.data);
+                        wx.hideLoading();
+                        wx.navigateBack();
+                    },
+                    fail: err => {
+                        reject(err);
+                    }
+                })
+            });
+        })
+        
+        
+    }
 })

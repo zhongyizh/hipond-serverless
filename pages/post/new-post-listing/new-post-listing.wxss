@@ -100,6 +100,7 @@
 }
 
 .body-text-textarea {
+    padding-top: 10rpx;
 	height: 500rpx;
 }
 
