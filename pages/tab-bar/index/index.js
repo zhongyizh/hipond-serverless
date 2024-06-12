@@ -34,7 +34,7 @@ Page({
 			const currentLength = postData.length
 			const newOffset = this.data.offset + currentLength
 			this.setData({
-				list: [...this.data.list, ...postData],
+				list: [...this.data.list, ...postData].reverse(),
 				offset: newOffset
 			})
 		}
