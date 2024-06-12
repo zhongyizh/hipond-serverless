@@ -12,9 +12,9 @@ Page({
 	data: {
 		fileList: [],
 		gridConfig: {
-      column: 9,
-      width: 213,
-      height: 213,
+            column: 9,
+            width: 213,
+            height: 213,
 		},
 		sizeLimit: {
 			size: 5,
@@ -27,7 +27,18 @@ Page({
 		price: '',
 		actionSheetItems: ['全新/仅开箱', '良好/轻微使用', '一般/工作良好', '需修理/零件可用'],
 		isActionSheetHidden: true,
-	},
+    },
+    onLoad() {
+        // 发帖编辑功能的实现
+        // 通过一个event来从「详情页」传数据到「编辑页」：
+        // 获取所有打开的EventChannel事件
+        const eventChannel = this.getOpenerEventChannel();
+        // 监听 index页面定义的 toB 事件
+        eventChannel.on('onPageEdit', (res) => {
+            this.setData(res);
+            console.log("new-post-listing.js: onLoad(): onPageEdit triggered: this.data:", this.data);
+        })
+    },
 	handleAdd(e) {
 		const { fileList } = this.data;
 		const { files } = e.detail;
