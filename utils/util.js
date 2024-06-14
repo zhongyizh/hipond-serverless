@@ -57,32 +57,6 @@ function getPostTitleFromBody(body, length = 24) {
 	return title
 }
 
-async function msgSecCheck(content) {
-	const res = await new Promise((resolve, reject) => {
-		wx.cloud.callFunction({
-			name: 'msgSecCheck',
-			data: {
-				content: content
-			},
-			success: res => {
-				resolve(res.result);
-			},
-			fail: err => {
-				console.error(err)
-				reject(err);
-			}
-		})
-	})
-	if (res.errCode !== 0) {
-		console.error('文字内容安全检查错误：' + res.errCode)
-		return false
-	}
-	if (res.result.suggest !== 'pass') {
-		return false
-	}
-	return true
-}
-
 function uploadImage(postId = '', filePath = '') {
 	return new Promise((resolve, reject) => {
 		wx.cloud.uploadFile({
@@ -98,49 +72,10 @@ function uploadImage(postId = '', filePath = '') {
 	})
 }
 
-async function imgSecCheck(postId = '', url = '') {
-	// TODO: 因传fileId给mediaCheckAsync的话不管什么图片都能pass，原因未知，故只能用https开头的tempUrl
-	const tempUrl = await new Promise((resolve, reject) => {
-		wx.cloud.getTempFileURL({
-			fileList: [url],
-			success: res => {
-				const tempUrl = res.fileList[0].tempFileURL
-				resolve(tempUrl)
-			},
-			fail: err => {
-				console.error(err)
-				reject(err)
-			}
-		})
-	})
-	const res = await new Promise((resolve, reject) => {
-		wx.cloud.callFunction({
-			name: 'mediaCheckAsync',
-			data: {
-				postId: postId,
-				url: tempUrl
-			},
-			success: res => {
-				resolve(res.result)
-			},
-			fail: err => {
-				console.error(err)
-				reject(err)
-			}
-		})
-	})
-	if (res.errCode !== 0) {
-		console.error('图像内容安全检查错误：' + res.errCode)
-	}
-	return
-}
-
 module.exports = {
 	getUserInfo,
 	getMyUserInfo,
 	getPostDisplayData,
 	getPostTitleFromBody,
-	msgSecCheck,
 	uploadImage,
-	imgSecCheck
 }

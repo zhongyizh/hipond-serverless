@@ -1,5 +1,6 @@
 // pages/post/new-post-listing/new-post-listing.js
-import { getPostTitleFromBody, msgSecCheck, uploadImage, imgSecCheck } from '../../../utils/util'
+import { getPostTitleFromBody, uploadImage } from '../../../utils/util'
+import { msgSecCheck, imgSecCheck } from '../../../services/post.service'
 
 const errMsg = new Map([
 	["text", "标题不能为空"],
@@ -125,6 +126,11 @@ Page({
 		var images = this.data.fileList
 		if (!this.validateForm([payload, images])) return false
 
+		wx.showLoading({
+			title: '上传中...',
+			mask: true
+		})
+		
 		const isBodyChecked = await msgSecCheck(payload.body)
 		const isTitleChecked = await msgSecCheck(payload.title)
 		if (!isBodyChecked || !isTitleChecked) {
@@ -135,11 +141,8 @@ Page({
 			})
 			return false
 		}
+		else console.log("✅ new-post-listing.js: upload(): Text Content Check Passed!");
 
-		wx.showLoading({
-			title: '上传中...',
-			mask: true
-		})
 		// 先去add Post的内容，数据库随机给一个id
 		let result = await this.uploadPostData(payload)
 		const postId = result._id
@@ -149,7 +152,8 @@ Page({
 		for (let img of fileList) {
 			const fileId = await uploadImage(postId, img.url)
 			imageUrls.push(fileId)
-			await imgSecCheck(postId, fileId)
+			let traceId = await imgSecCheck(postId, fileId);
+			console.log("new-post-listing.js: upload(): Image Security Compliance Check TraceId for " + fileId + " is " + traceId);
 		}
 		// 最后再去update对应的Post的imageUrls
 		result = await this.updatePostImageUrls(postId, imageUrls)

@@ -33,6 +33,9 @@ exports.main = async (event, context) => {
 				}
 		})
 	}
+	// 在拿到审核结果后删除掉记录节省空间
+	await db.collection('imageCheckStatus').doc(traceId).remove();
+
 	return {
 		event,
 		record,
