@@ -30,8 +30,7 @@ Page({
 		const total = countResult.total
 		const isEnd = this.data.offset >= total
 		if (!isEnd) {
-			let postData = await getPostDisplayData(this.data.maxLimit, this.data.offset)
-			postData = postData.reverse()
+			const postData = await getPostDisplayData(this.data.maxLimit, this.data.offset)
 			const currentLength = postData.length
 			const newOffset = this.data.offset + currentLength
 			this.setData({
