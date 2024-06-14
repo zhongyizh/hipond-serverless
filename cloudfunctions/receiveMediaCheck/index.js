@@ -22,7 +22,7 @@ exports.main = async (event, context) => {
 				title: '该内容已违规，暂不展示',
 				isImgChecked: false
 			}
-		})
+		});
 	}
 	const imageCheckResult = await db.collection('imageCheckStatus').where({ postId: postId }).get()
 	const allPassed = imageCheckResult.data.every(image => image.isChecked)
@@ -31,10 +31,10 @@ exports.main = async (event, context) => {
 				data: {
 					isImgChecked: true
 				}
-		})
+		});
 	}
-	// 在拿到审核结果后删除掉记录节省空间
-	await db.collection('imageCheckStatus').doc(traceId).remove();
+	// TO-DO: 在拿到审核结果后删除掉记录节省空间
+	// await db.collection('imageCheckStatus').doc(traceId).remove();
 
 	return {
 		event,

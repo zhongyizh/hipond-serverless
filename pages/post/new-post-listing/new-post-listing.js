@@ -11,7 +11,14 @@ const errMsg = new Map([
 
 Page({
 	data: {
+		// Data Models
 		fileList: [],
+		condition: '全新/仅开箱',
+		title: '',
+		body: '',
+		price: '',
+		// View Models
+		originalCopy: {}, // Store the copy of the original post upon editing.
 		gridConfig: {
             column: 9,
             width: 213,
@@ -22,10 +29,6 @@ Page({
 			unit: 'MB',
 			message: '图片大小不超过5MB'
 		},
-		condition: '全新/仅开箱',
-		title: '',
-		body: '',
-		price: '',
 		actionSheetItems: ['全新/仅开箱', '良好/轻微使用', '一般/工作良好', '需修理/零件可用'],
 		isActionSheetHidden: true,
     },
@@ -36,7 +39,8 @@ Page({
         const eventChannel = this.getOpenerEventChannel();
         // 监听 index页面定义的 toB 事件
         eventChannel.on('onPageEdit', (res) => {
-            this.setData(res);
+			this.setData(res);
+			this.setData({ originalCopy: res });
             console.log("new-post-listing.js: onLoad(): onPageEdit triggered: this.data:", this.data);
         })
     },
@@ -130,7 +134,7 @@ Page({
 			title: '上传中...',
 			mask: true
 		})
-		
+
 		const isBodyChecked = await msgSecCheck(payload.body)
 		const isTitleChecked = await msgSecCheck(payload.title)
 		if (!isBodyChecked || !isTitleChecked) {
@@ -146,15 +150,37 @@ Page({
 		// 先去add Post的内容，数据库随机给一个id
 		let result = await this.uploadPostData(payload)
 		const postId = result._id
-		// 再把图片都uploadFile到指定文件夹，拿到图片在云上的地址
-		const { fileList } = this.data;
-		let imageUrls = []
-		for (let img of fileList) {
-			const fileId = await uploadImage(postId, img.url)
-			imageUrls.push(fileId)
-			let traceId = await imgSecCheck(postId, fileId);
-			console.log("new-post-listing.js: upload(): Image Security Compliance Check TraceId for " + fileId + " is " + traceId);
+		// 获取原始文件列表和当前文件列表
+		const originalFileList = this.originalCopy.fileList;    // Denote as A
+		const currentFileList = this.data.fileList; 			// Denote as B
+		// 计算要添加的文件 (B - (A ∩ B))
+		const filesToAdd = currentFileList.filter(
+			img => !originalFileList.some(originalImg => originalImg.url === img.url)
+		);
+		console.log("new-post-listing: ");
+		// 计算要删除的文件 (A - (A ∩ B))
+		const filesToDelete = originalFileList.filter(
+			originalImg => !currentFileList.some(img => img.url === originalImg.url)
+		).map(img => img.url);
+		// 删除不再使用的图片
+		if (filesToDelete.length > 0) {
+			wx.cloud.deleteFile({
+				fileList: filesToDelete,
+				success: res => {
+					console.log("Successfully deleted post images: ", res.fileList);
+				},
+				fail: console.error
+			});
 		}
+		// 上传新的图片并检查
+		let imageUrls = []
+		for (let img of filesToAdd) {
+			const fileId = await this.uploadImage(postId, img.url)
+			imageUrls.push(fileId)
+			let traceId = await this.imgSecCheck(postId, fileId);
+			console.log("Image Security Compliance Check TraceId for " + fileId + " is " + traceId);
+		}
+	
 		// 最后再去update对应的Post的imageUrls
 		result = await this.updatePostImageUrls(postId, imageUrls)
 		wx.hideLoading()
