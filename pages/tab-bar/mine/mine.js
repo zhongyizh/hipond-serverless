@@ -19,7 +19,11 @@ Page({
 		posts: [],
 		maxLimit: 20,
     offsetLife: 0,
-    offsetSelling: 0
+		offsetSelling: 0,
+		offsetSaving: 0,
+		savedIdList: [],
+		savedPost: []
+		
 	},
 	async onLoad() {
     if(typeof this.getTabBar === 'function' &&
@@ -56,7 +60,7 @@ Page({
 				break;
       case 2: // 收藏页面
         // 目前没写下面这个function
-				// this.getMySaves()
+				this.getMySaves()
 				break;
 			default:
 				console.log("Invalid current tag index")
@@ -87,16 +91,17 @@ Page({
 			})
 		}
 	},
-	getMySellings() {
-		// TODO: Finish this
+	async getMySaves() {
+		const db = wx.cloud.database()
+		const tempSavedList = []
+		for (const id of this.data.savedIdList) {
+			const tempPost = await db.collection('posts').where({
+				_id: id
+			}).get()
+			tempSavedList.push(tempPost.data[0])
+		}
 		this.setData({
-			posts: []
-		})
-	},
-	getMySaves() {
-		// TODO: Finish this
-		this.setData({
-			posts: []
+			savedPost: tempSavedList
 		})
   },
 	async getMyProfile() {
@@ -123,10 +128,18 @@ Page({
     const sellingCount = await db.collection('posts').where({
       _openid: userId,
       postType: "selling"
-    }).count()
+		}).count()
+		
+		const saveRecord = await db.collection('saveList').where({
+      _id: userId
+		}).get()
+		this.setData({
+			savedIdList: saveRecord.data[0].list
+		})
 		let newTags = this.data.tags
     newTags[0].count = lifeCount.total
-    newTags[1].count = sellingCount.total
+		newTags[1].count = sellingCount.total
+		newTags[2].count = saveRecord.data[0].list.length
 		this.setData({
 			tags: newTags
 		})
@@ -145,6 +158,14 @@ Page({
 		}).limit(limit).skip(offset).get()
 		return postsListResult.data
 	},
+	navigateToDetailSaved(event) {
+		const postIndex = event.currentTarget.dataset.index
+		const postData = JSON.stringify(this.data.savedPost[postIndex])
+		wx.navigateTo({
+			url: `/pages/detail/detail?data=${postData}`
+		});
+	},
+
 	navigateToDetail(event) {
 		const postIndex = event.currentTarget.dataset.index
 		let postData = this.data.posts[postIndex]
