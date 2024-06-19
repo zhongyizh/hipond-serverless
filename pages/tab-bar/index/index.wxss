@@ -1,20 +1,22 @@
 /**index.wxss**/
 page {
-  display: flex;
+  	display: flex;
 	flex-direction: column;
 	background-color: var(--main-bg-color);
 	--card-border-radius: 3%;
 }
 
 .search-box {
-  --td-search-height: 60rpx;
-  width: 530rpx;
+	--td-search-height: 60rpx;
+	width: 530rpx;
 }
 
 .scroll-view-border {
-	margin-top: 4px;
-	margin-left: 4px;
-	margin-right: 4px;
+	margin: 4px 4px 0px 4px;
+}
+
+.scroll-view {
+	padding-bottom: 160rpx;
 }
 
 .grid-box {
