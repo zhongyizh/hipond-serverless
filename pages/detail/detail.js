@@ -46,7 +46,8 @@ Page({
 				if (res.result) {
 					this.setData({
 						postSaved: res.result,
-						saveButtonUrl: "/image/saved_button.png"
+            saveButtonUrl: "/image/saved_button.png",
+            "postData.saveCount": (this.data.postData.saveCount? this.data.postData.saveCount : 0)  + 1
 					})
 				}
 			},
