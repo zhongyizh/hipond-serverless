@@ -166,16 +166,6 @@ Page({
 		const filesToDelete = originalFileList.filter(
 			originalImg => !currentFileList.some(img => img.url === originalImg.url)
 		).map(img => img.url);
-		// 删除不再使用的图片
-		if (filesToDelete.length > 0) {
-			wx.cloud.deleteFile({
-				fileList: filesToDelete,
-				success: res => {
-					console.log("Successfully deleted post images: ", res.fileList);
-				},
-				fail: console.error
-			});
-		}
         console.log("new-post-listing.js: upload(): images to add: ", filesToAdd);
         console.log("new-post-listing.js: upload(): images to clear: ", filesToDelete);
 		// 上传新的图片并检查
@@ -188,11 +178,11 @@ Page({
 			let traceId = await imgSecCheck(postId, fileId);
 			console.log("Image Security Compliance Check TraceId for " + fileId + " is " + traceId);
 		}
-		
 		// 最后再去update对应的Post的imageUrls
 		console.warn(imageUrls);
 		result = await this.updatePostImageUrls(postId, imageUrls);
-		deletePost(this.data.originalCopy._id, originalFileList)
+		// 删除不再使用的图片
+		deletePost(this.data.originalCopy._id, filesToDelete)
 		wx.hideLoading();
 		wx.navigateBack();
 	},
