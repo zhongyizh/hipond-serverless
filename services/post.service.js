@@ -1,73 +1,26 @@
-async function imgSecCheck(postId = '', url = '') {
-	// TODO: 因传fileId给mediaCheckAsync的话不管什么图片都能pass，原因未知，故只能用https开头的tempUrl
-	const tempUrl = await new Promise((resolve, reject) => {
-		console.log("⏳ post.service.js: imgSecCheck(): Fetching Image Tempfile URLs...");
-		wx.cloud.getTempFileURL({
-			fileList: [url],
+async function deletePost(postId, imageUrls) {
+	const db = wx.cloud.database();
+	return new Promise((resolve, reject) => {
+		db.collection('posts').doc(postId).remove({
 			success: res => {
-				const tempUrl = res.fileList[0].tempFileURL
-				console.log("✅ post.service.js: imgSecCheck(): Image Tempfile URLs Fetched!");
-				resolve(tempUrl)
+				resolve(res);
+				console.log("🚮 detail.js: deletePost(): deleting post images: ", imageUrls);
+				wx.cloud.deleteFile({
+					fileList: imageUrls,
+					success: res => {
+						console.log("🚮 detail.js: deletePost(): successfully deleted post images: ", res.fileList);
+					},
+					fail: console.error
+				})
+				console.log("🚮 detail.js: deletePost(): successfully deleted the post: ", res.data);
 			},
 			fail: err => {
-				console.error(err)
-				reject(err)
-			}
-		})
-	})
-	const res = await new Promise((resolve, reject) => {
-		console.log("⏳ post.service.js: imgSecCheck(): Checking Image Security Compliance...");
-		console.log("🖼 post.service.js: imgSecCheck(): Post ID Checked: ", postId);
-		console.log("🖼 post.service.js: imgSecCheck(): Image Urls Checked (tempUrl): ", tempUrl);
-		wx.cloud.callFunction({
-			name: 'mediaCheckAsync',
-			data: {
-				postId: postId,
-				url: tempUrl
-			},
-			success: res => {
-				resolve(res.result)
-			},
-			fail: err => {
-				console.error(err)
-				reject(err)
-			}
-		})
-	})
-	if (res.errCode !== 0) {
-		console.error('❌ post.service.js: imgSecCheck(): 图像内容安全检查错误：' + res.errCode)
-	}
-	return res.traceId;
-}
-
-async function msgSecCheck(content) {
-	console.log("⏳ post.service.js: msgSecCheck(): Checking Text Content Security Compliance: ", content);
-	const res = await new Promise((resolve, reject) => {
-		wx.cloud.callFunction({
-			name: 'msgSecCheck',
-			data: {
-				content: content
-			},
-			success: res => {
-				resolve(res.result);
-			},
-			fail: err => {
-				console.error(err)
 				reject(err);
 			}
 		})
-	})
-	if (res.errCode !== 0) {
-		console.error('文字内容安全检查错误：' + res.errCode)
-		return false
-	}
-	if (res.result.suggest !== 'pass') {
-		return false
-	}
-	return true
+	});
 }
 
 module.exports = {
-	msgSecCheck,
-	imgSecCheck
+	deletePost
 }

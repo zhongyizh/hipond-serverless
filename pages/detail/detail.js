@@ -1,5 +1,6 @@
 // pages/detail/detail.js
 import { ListingConditions } from "../../models/posts.model"
+import { deletePost } from "../../services/post.service"
 const conditionIconPath = new Map([
 	["全新/仅开箱", "full-pie.svg"],
 	["良好/轻微使用", "75-percent-pie.svg"],
@@ -12,7 +13,8 @@ Page({
 		postData: [],
 		conditionForDisplay: '',
 		conditionIconPath: '',
-        isOwnerFlag: false
+        isEditBTNEnabled: false,
+        isDeleteBTNEnabled: false
     },
 	onLoad(options) {
 		const data = options.data
@@ -22,10 +24,17 @@ Page({
         this.setData({ postData })
         
         // 判定当前用户是不是帖子的所有者：
+        console.log("isImgChecked: ", this.data.postData.isImgChecked);
         this.isOwner().then(isOwner => {
-            this.setData({ isOwnerFlag: isOwner });
+            this.setData({ 
+                isEditBTNEnabled: this.data.postData.isImgChecked && isOwner, 
+                isDeleteBTNEnabled: isOwner 
+            });
         }).catch(error => {
-            this.setData({ isOwnerFlag: false }); 
+            this.setData({ 
+                isEditBTNEnabled: false, 
+                isDeleteBTNEnabled: false 
+            }); 
         });
 
 		// wxml里有个本地的+1，这里去改数据库
@@ -119,6 +128,7 @@ Page({
                 // 发送帖子编辑event和当前详情页数据至帖子编辑页
                 res.eventChannel.emit('onPageEdit',
                     {
+                        _id: this.data.postData._id,
                         fileList: this.data.postData.imageUrls.map((i) => {
                             return {
                                 url: i,
@@ -136,9 +146,7 @@ Page({
             }
         })
     },
-    
-    deletePost: function() {
-        const db = wx.cloud.database();
+    onDeletePostBTNClicked: function() { 
         new Promise((resolve, reject) => {
             wx.showModal({
                 title: "确认删除？",
@@ -147,36 +155,16 @@ Page({
                     resolve(res.confirm);
                 }
             })
-        })
-        .then(isConfirmed => {
+        }).then(isConfirmed => {
             if (!isConfirmed) return;
             wx.showLoading({
                 title: '删除中...',
                 mask: true
             })
-            return new Promise((resolve, reject) => {
-                db.collection('posts').doc(this.data.postData._id).remove({
-                    success: res => {
-                        resolve(res);
-                        console.log("🚮 detail.js: deletePost(): deleting post images: ", this.data.postData.imageUrls);
-                        wx.cloud.deleteFile({
-                            fileList: this.data.postData.imageUrls,
-                            success: res => {
-                                console.log("🚮 detail.js: deletePost(): successfully deleted post images: ", res.fileList);
-                            },
-                            fail: console.error
-                        })
-                        console.log("🚮 detail.js: deletePost(): successfully deleted the post: ", res.data);
-                        wx.hideLoading();
-                        wx.navigateBack();
-                    },
-                    fail: err => {
-                        reject(err);
-                    }
-                })
-            });
-        })
-        
-        
-    }
+            deletePost(this.data.postData._id, this.data.postData.imageUrls).then(() => {
+                wx.hideLoading();
+                wx.navigateBack();
+            }); 
+        });
+    } 
 })
