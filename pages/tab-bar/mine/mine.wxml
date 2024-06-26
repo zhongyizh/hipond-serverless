@@ -76,7 +76,7 @@
         <scroll-view class="scroll-view" type="custom" scroll-y="true" style="min-height: 700rpx">
           <grid-view type="masonry" cross-axis-count="2" cross-axis-gap="4" main-axis-gap="5">
             <block wx:for="{{savedPost}}" wx:key="_id">
-              <view  class="grid-box" bindtap="navigateToDetailSaved" data-index="{{index}}">
+              <view class="grid-box" bindtap="navigateToDetailSaved" data-index="{{index}}">
                 <image src="{{item.imageUrls[0]}}" mode="widthFix"></image>
                 <view class="content-box">
                   <view class="content-title-box"> {{item.title}}</view>

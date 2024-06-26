@@ -120,24 +120,23 @@ Page({
 		// TODO: 不知道为什么_openid: undefined也能拿到数据
 		const db = wx.cloud.database()
 		const userId = this.data.userInfo._id ? this.data.userInfo._id : ''
-    // 分别计算两种帖子的数量
-    const lifeCount = await db.collection('posts').where({
-      _openid: userId,
-      postType: "life"
-    }).count()
-    const sellingCount = await db.collection('posts').where({
-      _openid: userId,
-      postType: "selling"
+		// 分别计算两种帖子的数量
+		const lifeCount = await db.collection('posts').where({
+			_openid: userId,
+			postType: "life"
 		}).count()
-		
+		const sellingCount = await db.collection('posts').where({
+			_openid: userId,
+			postType: "selling"
+		}).count()
 		const saveRecord = await db.collection('saveList').where({
-      _id: userId
+			_id: userId
 		}).get()
 		this.setData({
 			savedIdList: saveRecord.data[0].list
 		})
 		let newTags = this.data.tags
-    newTags[0].count = lifeCount.total
+		newTags[0].count = lifeCount.total
 		newTags[1].count = sellingCount.total
 		newTags[2].count = saveRecord.data[0].list.length
 		this.setData({
@@ -147,14 +146,14 @@ Page({
 	async getUserPostData(limit = 20, offset = 0, Types = ['life','selling']) {
 		// TODO: 不知道为什么_openid: undefined也能拿到数据
 		const db = wx.cloud.database()
-    const userId = this.data.userInfo._id ? this.data.userInfo._id : ''
-    // 把Types map到一个object中执行where
-    const condition = Types.map(type => ({
-      postType: type
-    }));
+		const userId = this.data.userInfo._id ? this.data.userInfo._id : ''
+		// 把Types map到一个object中执行where
+		const condition = Types.map(type => ({
+			postType: type
+		}));
 		const postsListResult = await db.collection('posts').where({
-      _openid: userId,
-      $or: condition
+			_openid: userId,
+			$or: condition
 		}).limit(limit).skip(offset).get()
 		return postsListResult.data
 	},
@@ -165,7 +164,6 @@ Page({
 			url: `/pages/detail/detail?data=${postData}`
 		});
 	},
-
 	navigateToDetail(event) {
 		const postIndex = event.currentTarget.dataset.index
 		let postData = this.data.posts[postIndex]
@@ -183,29 +181,29 @@ Page({
 		wx.navigateTo({
 			url: `/pages/detail/detail?data=${data}`
 		});
-  },
-  // 分享给朋友
-  onShareAppMessage: function(options) {
-    return {
-      title: 'Hipond你的留学之家',
-      path: '/pages/tab-bar/mine/mine?pageId=' + this.data.currentPageId,
-      imageUrl: '/image/button_post_2nd.png',
-      success: function(res) {
-        // 分享成功后的回调
-        console.log('分享成功');
-      },
-      fail: function(res) {
-        // 分享失败后的回调
-        console.log('分享失败');
-      }
-    };
-  },
-  // 分享到朋友圈
-  onShareTimeline: function() {
-    return {
-      title: 'Hipond你的留学之家',
-      path: '/pages/tab-bar/mine/mine?pageId=' + this.data.currentPageId,
-      imageUrl: '/image/button_post_2nd.png' 
-    };
-  },
+  	},
+	// 分享给朋友
+	onShareAppMessage: function(options) {
+		return {
+			title: 'Hipond你的留学之家',
+			path: '/pages/tab-bar/mine/mine?pageId=' + this.data.currentPageId,
+			imageUrl: '/image/button_post_2nd.png',
+			success: function(res) {
+				// 分享成功后的回调
+				console.log('分享成功');
+			},
+			fail: function(res) {
+				// 分享失败后的回调
+				console.log('分享失败');
+			}
+		};
+	},
+	// 分享到朋友圈
+	onShareTimeline: function() {
+		return {
+			title: 'Hipond你的留学之家',
+			path: '/pages/tab-bar/mine/mine?pageId=' + this.data.currentPageId,
+			imageUrl: '/image/button_post_2nd.png' 
+		};
+	},
 })
