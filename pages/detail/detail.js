@@ -117,15 +117,12 @@ Page({
 		})
 	},
 	savePost() {
-		console.log(this.data.postData._id)
 		if (!this.data.postSaved) {
 			this.setData({
 				saveButtonUrl: "/image/saved_button.png",
 				postSaved: true,
 				"postData.saveCount": this.data.postData.saveCount + 1
-
 			})
-
 			wx.cloud.callFunction({
 				name: 'savePost',
 				data: {
@@ -151,16 +148,12 @@ Page({
 					})
 				}
 			})
-
 		} else {
 			this.setData({
 				saveButtonUrl: "/image/not_saved_button.png",
 				postSaved: false,
 				"postData.saveCount": this.data.postData.saveCount - 1
-
-
 			})
-
 			wx.cloud.callFunction({
 				name: 'savePost',
 				data: {
@@ -271,30 +264,30 @@ Page({
 				});
 			})
 	},
-  // 分享给朋友
-  onShareAppMessage: function() {
-    const detailData = JSON.stringify(this.data.postData)
-    return {
-      title: this.data.postData.nickname + '发布的帖子: ' + this.data.postData.title,
-      path: `/pages/detail/detail?data=${detailData}`,
-      imageUrl: this.data.postData.imageUrls[0],
-      success: function() {
-        // 分享成功后的回调
-        console.log('分享成功');
-      },
-      fail: function() {
-        // 分享失败后的回调
-        console.log('分享失败');
-      }
-    };
-  },
-  // 分享到朋友圈
-  onShareTimeline: function() {
-    const detailData = JSON.stringify(this.data.postData)
-    return {
-      title: this.data.postData.nickname + '发布的帖子: ' + this.data.postData.title,
-      path: `/pages/detail/detail?data=${detailData}`,
-      imageUrl: this.data.postData.imageUrls[0] 
-    };
-  },
+	// 分享给朋友
+	onShareAppMessage: function() {
+		const detailData = JSON.stringify(this.data.postData)
+		return {
+			title: this.data.postData.nickname + '发布的帖子: ' + this.data.postData.title,
+			path: `/pages/detail/detail?data=${detailData}`,
+			imageUrl: this.data.postData.imageUrls[0],
+			success: function() {
+			// 分享成功后的回调
+			console.log('分享成功');
+			},
+			fail: function() {
+			// 分享失败后的回调
+			console.log('分享失败');
+			}
+		};
+	},
+	// 分享到朋友圈
+	onShareTimeline: function() {
+		const detailData = JSON.stringify(this.data.postData)
+		return {
+			title: this.data.postData.nickname + '发布的帖子: ' + this.data.postData.title,
+			path: `/pages/detail/detail?data=${detailData}`,
+			imageUrl: this.data.postData.imageUrls[0] 
+		};
+	},
 })
