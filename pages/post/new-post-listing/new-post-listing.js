@@ -1,7 +1,7 @@
 // pages/post/new-post-listing/new-post-listing.js
 import { getPostTitleFromBody, uploadImage } from '../../../utils/util'
 import { msgSecCheck, imgSecCheck } from '../../../services/security.service'
-import { deletePost, createPost } from "../../../services/post.service"
+import { createPost, editPost } from "../../../services/post.service"
 
 const errMsg = new Map([
 	["text", "标题不能为空"],
@@ -81,19 +81,12 @@ Page({
 		});
 	},
 	inputText: function(res) {
-		switch(res.currentTarget.id) {
-			case "body":
-				this.data.body = res.detail.value;
-				break;
-			case "price":
-				this.data.price = res.detail.value; //TODO: 确认价格的输入限制，而且现在必须输入价格
-				break;
-			case "title":
-				this.data.title = res.detail.value;
-				break;
-			default: 
-				console.log("Unrecognized Input Box id");
-				break;
+		const widgetId = res.currentTarget.id;
+		try {
+			this.data[widgetId] = res.detail.value;
+		}
+		catch {
+			console.log("❌ new-post-listing: upload(): Unrecognized Input Box id");
 		}
 	},
 	validateForm: function(payloads) {
@@ -139,8 +132,9 @@ Page({
 		})
 		
 		try {
-			const isBodyChecked = await msgSecCheck(payload.body)
+			// 先审核文字部分
 			const isTitleChecked = await msgSecCheck(payload.title)
+			const isBodyChecked = await msgSecCheck(payload.body)
 			if (!isBodyChecked || !isTitleChecked) {
 				wx.showToast({
 					title: '内容含违规信息',
@@ -151,7 +145,9 @@ Page({
 			}
 			else console.log("✅ new-post-listing.js: upload(): Text Content Check Passed!");
 	
-			payload.imageUrls = images;
+			// 注意：Image Picker传的参数都是object, 所以要先把Url从Object里面提取出来，变成字符串格式
+			payload.imageUrls = images.map((i) => i.url);
+			// 根据是否是编辑的旧帖子来调用不同函数，发新帖createPost()，编辑旧帖editPost()
 			if (!this.data.isFromEdit) {
 				await createPost(payload);
 			}
