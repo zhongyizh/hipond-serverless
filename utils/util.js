@@ -57,25 +57,9 @@ function getPostTitleFromBody(body, length = 24) {
 	return title
 }
 
-function uploadImage(postId = '', filePath = '') {
-	return new Promise((resolve, reject) => {
-		wx.cloud.uploadFile({
-			cloudPath: 'postImages/' + postId + '/' + filePath.split('/').pop(),
-			filePath: filePath,
-			success: res => {
-				resolve(res.fileID);
-			},
-			fail: err => {
-				reject(err);
-			}
-		})
-	})
-}
-
 module.exports = {
 	getUserInfo,
 	getMyUserInfo,
 	getPostDisplayData,
-	getPostTitleFromBody,
-	uploadImage,
+	getPostTitleFromBody
 }

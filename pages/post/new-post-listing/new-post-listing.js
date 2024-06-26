@@ -1,7 +1,7 @@
 // pages/post/new-post-listing/new-post-listing.js
 import { getPostTitleFromBody, uploadImage } from '../../../utils/util'
 import { msgSecCheck, imgSecCheck } from '../../../services/security.service'
-import { deletePost } from "../../../services/post.service"
+import { deletePost, createPost } from "../../../services/post.service"
 
 const errMsg = new Map([
 	["text", "标题不能为空"],
@@ -32,6 +32,7 @@ Page({
 		},
 		actionSheetItems: ['全新/仅开箱', '良好/轻微使用', '一般/工作良好', '需修理/零件可用'],
 		isActionSheetHidden: true,
+		isFromEdit: false
     },
     onLoad() {
         // 发帖编辑功能的实现
@@ -42,6 +43,7 @@ Page({
         eventChannel.on('onPageEdit', (res) => {
 			this.setData(res);
 			this.setData({ originalCopy: JSON.parse(JSON.stringify(res))}); 
+			this.setData({ isFromEdit: true });
             console.log("new-post-listing.js: onLoad(): onPageEdit triggered: this.data:", this.data);
         })
     },
@@ -130,90 +132,44 @@ Page({
 		}
 		var images = this.data.fileList
 		if (!this.validateForm([payload, images])) return false
-
+		
 		wx.showLoading({
 			title: '上传中...',
 			mask: true
 		})
-
-		const isBodyChecked = await msgSecCheck(payload.body)
-		const isTitleChecked = await msgSecCheck(payload.title)
-		if (!isBodyChecked || !isTitleChecked) {
+		
+		try {
+			const isBodyChecked = await msgSecCheck(payload.body)
+			const isTitleChecked = await msgSecCheck(payload.title)
+			if (!isBodyChecked || !isTitleChecked) {
+				wx.showToast({
+					title: '内容含违规信息',
+					icon: 'error',
+					duration: 2000
+				})
+				return false
+			}
+			else console.log("✅ new-post-listing.js: upload(): Text Content Check Passed!");
+	
+			payload.imageUrls = images;
+			if (!this.data.isFromEdit) {
+				await createPost(payload);
+			}
+			else {
+				payload._id = this.data.originalCopy._id;
+				await editPost(payload);
+			}
+	
+			wx.hideLoading();
+			wx.navigateBack();
+		} catch (error) {
+			console.error("Upload failed: ", error);
+			wx.hideLoading();
 			wx.showToast({
-				title: '内容含违规信息',
+				title: '上传失败',
 				icon: 'error',
 				duration: 2000
-			})
-			return false
+			});
 		}
-		else console.log("✅ new-post-listing.js: upload(): Text Content Check Passed!");
-
-		// 先去add Post的内容，数据库随机给一个id
-		// 如果是通过编辑按钮进来的就用旧postId
-		let result = await this.uploadPostData(payload);
-		const postId = result._id;
-		// 获取原始文件列表和当前文件列表
-		// 如果不是通过“编辑”按钮进来的就把originalFileList初始化成空数组
-		const originalFileList = this.data.originalCopy.fileList ?? [];    // Denote as A
-		const currentFileList = this.data.fileList; 					   // Denote as B
-		console.log("new-post-listing.js: upload(): optimized editing action: ");
-		console.log("new-post-listing.js: upload(): original imgs: ", originalFileList, " cur imgs: ", currentFileList);
-		// 计算要添加的文件 (B - (A ∩ B))
-		const filesToAdd = currentFileList.filter(
-			img => !originalFileList.some(originalImg => originalImg.url === img.url)
-		);
-		// 计算要删除的文件 (A - (A ∩ B))
-		const filesToDelete = originalFileList.filter(
-			originalImg => !currentFileList.some(img => img.url === originalImg.url)
-		).map(img => img.url);
-        console.log("new-post-listing.js: upload(): images to add: ", filesToAdd);
-        console.log("new-post-listing.js: upload(): images to clear: ", filesToDelete);
-		// 上传新的图片并检查
-		let imageUrls = originalFileList.filter(
-			img => !filesToDelete.some(fileToDelete => img.url === fileToDelete.url)
-		).map(img => img.url);
-		for (let img of filesToAdd) {
-			const fileId = await uploadImage(postId, img.url)
-			imageUrls.push(fileId);
-			let traceId = await imgSecCheck(postId, fileId);
-			console.log("Image Security Compliance Check TraceId for " + fileId + " is " + traceId);
-		}
-		// 最后再去update对应的Post的imageUrls
-		console.warn(imageUrls);
-		result = await this.updatePostImageUrls(postId, imageUrls);
-		// 删除不再使用的图片
-		deletePost(this.data.originalCopy._id, filesToDelete)
-		wx.hideLoading();
-		wx.navigateBack();
-	},
-	uploadPostData(payload) {
-		const db = wx.cloud.database();
-		return new Promise((resolve, reject) => {
-			db.collection('posts').add({
-				data: payload,
-				success: res => {
-					resolve(res);
-				},
-				fail: err => {
-					reject(err);
-				}
-			})
-		})
-	},
-	updatePostImageUrls(postId = '', urls = []) {
-		const db = wx.cloud.database();
-		return new Promise((resolve, reject) => {
-			db.collection('posts').doc(postId).update({
-				data: {
-					imageUrls: urls
-				},
-				success: res => {
-					resolve(res.result);
-				},
-				fail: err => {
-					reject(err);
-				}
-			})
-		})
-	},
+	}
 })
