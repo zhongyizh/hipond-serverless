@@ -25,6 +25,9 @@ exports.main = async (event, context) => {
 		.project({
 			userInfo: 0
 		})
+		.sort({
+			postDate: -1
+		})
 		.end()
 		.then(res => {
 			console.log(res)

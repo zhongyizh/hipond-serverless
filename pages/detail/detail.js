@@ -186,7 +186,6 @@ Page({
 				}
 			})
 		}
-
 	},
 	isOwner: async function () {
 		// 先获取当前帖子作者的openId
@@ -209,7 +208,6 @@ Page({
 			})
 		});
 	},
-
 	editPost: function () {
 		console.log("detail.js: editPost(): ", this.data.postData);
 		wx.navigateTo({
@@ -233,7 +231,6 @@ Page({
 			}
 		})
 	},
-
 	deletePost: function () {
 		const db = wx.cloud.database();
 		new Promise((resolve, reject) => {
@@ -273,7 +270,31 @@ Page({
 					})
 				});
 			})
-
-
-	}
+	},
+  // 分享给朋友
+  onShareAppMessage: function() {
+    const detailData = JSON.stringify(this.data.postData)
+    return {
+      title: this.data.postData.nickname + '发布的帖子: ' + this.data.postData.title,
+      path: `/pages/detail/detail?data=${detailData}`,
+      imageUrl: this.data.postData.imageUrls[0],
+      success: function() {
+        // 分享成功后的回调
+        console.log('分享成功');
+      },
+      fail: function() {
+        // 分享失败后的回调
+        console.log('分享失败');
+      }
+    };
+  },
+  // 分享到朋友圈
+  onShareTimeline: function() {
+    const detailData = JSON.stringify(this.data.postData)
+    return {
+      title: this.data.postData.nickname + '发布的帖子: ' + this.data.postData.title,
+      path: `/pages/detail/detail?data=${detailData}`,
+      imageUrl: this.data.postData.imageUrls[0] 
+    };
+  },
 })

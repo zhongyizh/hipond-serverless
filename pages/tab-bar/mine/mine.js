@@ -183,5 +183,29 @@ Page({
 		wx.navigateTo({
 			url: `/pages/detail/detail?data=${data}`
 		});
-	},
+  },
+  // 分享给朋友
+  onShareAppMessage: function(options) {
+    return {
+      title: 'Hipond你的留学之家',
+      path: '/pages/tab-bar/mine/mine?pageId=' + this.data.currentPageId,
+      imageUrl: '/image/button_post_2nd.png',
+      success: function(res) {
+        // 分享成功后的回调
+        console.log('分享成功');
+      },
+      fail: function(res) {
+        // 分享失败后的回调
+        console.log('分享失败');
+      }
+    };
+  },
+  // 分享到朋友圈
+  onShareTimeline: function() {
+    return {
+      title: 'Hipond你的留学之家',
+      path: '/pages/tab-bar/mine/mine?pageId=' + this.data.currentPageId,
+      imageUrl: '/image/button_post_2nd.png' 
+    };
+  },
 })
