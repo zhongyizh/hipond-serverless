@@ -12,8 +12,15 @@ Page({
 		postData: [],
 		conditionForDisplay: '',
 		conditionIconPath: '',
-        isOwnerFlag: false
-    },
+    isOwnerFlag: false,
+    showModal: false,
+    tooltip: false,
+    showTooltipOverlay: false,
+    menuButtonTop: 0,
+    menuButtonLeft: 0,
+    menuButtonHeight: 0,
+    menuButtonWidth: 0,
+  },
 	onLoad(options) {
 		const data = options.data
 		// TODO: 处理特殊符号
@@ -31,6 +38,13 @@ Page({
 		// wxml里有个本地的+1，这里去改数据库
         this.incrementViewCount()
         this.showCondition()
+        const menuButtonInfo = wx.getMenuButtonBoundingClientRect();
+        this.setData({
+          menuButtonTop: menuButtonInfo.top,
+          menuButtonLeft: menuButtonInfo.left,
+          menuButtonHeight: menuButtonInfo.height,
+          menuButtonWidth: menuButtonInfo.width,
+        });
 	},
 	parseDate(date) {
 		var dateObject = new Date(parseInt(date));
@@ -203,4 +217,39 @@ Page({
       imageUrl: this.data.postData.imageUrls[0] 
     };
   },
+
+  showShareOptions: function() {
+    this.setData({
+      showModal: true
+    });
+  },
+
+  hideShareOptions: function() {
+    this.setData({
+      showModal: false
+    });
+  },
+
+  showTooltip: function() {
+    this.setData({
+      tooltip: true,
+      showTooltipOverlay: true
+    });
+  },
+
+  hideTooltip: function() {
+    this.setData({
+      tooltip: false,
+      showTooltipOverlay: false
+    });
+  },
+
+  hideTooltipAndShowShareOptions: function() {
+    this.setData({
+      tooltip: false,
+      showTooltipOverlay: false,
+      showModal: true
+    });
+  },
+
 })

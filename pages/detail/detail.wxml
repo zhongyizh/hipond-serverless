@@ -57,11 +57,27 @@
 		<text class="contact-button-sold" wx:if="{{postData.post_status == 2}}">已售出</text> -->
 	</block>
 	<view class="toolbar-right">
-        <text wx:if="{{isOwnerFlag}}" class="edit-btn" bindtap="editPost">编辑</text>
-        <text wx:if="{{isOwnerFlag}}" class="delete-btn" style="color: tomato;" bindtap="deletePost">删除</text>
+    <text class="share-btn" bindtap="showShareOptions">分享</text>
+    <text wx:if="{{isOwnerFlag}}" class="edit-btn" bindtap="editPost">编辑</text>
+    <text wx:if="{{isOwnerFlag}}" class="delete-btn" style="color: tomato;" bindtap="deletePost">删除</text>
 		<view class="view-count-container">
 			<image class="view-count-image" src="/image/view-count.png"></image>
 			<text>{{postData.viewCount + 1}}</text>
 		</view>
+    <view class="modal" wx:if="{{showModal}}">
+    <view class="modal-overlay" bindtap="hideShareOptions"></view>
+    <view class="modal-content">
+      <button class="modal-btn" open-type="share">分享给朋友</button>
+      <button class="modal-btn" bindtap="showTooltip">分享到朋友圈</button>
+      <button class="modal-btn" bindtap="hideShareOptions">取消</button>
     </view>
+    <cover-view class="tooltip-overlay" wx:if="{{showTooltipOverlay}}" bindtap="hideTooltipAndShowShareOptions"></cover-view>
+    <cover-view class="tooltip" wx:if="{{tooltip}}" style="top: {{menuButtonTop + menuButtonHeight + 15}}px; left: {{menuButtonLeft - 125}}px;">
+      <cover-view class="tooltip-arrow" style="top: {{menuButtonTop + menuButtonHeight + 5}}px; left: {{menuButtonLeft+menuButtonWidth/4}}px;"></cover-view>
+      <cover-view class="tooltip-content">
+        分享朋友圈请点击 · · · 这里~
+      </cover-view>
+    </cover-view>
+  </view>
+  </view>
 </view>
