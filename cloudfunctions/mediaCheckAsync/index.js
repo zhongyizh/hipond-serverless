@@ -17,6 +17,9 @@ exports.main = async (event, context) => {
 			"media_url": event.url
 		})
 		if (result.errCode === 0) {
+			console.log("✅ cloudfunctions: mediaCheckAsync(): Media Security Check Request Accepted! ");
+			console.log("✅ cloudfunctions: mediaCheckAsync(): 回执 traceId: ", result.traceId);
+			console.log("✅ cloudfunctions: mediaCheckAsync(): 回执 postId: ", result.postId);
 			await db.collection('imageCheckStatus').add({
 				data: {
 					_id: result.traceId,

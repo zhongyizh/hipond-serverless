@@ -58,8 +58,8 @@
 	</block>
 	<view class="toolbar-right">
     <text class="share-btn" bindtap="showShareOptions">分享</text>
-    <text wx:if="{{isOwnerFlag}}" class="edit-btn" bindtap="editPost">编辑</text>
-    <text wx:if="{{isOwnerFlag}}" class="delete-btn" style="color: tomato;" bindtap="deletePost">删除</text>
+    <text wx:if="{{isEditBTNEnabled}}" class="edit-btn" bindtap="editPost">编辑</text>
+    <text wx:if="{{isDeleteBTNEnabled}}" class="delete-btn" style="color: tomato;" bindtap="onDeletePostBTNClicked">删除</text>
 		<view class="view-count-container">
 			<image class="view-count-image" src="/image/view-count.png"></image>
 			<text>{{postData.viewCount + 1}}</text>
