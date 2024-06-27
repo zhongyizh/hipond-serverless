@@ -1,13 +1,35 @@
 <!--pages/post/new-post/new-post.wxml-->
 <t-navbar left-arrow />
-<view class="new-post-header">
-    <view style="flex-grow: 1"></view> 
-    <button class="new-post-button" bindtap="onUpload">发布</button>
-</view>
-<view class="new-post-textarea-container">
-    <t-textarea class="new-post-textarea" indicator bordered maxlength="200" placeholder="请输入描述..." disableDefaultPadding="{{true}}" bind:change="textChange"/>
-</view>
-<view class="upload-wrapper">
-  <t-upload media-type="{{['image']}}" files="{{fileList}}" gridConfig="{{gridConfig}}" max="9"
-		size-limit="{{sizeLimit}}" bind:remove="handleRemove" bind:add="handleAdd"/>
+<view class="new-post-page-container">
+	<!-- TODO: 需要upload这个区域能横向滚动，而不是整个页面都能滚动 -->
+	<scroll-view class="upload-wrapper" scroll-x enable-flex style="flex-direction: row;">
+		<t-upload class="upload-component" media-type="{{['image']}}" files="{{fileList}}" gridConfig="{{gridConfig}}" max="9"
+			size-limit="{{sizeLimit}}" bind:remove="handleRemove" bind:add="handleAdd"/>
+	</scroll-view>
+	<view class="form-title-container">
+		<view class="title-input-wrapper">
+			<input class="title-input" 
+                   id="title"
+                   value="{{title}}"
+                   placeholder="分享你的生活"
+                   placeholder-style="color: #BBDAD7; font-size: 34rpx;"
+                   bindinput="inputText"
+			/>
+		</view>
+	</view>
+	<view class="body-text-container">
+		<t-textarea class="body-text-textarea" 
+                    id="body"
+                    value="{{body}}"
+                    maxlength="200"
+                    placeholder="帖子正文" 
+                    placeholder-style="color: #DAECEB; font-size: 28rpx;"
+                    bind:change="inputText"
+		/>
+	</view>
+	<!-- TODO: 添加位置 -->
+	<!-- <view class="location-container">
+		<button class="location-button mini-btn" plain="{{true}}">添加位置</button>
+	</view> -->
+	<button class="submit-button" bind:tap="upload">发 布</button>
 </view>

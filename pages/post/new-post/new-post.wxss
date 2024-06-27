@@ -1,36 +1,89 @@
 /* pages/post/new-post/new-post.wxss */
-.new-post-header {
+.new-post-page-container {
 	display: flex;
-	justify-content: space-between;
-	padding-top: 50rpx;
-	padding-left: 15rpx; 
-	padding-right: 15rpx; 
-	height: 100rpx;
-}
-
-.new-post-button {
-	color: #fff;
-	background-color: #85e4dc;
-	border: none;
-	align-self: center; 
-	font-size: 16px;
-	max-width: 100px;
-	max-height: 60px;
-	margin-left: auto;
-	margin-right: auto;
-	width: 184px;
-}
-
-.new-post-textarea-container {
-	height: 500rpx; 
-	min-height: 500rpx;
-}
-
-.new-post-textarea {
-	min-height: 100% !important;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: stretch;
+	padding: 0rpx 8rpx 0rpx 8rpx;
 }
 
 .upload-wrapper {
 	padding-top: 25rpx;
-	padding-left: 5rpx;
+	padding-left: 25rpx;
+	width: 300%;
+}
+
+.upload-component {
+	--td-upload-add-bg-color: #EEF7F6;
+	--td-upload-add-color: #A4C5C2;
+	--td-upload-add-icon-font-size: 42px;
+	--td-upload-radius: 25rpx;
+}
+
+.form-title-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-top: 8rpx;
+	margin-right: 4%;
+	margin-left: 4%;
+	margin-bottom: 8rpx;
+	height: 96rpx;
+}
+
+.title-input-wrapper {
+	width: 100%;
+	border-bottom: 1rpx solid #EEEEEE;
+}
+
+.title-input {
+	padding-left: 16rpx;
+	margin-top: 30rpx;
+}
+
+.body-text-container{
+	display: flex;
+	flex-direction: column;
+	margin-right: 4%;
+	margin-left: 4%;
+	height: 500rpx;
+	border: 1px solid #00B1A2;
+	border-radius: 25rpx;
+	padding: 8rpx;
+}
+
+.body-text-textarea {
+    padding-top: 10rpx;
+	height: 500rpx;
+}
+
+.location-container {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	justify-content: flex-end;
+}
+
+.location-button {
+  	appearance: none;
+  	margin: 24rpx 4% 0rpx 0rpx !important;
+	height: 50rpx !important;
+	width: 180rpx !important;
+	padding: 7rpx;
+  	font-size: small;
+  	font-weight: 350;
+	color: #A4C5C2 !important;
+	border: 1px solid #DAECEB !important;
+	border-radius: 25rpx;
+	background: none;
+}
+
+.submit-button {
+	border-radius: 50rpx;
+	background-color: #85e4dc;	
+	color: white;
+	margin-top: 160rpx;
+	font-size: 38rpx;
+	font-weight: 700;
+	width: 42%;
 }
