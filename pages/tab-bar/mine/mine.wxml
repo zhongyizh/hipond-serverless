@@ -75,8 +75,8 @@
       <view wx:if="{{tags[2].count!=0}}">
         <scroll-view class="scroll-view" type="custom" scroll-y="true" style="min-height: 700rpx">
           <grid-view type="masonry" cross-axis-count="2" cross-axis-gap="4" main-axis-gap="5">
-            <block wx:for="{{posts}}" wx:key="_id">
-              <view wx:if="{{item.postType=='saved'}}" class="grid-box" bindtap="navigateToDetail" data-index="{{index}}">
+            <block wx:for="{{savedPost}}" wx:key="_id">
+              <view class="grid-box" bindtap="navigateToDetailSaved" data-index="{{index}}">
                 <image src="{{item.imageUrls[0]}}" mode="widthFix"></image>
                 <view class="content-box">
                   <view class="content-title-box"> {{item.title}}</view>

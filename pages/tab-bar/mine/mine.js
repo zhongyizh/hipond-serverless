@@ -18,8 +18,11 @@ Page({
 		userInfo: {},
 		posts: [],
 		maxLimit: 20,
-		offsetLife: 0,
-		offsetSelling: 0
+    	offsetLife: 0,
+		offsetSelling: 0,
+		offsetSaving: 0,
+		savedIdList: [],
+		savedPost: []
 	},
 	async onLoad() {
     	if(typeof this.getTabBar === 'function' && this.getTabBar()) {
@@ -55,15 +58,14 @@ Page({
 		}
 		switch(this.data.currentTagIndex) {
 			case 0: // 动态页面
-        		this.getLife()
+				this.getLife()
 				break;
 			case 1: // 在售页面
-        		this.getSelling()
+          		this.getSelling()
 				break;
       		case 2: // 收藏页面
-        		// 目前没写下面这个function
-				// this.getMySaves()
-				break;
+				this.getMySaves()
+          		break;
 			default:
 				console.log("Invalid current tag index")
 		}
@@ -93,12 +95,19 @@ Page({
 			})
 		}
 	},
-	getMySaves() {
-		// TODO: Finish this
+	async getMySaves() {
+		const db = wx.cloud.database()
+		const tempSavedList = []
+		for (const id of this.data.savedIdList) {
+			const tempPost = await db.collection('posts').where({
+				_id: id
+			}).get()
+			tempSavedList.push(tempPost.data[0])
+		}
 		this.setData({
-			posts: []
+			savedPost: tempSavedList
 		})
-  	},
+  },
 	async getMyProfile() {
 		// 要先执行这个，这个拿了userInfo里面有openid！
 		wx.showLoading({
@@ -124,9 +133,16 @@ Page({
 			_openid: userId,
 			postType: "selling"
 		}).count()
+		const saveRecord = await db.collection('saveList').where({
+			_id: userId
+		}).get()
+		this.setData({
+			savedIdList: saveRecord.data[0].list
+		})
 		let newTags = this.data.tags
 		newTags[0].count = lifeCount.total
 		newTags[1].count = sellingCount.total
+		newTags[2].count = saveRecord.data[0].list.length
 		this.setData({
 			tags: newTags
 		})
@@ -137,13 +153,20 @@ Page({
     	const userId = this.data.userInfo._id ? this.data.userInfo._id : ''
 		// 把Types map到一个object中执行where
 		const condition = Types.map(type => ({
-		postType: type
+		    postType: type
 		}));
 		const postsListResult = await db.collection('posts').where({
 			_openid: userId,
 			$or: condition
 		}).limit(limit).skip(offset).get()
 		return postsListResult.data
+	},
+	navigateToDetailSaved(event) {
+		const postIndex = event.currentTarget.dataset.index
+		const postData = JSON.stringify(this.data.savedPost[postIndex])
+		wx.navigateTo({
+			url: `/pages/detail/detail?data=${postData}`
+		});
 	},
 	navigateToDetail(event) {
 		const postIndex = event.currentTarget.dataset.index
@@ -170,12 +193,12 @@ Page({
 			path: '/pages/tab-bar/mine/mine?pageId=' + this.data.currentPageId,
 			imageUrl: '/image/button_post_2nd.png',
 			success: function(res) {
-			// 分享成功后的回调
-			console.log('分享成功');
+				// 分享成功后的回调
+				console.log('分享成功');
 			},
 			fail: function(res) {
-			// 分享失败后的回调
-			console.log('分享失败');
+				// 分享失败后的回调
+				console.log('分享失败');
 			}
 		};
 	},

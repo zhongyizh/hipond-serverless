@@ -13,18 +13,19 @@ Page({
 		postData: [],
 		conditionForDisplay: '',
 		conditionIconPath: '',
-        isOwnerFlag: false,
-        showModal: false,
-        tooltip: false,
-        showTooltipOverlay: false,
-        menuButtonTop: 0,
-        menuButtonLeft: 0,
-        menuButtonHeight: 0,
-        menuButtonWidth: 0,
-        isEditBTNEnabled: false,
-        isDeleteBTNEnabled: false,
-    },
-  
+    isOwnerFlag: false,
+    showModal: false,
+    tooltip: false,
+    showTooltipOverlay: false,
+    menuButtonTop: 0,
+    menuButtonLeft: 0,
+    menuButtonHeight: 0,
+    menuButtonWidth: 0,
+    isEditBTNEnabled: false,
+    isDeleteBTNEnabled: false,
+    saveButtonUrl: "/image/not_saved_button.png",
+    postSaved: false
+  },  
 	onLoad(options) {
 		const data = options.data
 		// TODO: 处理特殊符号
@@ -33,7 +34,6 @@ Page({
         this.setData({ postData })
         
         // 判定当前用户是不是帖子的所有者：
-        console.log("isImgChecked: ", this.data.postData.isImgChecked);
         this.isOwner().then(isOwner => {
             this.setData({ 
                 isEditBTNEnabled: this.data.postData.isImgChecked && isOwner, 
@@ -46,15 +46,34 @@ Page({
             }); 
         });
 
+        wx.cloud.callFunction({
+			name: 'checkSaveStatus',
+			data: {
+				postId: this.data.postData._id
+			},
+			success: (res) => {
+				if (res.result) {
+					this.setData({
+						postSaved: res.result,
+                        saveButtonUrl: "/image/saved_button.png",
+                        "postData.saveCount": (this.data.postData.saveCount ? this.data.postData.saveCount : 0) + 1
+					})
+				}
+			},
+			fail: (err) => {
+				console.error(err);
+			}
+        });
+        
 		// wxml里有个本地的+1，这里去改数据库
         this.incrementViewCount()
         this.showCondition()
         const menuButtonInfo = wx.getMenuButtonBoundingClientRect();
         this.setData({
-          menuButtonTop: menuButtonInfo.top,
-          menuButtonLeft: menuButtonInfo.left,
-          menuButtonHeight: menuButtonInfo.height,
-          menuButtonWidth: menuButtonInfo.width,
+            menuButtonTop: menuButtonInfo.top,
+            menuButtonLeft: menuButtonInfo.left,
+            menuButtonHeight: menuButtonInfo.height,
+            menuButtonWidth: menuButtonInfo.width,
         });
 	},
 	parseDate(date) {
@@ -73,20 +92,20 @@ Page({
 				conditionIconPath: '/../../image/condition_circle/' + conditionIconPath.get(condition)
 			})
 		}
-    },
+	},
 	async incrementViewCount() {
-        wx.cloud.callFunction ({
-        name: 'incrementViewCount',
-        data: {
-            postId: this.data.postData._id
-        },
-        success: res => {
-            console.log('View count updated', res);
-        },
-        fail: err => {
-            console.error('Failed to update view count', err);
-        }
-        });
+		wx.cloud.callFunction({
+			name: 'incrementViewCount',
+			data: {
+				postId: this.data.postData._id
+			},
+			success: res => {
+				console.log('View count updated', res);
+			},
+			fail: err => {
+				console.error('Failed to update view count', err);
+			}
+		});
 	},
     onTapContact() {
         // TODO: On Hold/已售出
@@ -113,6 +132,70 @@ Page({
             }
         })
     },
+    savePost() {
+		if (!this.data.postSaved) {
+			this.setData({
+				saveButtonUrl: "/image/saved_button.png",
+				postSaved: true,
+				"postData.saveCount": this.data.postData.saveCount + 1
+			})
+			wx.cloud.callFunction({
+				name: 'savePost',
+				data: {
+					postId: this.data.postData._id
+				},
+				success: function (res) {
+					if (res.result) {
+						wx.showToast({
+							title: '收藏成功',
+							icon: 'success',
+							duration: 1000,
+							mask: true,
+						})
+					}
+				},
+				fail: function (res) {
+					console.log(res)
+					wx.showToast({
+						title: '收藏失败',
+						icon: 'error',
+						duration: 1000,
+						mask: true,
+					})
+				}
+			})
+		} else {
+			this.setData({
+				saveButtonUrl: "/image/not_saved_button.png",
+				postSaved: false,
+				"postData.saveCount": this.data.postData.saveCount - 1
+			})
+			wx.cloud.callFunction({
+				name: 'savePost',
+				data: {
+					postId: this.data.postData._id
+				},
+				success: function (res) {
+					if (res.result) {
+						wx.showToast({
+							title: '取消收藏成功',
+							icon: 'success',
+							duration: 1000,
+							mask: true,
+						})
+					}
+				},
+				fail: function (res) {
+					wx.showToast({
+						title: '取消收藏失败',
+						icon: 'error',
+						duration: 1000,
+						mask: true,
+					})
+				}
+			})
+		}
+	},
     isOwner: async function() {
         // 先获取当前帖子作者的openId
         let authorOpenId = this.data.postData._openid;
@@ -243,5 +326,4 @@ Page({
             showModal: true
         });
     }
-
 })
