@@ -9,7 +9,7 @@ exports.main = async (event, context) => {
 	var $ = db.command.aggregate
 	const limit = event.limit
 	const offset = event.offset
-	const result = await db.collection('posts').aggregate().limit(limit).skip(offset)
+	const result = await db.collection('posts').aggregate()
 		.match({
 			isImgChecked: true
 		})
@@ -28,6 +28,8 @@ exports.main = async (event, context) => {
 		.sort({
 			postDate: -1
 		})
+		.limit(limit)
+		.skip(offset)
 		.end()
 		.then(res => {
 			console.log(res)

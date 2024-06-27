@@ -23,15 +23,13 @@ Page({
 		offsetSaving: 0,
 		savedIdList: [],
 		savedPost: []
-		
 	},
 	async onLoad() {
-    if(typeof this.getTabBar === 'function' &&
-			this.getTabBar()) {
+    	if(typeof this.getTabBar === 'function' && this.getTabBar()) {
 			this.getTabBar().setData({
 				selected: this.data.currentTabbarIndex
 			})
-    }
+    	}
 	},
 	async onShow() {
 		await this.getMyProfile()
@@ -46,29 +44,35 @@ Page({
 		if (index !== undefined && index !== this.data.currentTagIndex) {
 			this.setData({
 				currentTagIndex: index, // Update the current item to control active class
-      })
+			})
 			this.getRelevantPosts()
 		}
 	},
 	getRelevantPosts() {
+		if (this.data.posts.length > this.data.tags[0].count + this.data.tags[1].count) {
+			this.setData({
+				posts: [],
+				offsetLife: 0,
+				offsetSelling: 0
+			})
+		}
 		switch(this.data.currentTagIndex) {
 			case 0: // 动态页面
-        this.getLife()
-				break;
+          this.getLife()
+				  break;
 			case 1: // 在售页面
-        this.getSelling()
-				break;
+          this.getSelling()
+				  break;
       case 2: // 收藏页面
-        // 目前没写下面这个function
-				this.getMySaves()
-				break;
+          this.getMySaves()
+          break;
 			default:
-				console.log("Invalid current tag index")
+				  console.log("Invalid current tag index")
 		}
 	},
-  async getLife() {
-    // 判断是否加载完成
-		const isEnd = this.data.offsetLife >= (this.data.tags[0].count)
+	async getLife() {
+		// 判断是否加载完成
+		const isEnd = this.data.offsetLife >= this.data.tags[0].count
 		if (!isEnd) {
 			const postData = await this.getUserPostData(this.data.maxLimit, this.data.offsetLife, ['life'])
 			const currentLength = postData.length
@@ -78,9 +82,9 @@ Page({
 				offsetLife: newOffset
 			})
 		}
-  },
-  async getSelling() {
-		const isEnd = this.data.offsetSelling >= (this.data.tags[1].count)
+	},
+  	async getSelling() {
+		const isEnd = this.data.offsetSelling >= this.data.tags[1].count
 		if (!isEnd) {
 			const postData = await this.getUserPostData(this.data.maxLimit, this.data.offsetSelling, ['selling'])
 			const currentLength = postData.length
@@ -120,7 +124,7 @@ Page({
 		// TODO: 不知道为什么_openid: undefined也能拿到数据
 		const db = wx.cloud.database()
 		const userId = this.data.userInfo._id ? this.data.userInfo._id : ''
-		// 分别计算两种帖子的数量
+    // 分别计算两种帖子的数量
 		const lifeCount = await db.collection('posts').where({
 			_openid: userId,
 			postType: "life"
@@ -146,10 +150,10 @@ Page({
 	async getUserPostData(limit = 20, offset = 0, Types = ['life','selling']) {
 		// TODO: 不知道为什么_openid: undefined也能拿到数据
 		const db = wx.cloud.database()
-		const userId = this.data.userInfo._id ? this.data.userInfo._id : ''
+    const userId = this.data.userInfo._id ? this.data.userInfo._id : ''
 		// 把Types map到一个object中执行where
 		const condition = Types.map(type => ({
-			postType: type
+		    postType: type
 		}));
 		const postsListResult = await db.collection('posts').where({
 			_openid: userId,
@@ -181,7 +185,7 @@ Page({
 		wx.navigateTo({
 			url: `/pages/detail/detail?data=${data}`
 		});
-  	},
+	},
 	// 分享给朋友
 	onShareAppMessage: function(options) {
 		return {

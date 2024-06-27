@@ -1,5 +1,5 @@
 <!--pages/post/new-post-select/new-post-select.wxml-->
-<t-navbar class="custom-navbar" left-arrow />
+<t-navbar class="custom-navbar" bindtap="onNavigateBackBTNClicked" left-arrow />
 <view class="new-post-select-selector">
 	<view class="new-post-2nd" bindtap="post2nd">
 		<image src="/image/button_post_2nd.png" class="new-2nd"></image>
