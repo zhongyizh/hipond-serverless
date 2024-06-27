@@ -34,7 +34,6 @@ Page({
         this.setData({ postData })
         
         // 判定当前用户是不是帖子的所有者：
-        console.log("isImgChecked: ", this.data.postData.isImgChecked);
         this.isOwner().then(isOwner => {
             this.setData({ 
                 isEditBTNEnabled: this.data.postData.isImgChecked && isOwner, 
@@ -46,8 +45,8 @@ Page({
                 isDeleteBTNEnabled: false 
             }); 
         });
-    
-    		wx.cloud.callFunction({
+
+        wx.cloud.callFunction({
 			name: 'checkSaveStatus',
 			data: {
 				postId: this.data.postData._id
@@ -56,25 +55,25 @@ Page({
 				if (res.result) {
 					this.setData({
 						postSaved: res.result,
-            saveButtonUrl: "/image/saved_button.png",
-            "postData.saveCount": (this.data.postData.saveCount? this.data.postData.saveCount : 0)  + 1
+                        saveButtonUrl: "/image/saved_button.png",
+                        "postData.saveCount": (this.data.postData.saveCount ? this.data.postData.saveCount : 0) + 1
 					})
 				}
 			},
 			fail: (err) => {
 				console.error(err);
 			}
-		})
-
+        });
+        
 		// wxml里有个本地的+1，这里去改数据库
         this.incrementViewCount()
         this.showCondition()
         const menuButtonInfo = wx.getMenuButtonBoundingClientRect();
         this.setData({
-          menuButtonTop: menuButtonInfo.top,
-          menuButtonLeft: menuButtonInfo.left,
-          menuButtonHeight: menuButtonInfo.height,
-          menuButtonWidth: menuButtonInfo.width,
+            menuButtonTop: menuButtonInfo.top,
+            menuButtonLeft: menuButtonInfo.left,
+            menuButtonHeight: menuButtonInfo.height,
+            menuButtonWidth: menuButtonInfo.width,
         });
 	},
 	parseDate(date) {

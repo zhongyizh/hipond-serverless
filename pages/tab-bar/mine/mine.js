@@ -18,7 +18,7 @@ Page({
 		userInfo: {},
 		posts: [],
 		maxLimit: 20,
-    offsetLife: 0,
+    	offsetLife: 0,
 		offsetSelling: 0,
 		offsetSaving: 0,
 		savedIdList: [],
@@ -58,16 +58,16 @@ Page({
 		}
 		switch(this.data.currentTagIndex) {
 			case 0: // 动态页面
-          this.getLife()
-				  break;
+				this.getLife()
+				break;
 			case 1: // 在售页面
-          this.getSelling()
-				  break;
-      case 2: // 收藏页面
-          this.getMySaves()
-          break;
+          		this.getSelling()
+				break;
+      		case 2: // 收藏页面
+				this.getMySaves()
+          		break;
 			default:
-				  console.log("Invalid current tag index")
+				console.log("Invalid current tag index")
 		}
 	},
 	async getLife() {
@@ -124,7 +124,7 @@ Page({
 		// TODO: 不知道为什么_openid: undefined也能拿到数据
 		const db = wx.cloud.database()
 		const userId = this.data.userInfo._id ? this.data.userInfo._id : ''
-    // 分别计算两种帖子的数量
+    	// 分别计算两种帖子的数量
 		const lifeCount = await db.collection('posts').where({
 			_openid: userId,
 			postType: "life"
@@ -150,7 +150,7 @@ Page({
 	async getUserPostData(limit = 20, offset = 0, Types = ['life','selling']) {
 		// TODO: 不知道为什么_openid: undefined也能拿到数据
 		const db = wx.cloud.database()
-    const userId = this.data.userInfo._id ? this.data.userInfo._id : ''
+    	const userId = this.data.userInfo._id ? this.data.userInfo._id : ''
 		// 把Types map到一个object中执行where
 		const condition = Types.map(type => ({
 		    postType: type
