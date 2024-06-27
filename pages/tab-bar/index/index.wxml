@@ -4,7 +4,7 @@
     <t-search shape="round" placeholder="" />
   </view>
 </t-navbar>
-<view class="scroll-view-border" style="height: {{scrollHeight}}px">
+<view class="scroll-view-border">
 	<scroll-view class="scroll-view" type="custom" scroll-y="true">
 		<grid-view class="grid-view" type="masonry" cross-axis-count="2" cross-axis-gap="4" main-axis-gap="5">
 			<view wx:for="{{list}}" wx:key="_id" class="grid-box" bindtap="navigateToDetail" data-index="{{index}}">

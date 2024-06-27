@@ -3,7 +3,6 @@ import { getPostDisplayData } from '../../../utils/util'
 
 Page({
 	data: {
-		scrollHeight: wx.getWindowInfo().windowHeight * 1.8,
 		list: [],
 		currentTabbarIndex: 0,
 		maxLimit: 20,
@@ -46,5 +45,29 @@ Page({
 		wx.navigateTo({
 			url: `/pages/detail/detail?data=${postData}`
 		});
-	},
+  },
+  // 分享给朋友
+  onShareAppMessage: function() {
+    return {
+      title: 'Hipond你的留学之家',
+      path: '/pages/tab-bar/index/index?pageId=' + this.data.currentPageId,
+      imageUrl: '/image/button_post_2nd.png',
+      success: function() {
+        // 分享成功后的回调
+        console.log('分享成功');
+      },
+      fail: function() {
+        // 分享失败后的回调
+        console.log('分享失败');
+      }
+    };
+  },
+  // 分享到朋友圈
+  onShareTimeline: function() {
+    return {
+      title: 'Hipond你的留学之家',
+      path: '/pages/tab-bar/index/index?pageId=' + this.data.currentPageId,
+      imageUrl: '/image/button_post_2nd.png' 
+    };
+  },
 })
