@@ -28,6 +28,12 @@ Page({
 			isImgChecked: true
 		}).count()
 		const total = countResult.total
+		if (this.data.list.length > total) {
+			this.setData({
+				list: [],
+				offset: 0
+			})
+		}
 		const isEnd = this.data.offset >= total
 		if (!isEnd) {
 			const postData = await getPostDisplayData(this.data.maxLimit, this.data.offset)
