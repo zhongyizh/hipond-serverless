@@ -13,9 +13,18 @@ Page({
 		postData: [],
 		conditionForDisplay: '',
 		conditionIconPath: '',
+        isOwnerFlag: false,
+        showModal: false,
+        tooltip: false,
+        showTooltipOverlay: false,
+        menuButtonTop: 0,
+        menuButtonLeft: 0,
+        menuButtonHeight: 0,
+        menuButtonWidth: 0,
         isEditBTNEnabled: false,
-        isDeleteBTNEnabled: false
+        isDeleteBTNEnabled: false,
     },
+  
 	onLoad(options) {
 		const data = options.data
 		// TODO: 处理特殊符号
@@ -40,6 +49,13 @@ Page({
 		// wxml里有个本地的+1，这里去改数据库
         this.incrementViewCount()
         this.showCondition()
+        const menuButtonInfo = wx.getMenuButtonBoundingClientRect();
+        this.setData({
+          menuButtonTop: menuButtonInfo.top,
+          menuButtonLeft: menuButtonInfo.left,
+          menuButtonHeight: menuButtonInfo.height,
+          menuButtonWidth: menuButtonInfo.width,
+        });
 	},
 	parseDate(date) {
 		var dateObject = new Date(parseInt(date));
@@ -186,11 +202,46 @@ Page({
     },
     // 分享到朋友圈
     onShareTimeline: function() {
-    const detailData = JSON.stringify(this.data.postData)
+        const detailData = JSON.stringify(this.data.postData)
         return {
             title: this.data.postData.nickname + '发布的帖子: ' + this.data.postData.title,
             path: `/pages/detail/detail?data=${detailData}`,
             imageUrl: this.data.postData.imageUrls[0] 
         };
     },
+
+    showShareOptions: function() {
+        this.setData({
+            showModal: true
+        });
+    },
+
+    hideShareOptions: function() {
+        this.setData({
+            showModal: false
+        });
+    },
+
+    showTooltip: function() {
+        this.setData({
+            tooltip: true,
+            showTooltipOverlay: true
+        });
+    },
+
+    hideTooltip: function() {
+        this.setData({
+            tooltip: false,
+            showTooltipOverlay: false
+        });
+    },
+
+    hideTooltipAndShowShareOptions: function() {
+        this.setData({
+            tooltip: false,
+            showTooltipOverlay: false,
+            showModal: true
+        });
+    }
+
 })
