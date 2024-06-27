@@ -13,17 +13,17 @@ Page({
 		postData: [],
 		conditionForDisplay: '',
 		conditionIconPath: '',
-    isOwnerFlag: false,
-    showModal: false,
-    tooltip: false,
-    showTooltipOverlay: false,
-    menuButtonTop: 0,
-    menuButtonLeft: 0,
-    menuButtonHeight: 0,
-    menuButtonWidth: 0,
-    isEditBTNEnabled: false,
-    isDeleteBTNEnabled: false,
-  },
+        isOwnerFlag: false,
+        showModal: false,
+        tooltip: false,
+        showTooltipOverlay: false,
+        menuButtonTop: 0,
+        menuButtonLeft: 0,
+        menuButtonHeight: 0,
+        menuButtonWidth: 0,
+        isEditBTNEnabled: false,
+        isDeleteBTNEnabled: false,
+    },
   
 	onLoad(options) {
 		const data = options.data
@@ -202,46 +202,46 @@ Page({
     },
     // 分享到朋友圈
     onShareTimeline: function() {
-      const detailData = JSON.stringify(this.data.postData)
-      return {
-        title: this.data.postData.nickname + '发布的帖子: ' + this.data.postData.title,
-        path: `/pages/detail/detail?data=${detailData}`,
-        imageUrl: this.data.postData.imageUrls[0] 
-      };
+        const detailData = JSON.stringify(this.data.postData)
+        return {
+            title: this.data.postData.nickname + '发布的帖子: ' + this.data.postData.title,
+            path: `/pages/detail/detail?data=${detailData}`,
+            imageUrl: this.data.postData.imageUrls[0] 
+        };
     },
 
     showShareOptions: function() {
-      this.setData({
-        showModal: true
-      });
+        this.setData({
+            showModal: true
+        });
     },
 
     hideShareOptions: function() {
-      this.setData({
-        showModal: false
-      });
+        this.setData({
+            showModal: false
+        });
     },
 
     showTooltip: function() {
-      this.setData({
-        tooltip: true,
-        showTooltipOverlay: true
-      });
+        this.setData({
+            tooltip: true,
+            showTooltipOverlay: true
+        });
     },
 
     hideTooltip: function() {
-      this.setData({
-        tooltip: false,
-        showTooltipOverlay: false
-      });
+        this.setData({
+            tooltip: false,
+            showTooltipOverlay: false
+        });
     },
 
     hideTooltipAndShowShareOptions: function() {
-      this.setData({
-        tooltip: false,
-        showTooltipOverlay: false,
-        showModal: true
-      });
+        this.setData({
+            tooltip: false,
+            showTooltipOverlay: false,
+            showModal: true
+        });
     }
 
 })
