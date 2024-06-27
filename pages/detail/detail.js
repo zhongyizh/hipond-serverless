@@ -123,7 +123,9 @@ Page({
     editPost: function() {
         console.log("detail.js: editPost(): ",this.data.postData);
         wx.navigateTo({
-            url: '/pages/post/new-post-listing/new-post-listing',
+            url: ( this.data.postData.postType === "selling" ? 
+                '/pages/post/new-post-listing/new-post-listing' :
+                '/pages/post/new-post/new-post'),
             success: (res)=>{
                 // 发送帖子编辑event和当前详情页数据至帖子编辑页
                 res.eventChannel.emit('onPageEdit',

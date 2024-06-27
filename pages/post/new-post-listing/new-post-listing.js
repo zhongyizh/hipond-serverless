@@ -1,6 +1,6 @@
 // pages/post/new-post-listing/new-post-listing.js
-import { getPostTitleFromBody, uploadImage } from '../../../utils/util'
-import { msgSecCheck, imgSecCheck } from '../../../services/security.service'
+import { getPostTitleFromBody } from '../../../utils/util'
+import { msgSecCheck } from '../../../services/security.service'
 import { createPost, editPost } from "../../../services/post.service"
 
 const errMsg = new Map([

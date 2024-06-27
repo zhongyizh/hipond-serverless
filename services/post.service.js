@@ -3,7 +3,7 @@ import { imgSecCheck } from "./security.service";
 async function createPost(newPostData) {
 	const db = wx.cloud.database();
 	// 第一步：创建新帖子
-	console.log("post.service.js: createPost(): Creating New Post: ", newPostData);
+	console.log("⏳ post.service.js: createPost(): Creating New Post: ", newPostData);
 	const result = await new Promise((resolve, reject) => {
 		db.collection('posts').add({
 			data: newPostData,
@@ -18,7 +18,7 @@ async function createPost(newPostData) {
 	const newPostId = result._id;
 	// 第二步：上传图片
 	const newImgUrls = await uploadImages(newPostId, newPostData.imageUrls);
-	console.log("✏️post.service.js: createPost(): Uploaded New Images: ", newImgUrls);
+	console.log("✏️ post.service.js: createPost(): Uploaded New Images: ", newImgUrls);
 	for (let fileId of newImgUrls) {
 		let traceId = await imgSecCheck(newPostId, fileId);
 		console.log("✅ post.service.js: createPost(): Image Security Compliance Check TraceId for " + fileId + " is " + traceId);
