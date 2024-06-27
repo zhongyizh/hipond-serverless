@@ -1,27 +1,48 @@
 // pages/post/new-post/new-post.js
-import { getPostTitleFromBody, msgSecCheck, uploadImage, imgSecCheck } from '../../../utils/util'
+import { getPostTitleFromBody } from '../../../utils/util'
+import { msgSecCheck } from '../../../services/security.service'
+import { createPost, editPost } from "../../../services/post.service"
+import { ListingConditions } from '../../../models/posts.model';
+
+const errMsg = new Map([
+	["text", "标题不能为空"],
+	["body", "需要文章正文"],
+	["image", "请选至少一张图"]
+]);
 
 Page({
 	data: {
+		// Data Models
 		fileList: [],
+		title: '',
+		body: '',
+		// View Models
+		originalCopy: {}, // Store the copy of the original post upon editing.
 		gridConfig: {
-      column: 3,
-      width: 213,
-      height: 213,
+            column: 9,
+            width: 213,
+            height: 213,
 		},
 		sizeLimit: {
 			size: 5,
 			unit: 'MB',
 			message: '图片大小不超过5MB'
 		},
-		textVal: ''
-	},
-	textChange(res) {
-		var textVal = res.detail.value;
-		this.setData({
-			textVal: textVal
-		})
-	},
+		isFromEdit: false
+    },
+    onLoad() {
+        // 发帖编辑功能的实现
+        // 通过一个event来从「详情页」传数据到「编辑页」：
+        // 获取所有打开的EventChannel事件
+        const eventChannel = this.getOpenerEventChannel();
+        // 监听 index页面定义的 toB 事件
+        eventChannel.on('onPageEdit', (res) => {
+			this.setData(res);
+			this.setData({ originalCopy: JSON.parse(JSON.stringify(res)) }); 
+			this.setData({ isFromEdit: true });
+            console.log("new-post.js: onLoad(): onPageEdit triggered: this.data:", this.data);
+        })
+    },
 	handleAdd(e) {
 		const { fileList } = this.data;
 		const { files } = e.detail;
@@ -38,75 +59,92 @@ Page({
 			fileList,
 		});
 	},
-	async onUpload() {
-		const body = this.data.textVal;
-		const isBodyChecked = await msgSecCheck(body)
-		if (!isBodyChecked) {
+	inputText: function(res) {
+		const widgetId = res.currentTarget.id;
+		try {
+			this.data[widgetId] = res.detail.value;
+		}
+		catch {
+			console.log("❌ new-post-listing: upload(): Unrecognized Input Box id");
+		}
+	},
+	validateForm: function(payloads) {
+		for (const [key, value] of Object.entries(payloads[0])) {
+			if (errMsg.has(key))
+				if (value == "") {
+					wx.showToast({
+						title: errMsg.get(key),
+						icon: 'error',
+						duration: 2000
+					});
+					return false;
+				}
+		}
+		if (payloads[1].length <= 0) {
 			wx.showToast({
-				title: '内容含违规信息',
+				title: errMsg.get("image"),
 				icon: 'error',
 				duration: 2000
-			})
-			return false
+			});
+			return false;
 		}
-
+		return true;
+	},
+	async upload() {
+		var payload = {
+			'title': this.data.title ? this.data.title : getPostTitleFromBody(this.data.body),
+			'body': this.data.body,
+			'price': 0.00,
+			'location': '',
+			'condition': ListingConditions.UNKNOWN,
+			'postDate': Date.now(),
+			'postType': 'life',
+			'isImgChecked': false,
+			'viewCount': 0
+		}
+		var images = this.data.fileList
+		if (!this.validateForm([payload, images])) return false
+		
 		wx.showLoading({
 			title: '上传中...',
 			mask: true
 		})
-		// 先去add Post的内容，数据库随机给一个id
-		let result = await this.uploadPostData()
-		const postId = result._id
-		// 再把图片都uploadFile到指定文件夹，拿到图片在云上的地址
-		const { fileList } = this.data;
-		let imageUrls = []
-		for (let img of fileList) {
-			const fileId = await uploadImage(postId, img.url)
-			imageUrls.push(fileId)
-			await imgSecCheck(postId, fileId)
+		
+		try {
+			// 先审核文字部分
+			const isTitleChecked = await msgSecCheck(payload.title)
+			const isBodyChecked = await msgSecCheck(payload.body)
+			if (!isBodyChecked || !isTitleChecked) {
+				wx.showToast({
+					title: '内容含违规信息',
+					icon: 'error',
+					duration: 2000
+				})
+				return false
+			}
+			else console.log("✅ new-post.js: upload(): Text Content Check Passed!");
+	
+			// 注意：Image Picker传的参数都是object, 所以要先把Url从Object里面提取出来，变成字符串格式
+			payload.imageUrls = images.map((i) => i.url);
+			// 根据是否是编辑的旧帖子来调用不同函数，发新帖createPost()，编辑旧帖editPost()
+			if (!this.data.isFromEdit) {
+				await createPost(payload);
+			}
+			else {
+				payload._id = this.data.originalCopy._id;
+				await editPost(payload);
+			}
+	
+			wx.hideLoading();
+			wx.navigateBack();
+		} catch (error) {
+			console.error("Upload failed: ", error);
+			wx.hideLoading();
+			wx.showToast({
+				title: '上传失败',
+				icon: 'error',
+				duration: 2000
+			});
 		}
-		// 最后再去update对应的Post的imageUrls
-		result = await this.updatePostImageUrls(postId, imageUrls)
-		wx.hideLoading()
-		wx.navigateBack()
-	},
-	uploadPostData() {
-		const db = wx.cloud.database();
-		const body = this.data.textVal;
-		return new Promise((resolve, reject) => {
-			db.collection('posts').add({
-				data: {
-					body: body,
-					title: getPostTitleFromBody(body),
-					location: '',
-					postDate: Date.now(),
-					postType: 'life',
-					isImgChecked: this.data.fileList.length === 0,
-					viewCount: 0
-				},
-				success: res => {
-					resolve(res);
-				},
-				fail: err => {
-					reject(err);
-				}
-			})
-		})
-	},
-	updatePostImageUrls(postId = '', urls = []) {
-		const db = wx.cloud.database();
-		return new Promise((resolve, reject) => {
-			db.collection('posts').doc(postId).update({
-				data: {
-					imageUrls: urls
-				},
-				success: res => {
-					resolve(res.result);
-				},
-				fail: err => {
-					reject(err);
-				}
-			})
-		})
 	}
 })
