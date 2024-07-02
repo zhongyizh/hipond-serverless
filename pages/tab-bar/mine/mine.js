@@ -135,14 +135,18 @@ Page({
 		}).count()
 		const saveRecord = await db.collection('saveList').where({
 			_id: userId
-		}).get()
-		this.setData({
-			savedIdList: saveRecord.data[0].list
-		})
+    }).get()
+    if (saveRecord.data.length != 0)
+    {
+      this.setData({
+        savedIdList: saveRecord.data[0].list
+      })
+    }
+		
 		let newTags = this.data.tags
 		newTags[0].count = lifeCount.total
 		newTags[1].count = sellingCount.total
-		newTags[2].count = saveRecord.data[0].list.length
+		newTags[2].count = this.data.savedIdList.length
 		this.setData({
 			tags: newTags
 		})
