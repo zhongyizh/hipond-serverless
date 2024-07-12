@@ -4,20 +4,22 @@ import { msgSecCheck } from '../../../services/security.service'
 import { createPost, editPost } from "../../../services/post.service"
 
 const errMsg = new Map([
-	["text", "标题不能为空"],
 	["body", "需要物品描述"],
 	["price", "请输入价格"],
-	["image", "请选至少一张图"]
+  ["image", "请选至少一张图"],
+  ["method", "请选择交易方式"],
+  ["condition", "请选择新旧程度"]
 ]);
 
 Page({
 	data: {
 		// Data Models
 		fileList: [],
-		condition: '全新/仅开箱',
+		condition: '物品新旧程度*',
 		title: '',
 		body: '',
-		price: '',
+    price: '',
+    originalPrice: '',
 		// View Models
 		originalCopy: {}, // Store the copy of the original post upon editing.
 		gridConfig: {
@@ -31,8 +33,11 @@ Page({
 			message: '图片大小不超过5MB'
 		},
 		actionSheetItems: ['全新/仅开箱', '良好/轻微使用', '一般/工作良好', '需修理/零件可用'],
-		isActionSheetHidden: true,
-		isFromEdit: false
+    isFromEdit: false,
+    isDeliverChecked: false,
+    isPickupChecked: false,
+    isMailChecked: false,
+    subitButtonType: 'submit-button'
     },
     onLoad() {
         // 发帖编辑功能的实现
@@ -62,24 +67,46 @@ Page({
 		this.setData({
 			fileList,
 		});
-	},
-	actionSheetTap: function(e) {
+  },
+  showActionSheet(e) {
+    wx.showActionSheet({
+      itemList: this.data.actionSheetItems,
+      success: (res) =>{
+        if(!res.camcle){    
+          this.setData({
+            condition: this.data.actionSheetItems[res.tapIndex]
+          })
+        }else{
+          console.log("Condition selection cancle")
+        }
+      },
+      fail: (res) =>{
+        console.log("fail")
+        console.log(res)
+      },
+      complete: (res) => {
+        console.log("Condition selection complete")
+      }
+    })
+  },
+  
+  checkboxChange: function (e) {
+		const items = e.detail.value;
+		const isChecked = (id) => items.includes(id);
+		const isDeliverChecked = isChecked("deliver");
+    const isPickupChecked = isChecked("pickup");
+    const isMailChecked = isChecked("mail");
 		this.setData({
-			isActionSheetHidden: false
+			isDeliverChecked: isDeliverChecked,
+      isPickupChecked: isPickupChecked,
+      isMailChecked: isMailChecked
 		});
-	},
-	actionSheetItemTap: function(e) {
-		let clickedItem = e.currentTarget.dataset.clickedItem;
-		this.setData({
-			isActionSheetHidden: true,
-			condition: clickedItem
-		});
-	},
-	actionSheetChange: function(e) {
-		this.setData({
-			isActionSheetHidden: true
-		});
-	},
+    // this.updateButtonStatus();
+  },
+  // updateButtonStatus()
+  // {
+
+  // },
 	inputText: function(res) {
 		const widgetId = res.currentTarget.id;
 		try {
@@ -91,7 +118,7 @@ Page({
 	},
 	validateForm: function(payloads) {
 		for (const [key, value] of Object.entries(payloads[0])) {
-			if (errMsg.has(key))
+      if (errMsg.has(key))
 				if (value == "") {
 					wx.showToast({
 						title: errMsg.get(key),
@@ -99,7 +126,7 @@ Page({
 						duration: 2000
 					});
 					return false;
-				}
+        }
 		}
 		if (payloads[1].length <= 0) {
 			wx.showToast({
@@ -116,12 +143,19 @@ Page({
 			'title': this.data.title ? this.data.title : getPostTitleFromBody(this.data.body),
 			'body': this.data.body,
 			'price': this.data.price,
-			'location': '',
-			'condition': this.data.condition,
+      'location': '',
+			'condition': this.data.condition !== '物品新旧程度*' ? this.data.condition : '',
 			'postDate': Date.now(),
 			'postType': 'selling',
 			'isImgChecked': false,
-			'viewCount': 0
+      'viewCount': 0,
+      'originalPrice': this.data.originalPrice,
+      'method': !this.data.isDeliverChecked && !this.data.isMailChecked && !this.data.isPickupChecked ? "" : 
+      [
+        this.data.isDeliverChecked ? 'deliver' : '', 
+        this.data.isMailChecked ? 'mail' : '', 
+        this.data.isPickupChecked ? 'pickup' : ''
+        ]
 		}
 		var images = this.data.fileList
 		if (!this.validateForm([payload, images])) return false

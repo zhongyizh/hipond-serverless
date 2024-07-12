@@ -241,7 +241,13 @@ Page({
                         condition: this.data.postData.condition || ListingConditions.UNKNOWN,
                         // ddl: this.data.postData.ddl,
                         body: this.data.postData.body,
-                        title: this.data.postData.title
+                        title: this.data.postData.title,
+                        // originalPrice: this.data.postData.originalPrice,
+                        // isDeliverChecked: this.data.postData.method[0] == "deliver" ? true : false,
+                        // isMailChecked: this.data.postData.method[1] == "mail" ? true : false,
+                        // isPickupChecked: this.data.postData.method[2] == "pickup" ? true : false
+
+                        
                     }
                 );
             }
