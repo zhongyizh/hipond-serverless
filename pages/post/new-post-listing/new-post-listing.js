@@ -23,7 +23,7 @@ Page({
 		// View Models
 		originalCopy: {}, // Store the copy of the original post upon editing.
 		gridConfig: {
-            column: 9,
+            column: 3,
             width: 213,
             height: 213,
 		},

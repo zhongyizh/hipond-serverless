@@ -143,8 +143,10 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
 }
 
 .body-text-textarea {
-    padding-top: 10rpx;
-	height: 500rpx;
+  padding-top: 10rpx;
+  height: 500rpx;
+  --td-textarea-text-color: #416D6E;
+  font-size: 26rpx;
 }
 
 .location-container {
