@@ -27,18 +27,18 @@
 }
 
 .post-text {
-	font-size: 18pt;
+	font-size: 18px;
 	margin-left: 4%;
 	margin-right: 4%;
 	letter-spacing: 5%;
-	line-height: 24pt;
+	line-height: 21px;
 }
 
 .price-tag {
-	font-size: 18pt;
+	font-size: 18px;
 	margin-right: 6%;
 	letter-spacing: 5%;
-	line-height: 24pt;
+	line-height: 21px;
 	color: #00B1A2;
 }
 
@@ -103,11 +103,11 @@
 /* Post Body */
 .post-body {
 	align-self: flex-start;
-	font-size: 13pt;
+	font-size: 13px;
 	margin-left: 4%;
 	margin-right: 4%;
 	letter-spacing: 5%;
-	line-height: 24pt;
+	line-height: 21px;
 	margin-top: 8px;
 }
 
@@ -119,6 +119,7 @@
 	margin-left: 4%;
 	margin-right: 4%;
 	gap: 5px;
+	padding-top: 22rpx;
 	padding-bottom: 200rpx;
 }
 
@@ -160,13 +161,13 @@
 .location {
 	font-size: 11px;
 	color: #486361;
-	margin-top: -25rpx;
+	margin-top: 25rpx;
 }
 
 .location_icon{
 	width: 18rpx;
 	height: 22rpx;
-	margin-top: -25rpx;
+	margin-top: 25rpx;
 }
 
 /* Toolbar */
@@ -183,14 +184,15 @@
 }
 
 .contact-button {
+	position: fixed;
+	margin-top: 2.5%;
+	left: 32rpx;
 	background-color: #EEF7F6; 
 	color: #00B1A2; 
-	margin-top: 2.5%;
-	margin-right: 18%;
 	font-size: 11pt;
 	font-weight: 700;
 	border-radius: 25rpx;
-	width: 300rpx; 
+	width: 320rpx; 
 	height: 60rpx; 
 	display: flex;
 	align-items: center; 

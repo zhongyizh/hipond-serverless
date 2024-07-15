@@ -69,15 +69,19 @@
 .info-title {
 	color: #575757;
 	font-weight: 400;
-	font-size: 26rpx;
+	font-size: 13px;
 	width: 180rpx;
+	height: 23.4px;
+	border-bottom: 1px solid #EEEEEE;
 }
 
 .info-text {
 	color: #979797;
 	font-weight: 400;
 	letter-spacing: 1.3rpx;
-	font-size: 22rpx;
+	font-size: 11px;
+	height: 23.4px;
+	border-bottom: 1px solid #EEEEEE;
 }
 
 .info-line {
