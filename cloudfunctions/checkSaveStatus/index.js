@@ -9,15 +9,23 @@ cloud.init({
 exports.main = async (event, context) => {
 	const db = cloud.database()
 	const wxContext = cloud.getWXContext()
-	const openid = wxContext.OPENID
-	const record = await db.collection('saveList').where({
-		_id: openid
-	}).get()
-	const data = record.data[0].list
-	if (data.includes(event.postId)) {
-		console.log("已收藏")
-		return true
-	} else {
-		return false
-	}
+  const openid = wxContext.OPENID
+  try{
+    const record = await db.collection('saveList').where({
+      _id: openid
+    }).get()
+    const data = record.data[0].list
+    if (data.includes(event.postId)) {
+      console.log("已收藏")
+      return true
+    } else {
+      return false
+    }
+  }
+  catch (error)
+  {
+    console.error(error)
+    return false
+  }
+	
 }

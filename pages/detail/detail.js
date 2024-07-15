@@ -45,7 +45,9 @@ Page({
                 isDeleteBTNEnabled: false 
             }); 
         });
-
+        this.setData({
+          "postData.saveCount": this.data.postData.saveCount ? this.data.postData.saveCount: 0 
+        })
         wx.cloud.callFunction({
 			name: 'checkSaveStatus',
 			data: {
@@ -54,9 +56,9 @@ Page({
 			success: (res) => {
 				if (res.result) {
 					this.setData({
-						postSaved: res.result,
-                        saveButtonUrl: "/image/saved_button.png",
-                        "postData.saveCount": (this.data.postData.saveCount ? this.data.postData.saveCount : 0) + 1
+            postSaved: res.result,
+            saveButtonUrl: "/image/saved_button.png",
+            "postData.saveCount": this.data.postData.saveCount + 1
 					})
 				}
 			},
