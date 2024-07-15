@@ -41,8 +41,8 @@
 
 .own-header-img,.own-header-img-div {
 	border-radius: 280rpx;
-	height: 115px;
-	width: 115px;
+	height: 230rpx;
+	width: 230rpx;
 }
 
 .header-middle {
@@ -91,14 +91,11 @@
 	width: 100%;
 	display: flex;
 	height: 100rpx;
-	/* justify-content: center;
-	align-items: center; */
 }
 
 .header-right-box {
-	bottom: 30rpx;
-	position: absolute;
-	right: 60rpx;
+	position: relative;
+	left: 66.666%;
 }
 
 .header-box,.header-right-box {
@@ -129,7 +126,7 @@
 	left: 0;
 	position: absolute;
 	/* top: 520rpx; */
-	margin-top: -30px;
+	margin-top: -40px;
 	width: 100%;
 }
 
@@ -197,8 +194,8 @@
 }
 
 .grid-box {
-  border-radius: var(--card-border-radius);
-  background-color: white;
+	border-radius: var(--card-border-radius);
+	background-color: white;
 }
 
 .grid-box image {
@@ -207,14 +204,14 @@
 }
 
 .content-box {
-  margin: 0%;
-  padding-top: 0px;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-bottom: 8px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+	margin: 0%;
+	padding-top: 0px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-bottom: 8px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
 .content-title-box {
@@ -231,46 +228,45 @@
 }
 
 .selling-image-container {
-  display: flex;
-  flex-direction: column; /* Stack children vertically */
-  height: 38vh;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	flex-direction: column; /* Stack children vertically */
+	align-items: center;
+	justify-content: center;
 }
 
 .selling-image {
-  width: 250px;
-  height: 250px;
+	margin-top:25px;
+	width: 250px;
+	height: 250px;
 }
 
 .sellingtext {
-  padding-top: 8px;
-  font-size: 16px;
-  color: #A4C5C2;
+	padding-top: 8px;
+	font-size: 16px;
+	color: #A4C5C2;
 }
 
 .saved-image-container {
-  display: flex;
-  flex-direction: column; /* Stack children vertically */
-  height: 38vh;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	flex-direction: column; /* Stack children vertically */
+	align-items: center;
+	justify-content: center;
 }
 
 .saved-image {
-  padding-top: 25px;
-  width: 250px;
-  height: 250px;
+	margin-top:25px;
+	width: 250px;
+	height: 250px;
 }
 
 .savedtext {
-  padding-top: 8px;
-  font-size: 16px;
-  color: #A4C5C2;
+	padding-top: 8px;
+	font-size: 16px;
+	color: #A4C5C2;
 }
 
 .savedtext2 {
-  padding-top: 4px;
-  font-size: 16px;
-  color: #A4C5C2;
+	padding-top: 4px;
+	font-size: 16px;
+	color: #A4C5C2;
 }
