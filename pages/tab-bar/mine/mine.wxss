@@ -1,7 +1,7 @@
 /* pages/mine.wxss */
 .user-background {
 	left: 0;
-	position: absolute;
+	position: relative;
 	top: 0;
 	width: 100%;
 }
@@ -41,8 +41,8 @@
 
 .own-header-img,.own-header-img-div {
 	border-radius: 280rpx;
-	height: 230rpx;
-	width: 230rpx;
+	height: 115px;
+	width: 115px;
 }
 
 .header-middle {
@@ -65,7 +65,7 @@
 .name-text {
 	margin-left: 4rpx;
 	max-width: 550rpx;
-	font-size: 40rpx;
+	font-size: 20px;
 }
 
 .header-location,.name-text {
@@ -74,13 +74,15 @@
 }
 
 .header-location {
+	position: relative;
 	color: #fff;
-	font-size: 32rpx;
+	font-size: 13px;
 	font-weight: 300;
 	margin-top: 20rpx;
 	width: 600rpx;
 	margin-left: 12rpx;
 	letter-spacing: 2.6rpx;
+	margin-bottom: 27px;
 }
 
 .header-bottom {
@@ -89,6 +91,8 @@
 	width: 100%;
 	display: flex;
 	height: 100rpx;
+	/* justify-content: center;
+	align-items: center; */
 }
 
 .header-right-box {
@@ -124,7 +128,8 @@
 	border-radius: 30rpx 30rpx 0 0;
 	left: 0;
 	position: absolute;
-	top: 620rpx;
+	/* top: 520rpx; */
+	margin-top: -30px;
 	width: 100%;
 }
 

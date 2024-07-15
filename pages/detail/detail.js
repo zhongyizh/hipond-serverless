@@ -125,9 +125,9 @@ Page({
             data: contact,
             success: function(){
                 wx.showToast({
-                    title: '复制成功',  
+                    title: '联系方式已复制',  
                     icon: 'success',    
-                    duration: 2000,
+                    duration: 4000,
                 });
             }
         })
