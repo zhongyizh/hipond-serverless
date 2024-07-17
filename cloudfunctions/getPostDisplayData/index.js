@@ -28,8 +28,8 @@ exports.main = async (event, context) => {
 		.sort({
 			postDate: -1
 		})
-		.limit(limit)
 		.skip(offset)
+		.limit(limit)
 		.end()
 		.then(res => {
 			console.log(res)

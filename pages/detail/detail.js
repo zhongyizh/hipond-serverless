@@ -27,8 +27,9 @@ Page({
     postSaved: false
   },  
 	onLoad(options) {
-		const data = options.data
-		// TODO: 处理特殊符号
+        // decode传进来的URL的data部分
+        const data = decodeURIComponent(options.data);
+        console.log('decode:', data)
 		const postData = JSON.parse(data)
 		postData.postDate = this.parseDate(postData.postDate)
         this.setData({ postData })
