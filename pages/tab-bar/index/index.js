@@ -49,7 +49,7 @@ Page({
 		const postIndex = event.currentTarget.dataset.index
 		const postData = JSON.stringify(this.data.list[postIndex])
 		wx.navigateTo({
-			url: `/pages/detail/detail?data=${postData}`
+			url: `/pages/detail/detail?data=${encodeURIComponent(postData)}`
 		});
   },
   // 分享给朋友

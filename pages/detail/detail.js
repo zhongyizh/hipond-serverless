@@ -27,7 +27,9 @@ Page({
     postSaved: false
   },  
 	onLoad(options) {
-		const data = options.data
+        // const data = options.data
+        const data = decodeURIComponent(options.data);
+        console.log('decode:', data)
 		// TODO: 处理特殊符号
 		const postData = JSON.parse(data)
 		postData.postDate = this.parseDate(postData.postDate)
