@@ -18,7 +18,6 @@ Page({
 		}
 	},
 	onShow() {
-		console.log("index page onShow")
 		this.getPostList()
 	},
 	onReachBottom() {
