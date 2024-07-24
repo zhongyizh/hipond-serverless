@@ -1,13 +1,12 @@
 // pages/detail/detail.js
 import { ListingConditions } from "../../models/posts.model"
 import { deletePost } from "../../services/post.service"
-const conditionIconPath = new Map([
-	["全新/仅开箱", "full-pie.svg"],
-	["良好/轻微使用", "75-percent-pie.svg"],
-	["一般/工作良好", "50-percent-pie.svg"],
-	["需修理/零件可用", "25-percent-pie.svg"]
-])
-
+const conditionMapping = {
+  "全新/仅开箱": "New/Open-Box",
+  "良好/轻微使用": "Very Good",
+  "一般/工作良好": "Good",
+  "需修理/零件可用": "Fair"
+  };
 Page({
 	data: {
 		postData: [],
@@ -24,7 +23,10 @@ Page({
     isEditBTNEnabled: false,
     isDeleteBTNEnabled: false,
     saveButtonUrl: "/image/not_saved_button.png",
-    postSaved: false
+    postSaved: false,
+    showDialog: false,
+    conditionDescription: "",
+    confirmBtn: { content: '确定', variant: 'text' }
   },  
 	onLoad(options) {
 		const data = options.data
@@ -32,7 +34,13 @@ Page({
 		const postData = JSON.parse(data)
 		postData.postDate = this.parseDate(postData.postDate)
         this.setData({ postData })
-        
+        //转换之前的成色命名方式
+        if (conditionMapping.hasOwnProperty(this.data.postData.condition)) {
+          this.setData({
+            "postData.condition": conditionMapping[this.data.postData.condition]
+          })
+        }
+
         // 判定当前用户是不是帖子的所有者：
         this.isOwner().then(isOwner => {
             this.setData({ 
@@ -69,7 +77,6 @@ Page({
         
 		// wxml里有个本地的+1，这里去改数据库
         this.incrementViewCount()
-        this.showCondition()
         const menuButtonInfo = wx.getMenuButtonBoundingClientRect();
         this.setData({
             menuButtonTop: menuButtonInfo.top,
@@ -85,15 +92,6 @@ Page({
 		const month = ('0' + (dateObject.getMonth() + 1)).slice(-2); // Adding 1 because getMonth() returns 0-indexed month
 		const day = ('0' + dateObject.getDate()).slice(-2);
 		return month + '/' + day + '/' + year
-	},
-	showCondition() {
-		const condition = this.data.postData.condition
-		if (condition) {
-			this.setData({
-				conditionForDisplay: condition.replace('/', '\n'),
-				conditionIconPath: '/../../image/condition_circle/' + conditionIconPath.get(condition)
-			})
-		}
 	},
 	async incrementViewCount() {
 		wx.cloud.callFunction({
@@ -134,6 +132,27 @@ Page({
             }
         })
     },
+    conditionButton() {
+      const conditionDescriptions = {
+        'New/Open-Box': '该物品全新或仅开箱',
+        'Exellent': '该物品功能完好，几乎没有使用痕迹和污渍',
+        'Very Good': '该物品功能完好，有轻微使用痕迹或可以被清除的污渍',
+        'Good': '该物品功能完好，有比较明显的使用痕迹，或较难清除掉污渍，不影响使用',
+        'Fair': '该物品部分功能有故障或缺少部分部件，不影响正常使用',
+      };
+      const description = conditionDescriptions[this.data.postData.condition];
+      if (description) {
+        this.setData({
+          conditionDescription: description,
+          showDialog: true
+        });
+      }
+    },
+
+    closeDialog() {
+      this.setData({ showDialog: false });
+    },
+    
     savePost() {
 		if (!this.data.postSaved) {
 			this.setData({

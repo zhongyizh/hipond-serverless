@@ -1,5 +1,25 @@
 <!--pages/post/new-post-listing/new-post-listing.wxml-->
 <t-navbar left-arrow />
+
+<t-dialog
+  visible="{{showMultiTextAndTitle}}"
+  title="Hipond物品新旧程度评判标准"
+  confirm-btn="{{ confirmBtn }}"
+  bind:confirm="onConfirm"
+  confirm-btn-disabled="{{confirmBtnDisabled}}"
+  style="--td-button-primary-text-color	: #576B95"
+>
+  <scroll-view slot="content" type="list" scroll-y class="long-content">
+    <view class="content-container">
+      <view class="item"><text class="bold">New/Open-Box：</text>全新或仅开箱</view>
+        <view class="item"><text class="bold">Excellent：</text>功能完好，几乎没有使用痕迹和污渍</view>
+        <view class="item"><text class="bold">Very Good：</text>功能完好，有轻微使用痕迹或可以被清除的污渍</view>
+        <view class="item"><text class="bold">Good：</text>功能完好，有比较明显的使用痕迹，或较难清除掉污渍，不影响使用</view>
+        <view class="item"><text class="bold">Fair：</text>部分功能有故障或缺少部分部件，不影响正常使用</view>
+    </view>
+  </scroll-view>
+</t-dialog>
+
 <view class="new-listing-page-container">
 	<!-- TODO: 需要upload这个区域能横向滚动，而不是整个页面都能滚动 -->
 		<t-upload class="upload-component" media-type="{{['image']}}" files="{{fileList}}" gridConfig="{{gridConfig}}" max="9"

@@ -13,7 +13,10 @@ const errMsg = new Map([
 
 Page({
 	data: {
-		// Data Models
+    // Data Models
+    confirmBtn: { content: '知道了(3s)', variant: 'text' },
+    showMultiTextAndTitle: false,
+    confirmBtnDisabled: true,
 		fileList: [],
 		condition: '物品新旧程度*',
 		title: '',
@@ -32,14 +35,19 @@ Page({
 			unit: 'MB',
 			message: '图片大小不超过5MB'
 		},
-		actionSheetItems: ['全新/仅开箱', '良好/轻微使用', '一般/工作良好', '需修理/零件可用'],
+		actionSheetItems: ['New/Open-Box', 'Excellent', 'Very Good', 'Good', 'Fair'],
     isFromEdit: false,
     isDeliverChecked: false,
     isPickupChecked: false,
     isMailChecked: false,
     subitButtonType: 'submit-button'
     },
-    onLoad() {
+    async onLoad() {
+      setTimeout(() => {
+        this.setData({
+          confirmBtnDisabled: false
+        });
+      }, 3000);
         // 发帖编辑功能的实现
         // 通过一个event来从「详情页」传数据到「编辑页」：
         // 获取所有打开的EventChannel事件
@@ -52,6 +60,16 @@ Page({
             console.log("new-post-listing.js: onLoad(): onPageEdit triggered: this.data:", this.data);
         })
     },
+    onConfirm() {
+      // 如果按钮仍然禁用，则直接返回
+      if (this.data.confirmBtnDisabled) {
+        return;
+      }
+      this.setData({
+        showMultiTextAndTitle: false
+      });
+    },
+
 	handleAdd(e) {
 		const { fileList } = this.data;
 		const { files } = e.detail;

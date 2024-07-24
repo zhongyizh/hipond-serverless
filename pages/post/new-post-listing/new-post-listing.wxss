@@ -1,4 +1,19 @@
 /* pages/post/new-post-listing/new-post-listing.wxss */
+
+.long-content {
+  font-size: 28rpx;
+  color: #353535;
+}
+
+.content-container .item {
+  margin-top: 10px; 
+  text-align: center
+}
+
+.bold {
+  font-weight: bold;
+}
+
 .new-listing-page-container {
 	display: flex;
 	flex-direction: column;
