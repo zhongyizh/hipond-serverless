@@ -6,7 +6,8 @@ Page({
 		list: [],
 		currentTabbarIndex: 0,
 		maxLimit: 20,
-		offset: 0
+		offset: 0,
+		currentPostsCount: 0
 	},
 	onLoad() {
 		if(typeof this.getTabBar === 'function' &&
@@ -17,6 +18,7 @@ Page({
 		}
 	},
 	onShow() {
+		console.log("index page onShow")
 		this.getPostList()
 	},
 	onReachBottom() {
@@ -28,12 +30,17 @@ Page({
 			isImgChecked: true
 		}).count()
 		const total = countResult.total
-		if (this.data.list.length > total) {
+		// 删除贴子后需要刷新
+		const needRefresh = this.data.currentPostsCount > total
+		if (needRefresh) {
 			this.setData({
 				list: [],
 				offset: 0
 			})
 		}
+		this.setData({
+			currentPostsCount: total
+		})
 		const isEnd = this.data.offset >= total
 		if (!isEnd) {
 			const postData = await getPostDisplayData(this.data.maxLimit, this.data.offset)
@@ -52,29 +59,29 @@ Page({
 		wx.navigateTo({
 			url: `/pages/detail/detail?data=${encodeURIComponent(postData)}`
 		});
-  },
-  // 分享给朋友
-  onShareAppMessage: function() {
-    return {
-      title: 'Hipond你的留学之家',
-      path: '/pages/tab-bar/index/index?pageId=' + this.data.currentPageId,
-      imageUrl: '/image/button_post_2nd.png',
-      success: function() {
-        // 分享成功后的回调
-        console.log('分享成功');
-      },
-      fail: function() {
-        // 分享失败后的回调
-        console.log('分享失败');
-      }
-    };
-  },
-  // 分享到朋友圈
-  onShareTimeline: function() {
-    return {
-      title: 'Hipond你的留学之家',
-      path: '/pages/tab-bar/index/index?pageId=' + this.data.currentPageId,
-      imageUrl: '/image/button_post_2nd.png' 
-    };
-  },
+	},
+	// 分享给朋友
+	onShareAppMessage: function() {
+		return {
+			title: 'Hipond你的留学之家',
+			path: '/pages/tab-bar/index/index?pageId=' + this.data.currentPageId,
+			imageUrl: '/image/button_post_2nd.png',
+			success: function() {
+			// 分享成功后的回调
+			console.log('分享成功');
+			},
+			fail: function() {
+			// 分享失败后的回调
+			console.log('分享失败');
+			}
+		};
+	},
+	// 分享到朋友圈
+	onShareTimeline: function() {
+		return {
+			title: 'Hipond你的留学之家',
+			path: '/pages/tab-bar/index/index?pageId=' + this.data.currentPageId,
+			imageUrl: '/image/button_post_2nd.png' 
+		};
+	},
 })

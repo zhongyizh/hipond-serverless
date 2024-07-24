@@ -13,23 +13,22 @@ Page({
 		postData: [],
 		conditionForDisplay: '',
 		conditionIconPath: '',
-    isOwnerFlag: false,
-    showModal: false,
-    tooltip: false,
-    showTooltipOverlay: false,
-    menuButtonTop: 0,
-    menuButtonLeft: 0,
-    menuButtonHeight: 0,
-    menuButtonWidth: 0,
-    isEditBTNEnabled: false,
-    isDeleteBTNEnabled: false,
-    saveButtonUrl: "/image/not_saved_button.png",
-    postSaved: false
-  },  
+        isOwnerFlag: false,
+        showModal: false,
+        tooltip: false,
+        showTooltipOverlay: false,
+        menuButtonTop: 0,
+        menuButtonLeft: 0,
+        menuButtonHeight: 0,
+        menuButtonWidth: 0,
+        isEditBTNEnabled: false,
+        isDeleteBTNEnabled: false,
+        saveButtonUrl: "/image/not_saved_button.png",
+        postSaved: false
+    },
 	onLoad(options) {
         // decode传进来的URL的data部分
         const data = decodeURIComponent(options.data);
-        console.log('decode:', data)
 		const postData = JSON.parse(data)
 		postData.postDate = this.parseDate(postData.postDate)
         this.setData({ postData })

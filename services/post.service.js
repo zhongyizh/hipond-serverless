@@ -24,7 +24,7 @@ async function createPost(newPostData) {
 		console.log("✅ post.service.js: createPost(): Image Security Compliance Check TraceId for " + fileId + " is " + traceId);
 	}
 	// 第三步：更新帖子，添加图片URL
-	console.log("⏳ post.service.js: createPost(): Updating the New Images in ddatabase...");
+	console.log("⏳ post.service.js: createPost(): Updating the New Images in database...");
 	const updateResult = await new Promise((resolve, reject) => {
 		db.collection("posts").doc(newPostId).update({
 			data: { imageUrls: newImgUrls },
