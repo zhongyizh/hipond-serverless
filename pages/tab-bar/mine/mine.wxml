@@ -9,7 +9,7 @@
 			</navigator>
 			<view class="header-middle">
 				<text class="name-text">{{userInfo.nickname ? userInfo.nickname : '用户未登录'}}</text>
-				<image class="verification_icon" src="/image/student_verification_icon.png" hidden="{{!userInfo.isUserVerified}}"></image>
+				<image class="verification_icon" src="/image/student_verification_icon.svg" hidden="{{!userInfo.isUserVerified}}"></image>
 			</view>
 			<view class="header-location">我的常住地：{{userInfo.zipcode ? userInfo.zipcode : '未知'}}</view>
 		</view>

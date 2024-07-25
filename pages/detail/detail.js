@@ -39,8 +39,9 @@ Page({
     
   },  
 	onLoad(options) {
-		const data = options.data
-		// TODO: 处理特殊符号
+        // decode传进来的URL的data部分
+        const data = decodeURIComponent(options.data);
+        console.log('decode:', data)
 		const postData = JSON.parse(data)
 		postData.postDate = this.parseDate(postData.postDate)
         this.setData({ postData })
@@ -149,9 +150,9 @@ Page({
             data: contact,
             success: function(){
                 wx.showToast({
-                    title: '复制成功',  
+                    title: '联系方式已复制',  
                     icon: 'success',    
-                    duration: 2000,
+                    duration: 4000,
                 });
             }
         })
