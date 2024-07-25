@@ -5,8 +5,16 @@ const conditionMapping = {
   "全新/仅开箱": "New/Open-Box",
   "良好/轻微使用": "Very Good",
   "一般/工作良好": "Good",
-  "需修理/零件可用": "Fair"
+  "需修理/零件可用": "Fair",
+  "未提供":"Unknown",
+  "":"Unknown"
   };
+
+  const labelsMap = new Map([
+    ["pickup", "自取"],
+    ["mail", "邮寄"],
+    ["deliver", "送货"]
+  ]); 
 Page({
 	data: {
 		postData: [],
@@ -26,7 +34,9 @@ Page({
     postSaved: false,
     showDialog: false,
     conditionDescription: "",
-    confirmBtn: { content: '确定', variant: 'text' }
+    confirmBtn: { content: '确定', variant: 'text' },
+    methodOfDeliver: "",
+    
   },  
 	onLoad(options) {
 		const data = options.data
@@ -84,6 +94,20 @@ Page({
             menuButtonHeight: menuButtonInfo.height,
             menuButtonWidth: menuButtonInfo.width,
         });
+        if(this.data.postData.method)
+        {
+          const selectedMethods = this.data.postData.method.filter(method => method).map(method => labelsMap.get(method));
+          this.setData({
+            methodOfDeliver: selectedMethods.join("/")
+          })
+        }
+        else
+        {
+          this.setData({
+            methodOfDeliver: "Unknown"
+          })
+        }
+        
 	},
 	parseDate(date) {
 		var dateObject = new Date(parseInt(date));

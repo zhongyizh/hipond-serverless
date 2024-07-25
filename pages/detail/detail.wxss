@@ -74,9 +74,8 @@
   width: 80%;
   background: #EEF7F6;
   border-radius: 30rpx;
-  display: flex; 
-  align-items: center; 
-  padding: 0 1.5%; 
+  text-align: center;
+  
 }
 
 .text-container {

@@ -43,11 +43,36 @@ Page({
     subitButtonType: 'submit-button'
     },
     async onLoad() {
-      setTimeout(() => {
-        this.setData({
-          confirmBtnDisabled: false
-        });
-      }, 3000);
+      await wx.cloud.callFunction({
+        name: 'newUserCheck',
+        data: {
+        },
+        success: res => {
+
+          if(res.result)
+          {
+            console.log("This is a new user.", res)
+
+            this.setData({
+              showMultiTextAndTitle: true,
+            })  
+            setTimeout(() => {
+              this.setData({
+                confirmBtnDisabled: false
+              });
+            }, 3000);
+          }
+          else
+          {
+            console.log("This is an old user.", res)
+          }
+        },
+        fail: err => {
+          console.error('Failed to check if the user is new user:', err);
+        }
+      });
+
+      
         // 发帖编辑功能的实现
         // 通过一个event来从「详情页」传数据到「编辑页」：
         // 获取所有打开的EventChannel事件
