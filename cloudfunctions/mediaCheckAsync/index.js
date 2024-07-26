@@ -9,7 +9,7 @@ exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext()
 
 	try {
-    const result = await cloud.openapi.security.mediaCheckAsync({
+    	const result = await cloud.openapi.security.mediaCheckAsync({
 			"openid": wxContext.OPENID,
 			"media_type": 2,
 			"scene": 3,
@@ -19,7 +19,7 @@ exports.main = async (event, context) => {
 		if (result.errCode === 0) {
 			console.log("✅ cloudfunctions: mediaCheckAsync(): Media Security Check Request Accepted! ");
 			console.log("✅ cloudfunctions: mediaCheckAsync(): 回执 traceId: ", result.traceId);
-			console.log("✅ cloudfunctions: mediaCheckAsync(): 回执 postId: ", result.postId);
+			console.log("✅ cloudfunctions: mediaCheckAsync(): 回执 postId: ", event.postId);
 			await db.collection('imageCheckStatus').add({
 				data: {
 					_id: result.traceId,
@@ -28,8 +28,8 @@ exports.main = async (event, context) => {
 				}
 			})
 		}
-    return result
-  } catch (err) {
-    return err
-  }
+    	return result
+	} catch (err) {
+		return err
+	}
 }
