@@ -269,6 +269,7 @@ Page({
                 '/pages/post/new-post-listing/new-post-listing' :
                 '/pages/post/new-post/new-post'),
             success: (res)=>{
+                const method = this.data.postData.method || [];
                 // 发送帖子编辑event和当前详情页数据至帖子编辑页
                 res.eventChannel.emit('onPageEdit',
                     {
@@ -285,10 +286,10 @@ Page({
                         // ddl: this.data.postData.ddl,
                         body: this.data.postData.body,
                         title: this.data.postData.title,
-                        // originalPrice: this.data.postData.originalPrice,
-                        // isDeliverChecked: this.data.postData.method[0] == "deliver" ? true : false,
-                        // isMailChecked: this.data.postData.method[1] == "mail" ? true : false,
-                        // isPickupChecked: this.data.postData.method[2] == "pickup" ? true : false
+                        originalPrice: this.data.postData.originalPrice,
+                        isDeliverChecked: method[0] == "deliver",
+                        isMailChecked: method[1] == "mail",
+                        isPickupChecked: method[2] == "pickup"
 
                         
                     }

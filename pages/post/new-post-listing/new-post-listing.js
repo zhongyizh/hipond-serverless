@@ -15,7 +15,7 @@ Page({
 	data: {
     // Data Models
     confirmBtn: { content: '知道了(3s)', variant: 'text' },
-    showMultiTextAndTitle: false,
+    showActSheet: false,
     confirmBtnDisabled: true,
 		fileList: [],
 		condition: '物品新旧程度*',
@@ -39,8 +39,7 @@ Page({
     isFromEdit: false,
     isDeliverChecked: false,
     isPickupChecked: false,
-    isMailChecked: false,
-    subitButtonType: 'submit-button'
+	isMailChecked: false
     },
     async onLoad() {
       await wx.cloud.callFunction({
@@ -54,7 +53,7 @@ Page({
             console.log("This is a new user.", res)
 
             this.setData({
-              showMultiTextAndTitle: true,
+				showActSheet: true,
             })  
             setTimeout(() => {
               this.setData({
@@ -91,7 +90,7 @@ Page({
         return;
       }
       this.setData({
-        showMultiTextAndTitle: false
+        showActSheet: false
       });
     },
 
@@ -115,7 +114,7 @@ Page({
     wx.showActionSheet({
       itemList: this.data.actionSheetItems,
       success: (res) =>{
-        if(!res.camcle){    
+        if(!res.cancle){    
           this.setData({
             condition: this.data.actionSheetItems[res.tapIndex]
           })
@@ -144,12 +143,7 @@ Page({
       isPickupChecked: isPickupChecked,
       isMailChecked: isMailChecked
 		});
-    // this.updateButtonStatus();
   },
-  // updateButtonStatus()
-  // {
-
-  // },
 	inputText: function(res) {
 		const widgetId = res.currentTarget.id;
 		try {

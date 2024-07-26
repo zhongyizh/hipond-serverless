@@ -2,7 +2,7 @@
 <t-navbar left-arrow />
 
 <t-dialog
-  visible="{{showMultiTextAndTitle}}"
+  visible="{{showActSheet}}"
   title="Hipond物品新旧程度评判标准"
   confirm-btn="{{ confirmBtn }}"
   bind:confirm="onConfirm"
@@ -21,7 +21,6 @@
 </t-dialog>
 
 <view class="new-listing-page-container">
-	<!-- TODO: 需要upload这个区域能横向滚动，而不是整个页面都能滚动 -->
 		<t-upload class="upload-component" media-type="{{['image']}}" files="{{fileList}}" gridConfig="{{gridConfig}}" max="9"
 			size-limit="{{sizeLimit}}" bind:remove="handleRemove" bind:add="handleAdd"/>
 	<view class="form-title-container">
@@ -107,5 +106,5 @@
 	<!-- <view class="location-container">
 		<button class="location-button mini-btn" plain="{{true}}">添加位置</button>
 	</view> -->
-	<button class="{{subitButtonType}}" bind:tap="upload">发 布</button>
+	<button class="submit-button" bind:tap="upload">发 布</button>
 </view>

@@ -31,7 +31,7 @@
   <view wx:if="{{postData.postType == 'selling'}}" class="option-row">
     <view class="background-shape" style="margin-left: 4%; margin-right: 1%; align-items: center; display: flex; padding: 0 1.5%;  ">
       <view class="text-container">物品新旧 {{postData.condition}}</view>
-      <image class= "info-icon"src="/image/info-icon.png" bindtap="conditionButton"> </image>
+      <image class= "info-icon"src="/image/info-icon.svg" bindtap="conditionButton"> </image>
 
     </view>
     <view class="background-shape" style="margin-left: 1%; margin-right: 4%;">
