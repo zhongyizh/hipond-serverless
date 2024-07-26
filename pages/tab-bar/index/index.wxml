@@ -16,7 +16,7 @@
               <view class="left">
                 <image class="icon" src="{{item.avatarUrl}}"></image>
                 <text>{{item.nickname}}</text>
-                <image class="verification_icon" src="/image/student_verification_icon.png" hidden="{{!item.isUserVerified}}"></image>
+                <image class="verification_icon" src="/image/student_verification_icon.svg" hidden="{{!item.isUserVerified}}"></image>
               </view>
 							<view class="price-tag-container" wx:if="{{item.price}}">
 								<view class="price-tag-label">${{item.price}}</view>

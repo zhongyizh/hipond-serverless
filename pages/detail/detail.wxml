@@ -65,7 +65,7 @@
 <!-- Toolbar -->
 <view class="bottom-toolbar">
 	<block wx:if = "{{postData.postType == 'selling'}}">
-		<text bindtap="onTapContact" class="contact-button" wx:if="{{postData.postType == 'selling'}}">联系TA</text>
+		<text bindtap="onTapContact" class="contact-button" wx:if="{{postData.postType == 'selling' && isEditBTNEnabled == false}}">联系TA</text>
 		<!-- TODO: On Hold/已售出 -->
 		<!-- <text bindtap="onTapContact" class="contact-button" wx:if="{{postData.post_status == 0}}">联系TA</text>
 		<text bindtap="onTapContact" class="contact-button-hold" wx:if="{{postData.post_status == 1}}">On Hold</text>

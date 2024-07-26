@@ -1,7 +1,7 @@
 /* pages/mine.wxss */
 .user-background {
 	left: 0;
-	position: absolute;
+	position: relative;
 	top: 0;
 	width: 100%;
 }
@@ -65,7 +65,7 @@
 .name-text {
 	margin-left: 4rpx;
 	max-width: 550rpx;
-	font-size: 40rpx;
+	font-size: 20px;
 }
 
 .header-location,.name-text {
@@ -74,13 +74,15 @@
 }
 
 .header-location {
+	position: relative;
 	color: #fff;
-	font-size: 32rpx;
+	font-size: 13px;
 	font-weight: 300;
 	margin-top: 20rpx;
 	width: 600rpx;
 	margin-left: 12rpx;
 	letter-spacing: 2.6rpx;
+	margin-bottom: 27px;
 }
 
 .header-bottom {
@@ -92,9 +94,8 @@
 }
 
 .header-right-box {
-	bottom: 30rpx;
-	position: absolute;
-	right: 60rpx;
+	position: relative;
+	left: 66.666%;
 }
 
 .header-box,.header-right-box {
@@ -124,7 +125,8 @@
 	border-radius: 30rpx 30rpx 0 0;
 	left: 0;
 	position: absolute;
-	top: 620rpx;
+	/* top: 520rpx; */
+	margin-top: -40px;
 	width: 100%;
 }
 
@@ -192,8 +194,8 @@
 }
 
 .grid-box {
-  border-radius: var(--card-border-radius);
-  background-color: white;
+	border-radius: var(--card-border-radius);
+	background-color: white;
 }
 
 .grid-box image {
@@ -202,14 +204,14 @@
 }
 
 .content-box {
-  margin: 0%;
-  padding-top: 0px;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-bottom: 8px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+	margin: 0%;
+	padding-top: 0px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-bottom: 8px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
 .content-title-box {
@@ -226,46 +228,45 @@
 }
 
 .selling-image-container {
-  display: flex;
-  flex-direction: column; /* Stack children vertically */
-  height: 38vh;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	flex-direction: column; /* Stack children vertically */
+	align-items: center;
+	justify-content: center;
 }
 
 .selling-image {
-  width: 250px;
-  height: 250px;
+	margin-top:25px;
+	width: 250px;
+	height: 250px;
 }
 
 .sellingtext {
-  padding-top: 8px;
-  font-size: 16px;
-  color: #A4C5C2;
+	padding-top: 8px;
+	font-size: 16px;
+	color: #A4C5C2;
 }
 
 .saved-image-container {
-  display: flex;
-  flex-direction: column; /* Stack children vertically */
-  height: 38vh;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	flex-direction: column; /* Stack children vertically */
+	align-items: center;
+	justify-content: center;
 }
 
 .saved-image {
-  padding-top: 25px;
-  width: 250px;
-  height: 250px;
+	margin-top:25px;
+	width: 250px;
+	height: 250px;
 }
 
 .savedtext {
-  padding-top: 8px;
-  font-size: 16px;
-  color: #A4C5C2;
+	padding-top: 8px;
+	font-size: 16px;
+	color: #A4C5C2;
 }
 
 .savedtext2 {
-  padding-top: 4px;
-  font-size: 16px;
-  color: #A4C5C2;
+	padding-top: 4px;
+	font-size: 16px;
+	color: #A4C5C2;
 }
