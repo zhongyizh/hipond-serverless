@@ -6,6 +6,9 @@ Page({
 
 	},
 	async onLoad() {
+		await this.checkUserInfo()
+	},
+	async checkUserInfo() {
 		wx.showLoading({
 			title: '获取用户信息中，请耐心等待...',
 			mask: true
@@ -20,14 +23,16 @@ Page({
 		}
 		wx.hideLoading()
 	},
-	post2nd: function() {
-    wx.navigateTo({
-      url: '/pages/post/new-post-listing/new-post-listing',
-    })
-  },
-  postLife: function() {
-    wx.navigateTo({
-      url: '/pages/post/new-post/new-post',
-    })
-  }
+	async post2nd() {
+		await this.checkUserInfo()
+		wx.navigateTo({
+			url: '/pages/post/new-post-listing/new-post-listing',
+		})
+	},
+	async postLife() {
+		await this.checkUserInfo()
+		wx.navigateTo({
+			url: '/pages/post/new-post/new-post',
+		})
+	}
 })
