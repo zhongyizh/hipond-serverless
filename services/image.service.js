@@ -27,7 +27,7 @@ async function deleteImages(filePaths = ['']) {
         new Promise((resolve, reject) => {
 			f = f.url ?? f;
             wx.cloud.deleteFile({
-				fileList: f,
+				fileList: f.split(),
 				success: res => {
 					console.log("🚮 image.service.js: deleteImages(): Successfully Deleted Image: ", res);
 					resolve(res);
