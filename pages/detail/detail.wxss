@@ -1,4 +1,28 @@
 /* pages/detail/detail.wxss */
+.custom-capsule {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  }
+  
+.custom-capsule__icon {
+flex: 1;
+position: relative;
+}
+
+.custom-capsule__icon.home:before {
+content: '';
+display: block;
+position: absolute;
+left: -1px;
+top: 50%;
+transform: translateY(-50%);
+width: 1px;
+height: 18px;
+background: #e7e7e7;
+}
+
 .container {
 	padding: 8rpx 0;
 	width: 100%;
@@ -158,18 +182,6 @@
 	align-items: center;
 }
 
-.location {
-	font-size: 11px;
-	color: #486361;
-	margin-top: 25rpx;
-}
-
-.location_icon{
-	width: 18rpx;
-	height: 22rpx;
-	margin-top: 25rpx;
-}
-
 /* Toolbar */
 .bottom-toolbar {
 	position: fixed; 
@@ -241,7 +253,7 @@
 	margin-top: 2.5%;
   margin-right: 5%;
 }
-.save-button {
+.share-btn, .save-button {
 	width: 20px;
 	height: 20px;
 	background-size: cover;
@@ -282,7 +294,7 @@
     margin: 0 6px 2px 6px;
 }
 
-.share-btn, .edit-btn, .delete-btn{
+.edit-btn, .delete-btn{
     font-size: 10pt;
     color: #727A7A;
     font-weight: 700;
