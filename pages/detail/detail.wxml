@@ -1,5 +1,25 @@
 <!--pages/detail/detail.wxml-->
-<t-navbar left-arrow />
+<t-navbar t-class-placeholder="t-navbar-placeholder" t-class-content="t-navbar-content" title="">
+  <view slot="capsule" class="custom-capsule">
+    <t-icon
+      size="20"
+      bind:tap="onBack"
+      aria-role="button"
+      aria-label="返回"
+      name="chevron-left"
+      class="custom-capsule__icon back"
+    />
+    <t-icon
+      size="20"
+      bind:tap="onGoHome"
+      aria-role="button"
+      aria-label="首页"
+      name="home"
+      class="custom-capsule__icon home"
+    />
+  </view>
+</t-navbar>
+
 <view class="container">
   <!-- Image Carousel -->
   <swiper class="carousel" autoplay="true" interval="5000" duration="300" indicator-dots="true">
@@ -43,8 +63,6 @@
 		</view>
 		<text class="post-date">发布于{{postData.postDate}}</text>
 	</view>
-	<text class="location">{{postData.location ? postData.location : '未知地点'}}</text>
-	<image src="/image/location_icon.png" class="location_icon"></image>
 </view>
 
 <!-- Toolbar -->
@@ -57,15 +75,15 @@
 		<text class="contact-button-sold" wx:if="{{postData.post_status == 2}}">已售出</text> -->
 	</block>
 	<view class="toolbar-right">
-		<text class="share-btn" bindtap="showShareOptions">分享</text>
 		<text wx:if="{{isEditBTNEnabled}}" class="edit-btn" bindtap="editPost">编辑</text>
 		<text wx:if="{{isDeleteBTNEnabled}}" class="delete-btn" style="color: tomato;" bindtap="onDeletePostBTNClicked">删除</text>
-    <image class="save-button" src="{{saveButtonUrl}}" bindtap="savePost"> </image>
+		<view class="view-count-container">
+			<image class="view-count-image" src="/image/view-count.svg"></image>
+			<text>{{postData.viewCount + 1}}</text>
+		</view>
+		<image class="save-button" src="{{saveButtonUrl}}" bindtap="savePost"> </image>
 		<text class="save-count-text">{{postData.saveCount}}</text>
-			<view class="view-count-container">
-				<image class="view-count-image" src="/image/view-count.png"></image>
-				<text>{{postData.viewCount + 1}}</text>
-			</view>
+		<image class="share-btn" bindtap="showShareOptions" src="/image/share_button.svg"></image>
 		<view class="modal" wx:if="{{showModal}}">
 			<view class="modal-overlay" bindtap="hideShareOptions"></view>
 			<view class="modal-content">
@@ -75,10 +93,10 @@
 			</view>
 			<cover-view class="tooltip-overlay" wx:if="{{showTooltipOverlay}}" bindtap="hideTooltipAndShowShareOptions"></cover-view>
 			<cover-view class="tooltip" wx:if="{{tooltip}}" style="top: {{menuButtonTop + menuButtonHeight + 15}}px; left: {{menuButtonLeft - 125}}px;">
-			<cover-view class="tooltip-arrow" style="top: {{menuButtonTop + menuButtonHeight + 5}}px; left: {{menuButtonLeft+menuButtonWidth/4}}px;"></cover-view>
-			<cover-view class="tooltip-content">
-				分享朋友圈请点击 · · · 这里~
-			</cover-view>
+				<cover-view class="tooltip-arrow" style="top: {{menuButtonTop + menuButtonHeight + 5}}px; left: {{menuButtonLeft+menuButtonWidth/4}}px;"></cover-view>
+				<cover-view class="tooltip-content">
+					分享朋友圈请点击 · · · 这里~
+				</cover-view>
 			</cover-view>
 		</view>
 	</view>
