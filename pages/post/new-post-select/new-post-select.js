@@ -32,7 +32,7 @@ Page({
   },
   onNavigateBackBTNClicked: function() {
 	wx.navigateTo({
-		url: "/pages/tab-bar/index"
+		url: "/pages/tab-bar/index/index"
 	})
   }
 })
