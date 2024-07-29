@@ -63,8 +63,6 @@
 		</view>
 		<text class="post-date">发布于{{postData.postDate}}</text>
 	</view>
-	<text class="location">{{postData.location ? postData.location : '未知地点'}}</text>
-	<image src="/image/location_icon.png" class="location_icon"></image>
 </view>
 
 <!-- Toolbar -->
@@ -80,12 +78,12 @@
 		<text wx:if="{{isEditBTNEnabled}}" class="edit-btn" bindtap="editPost">编辑</text>
 		<text wx:if="{{isDeleteBTNEnabled}}" class="delete-btn" style="color: tomato;" bindtap="onDeletePostBTNClicked">删除</text>
 		<view class="view-count-container">
-			<image class="view-count-image" src="/image/view-count.png"></image>
+			<image class="view-count-image" src="/image/view-count.svg"></image>
 			<text>{{postData.viewCount + 1}}</text>
 		</view>
 		<image class="save-button" src="{{saveButtonUrl}}" bindtap="savePost"> </image>
 		<text class="save-count-text">{{postData.saveCount}}</text>
-		<image class="share-btn" bindtap="showShareOptions" src="/image/share_button.png"></image>
+		<image class="share-btn" bindtap="showShareOptions" src="/image/share_button.svg"></image>
 		<view class="modal" wx:if="{{showModal}}">
 			<view class="modal-overlay" bindtap="hideShareOptions"></view>
 			<view class="modal-content">

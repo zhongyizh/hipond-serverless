@@ -24,8 +24,7 @@ Page({
     isEditBTNEnabled: false,
     isDeleteBTNEnabled: false,
     saveButtonUrl: "/image/not_saved_button.png",
-    postSaved: false,
-    priceIndicator: ''
+    postSaved: false
   },
 
 	onLoad(options) {
@@ -273,17 +272,14 @@ Page({
     // 分享给朋友
     onShareAppMessage: function() {
         const detailData = JSON.stringify(this.data.postData)
+        var priceIndicator = ''
         if (this.data.postData.postType == "selling") {
-            this.setData ({
-                priceIndicator: '[$' + this.data.postData.price + ']'
-            })
+            priceIndicator = '[$' + this.data.postData.price + ']'
         } else {
-            this.setData ({
-                priceIndicator: ''
-            })
+            priceIndicator = ''
         }
         return {
-            title: this.data.priceIndicator + ' ' + this.data.postData.title,
+            title: priceIndicator + ' ' + this.data.postData.title,
             path: `/pages/detail/detail?data=${detailData}`,
             imageUrl: this.data.postData.imageUrls[0],
             success: function() {
@@ -299,17 +295,14 @@ Page({
     // 分享到朋友圈
     onShareTimeline: function() {
         const detailData = JSON.stringify(this.data.postData)
+        var priceIndicator = ''
         if (this.data.postData.postType == "selling") {
-            this.setData ({
-                priceIndicator: '[$' + this.data.postData.price + ']'
-            })
+            priceIndicator = '[$' + this.data.postData.price + ']'
         } else {
-            this.setData ({
-                priceIndicator: ''
-            })
+            priceIndicator = ''
         }
         return {
-            title: this.data.priceIndicator + ' ' + this.data.postData.title,
+            title: priceIndicator + ' ' + this.data.postData.title,
             path: `/pages/detail/detail?data=${detailData}`,
             imageUrl: this.data.postData.imageUrls[0] 
         };

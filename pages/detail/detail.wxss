@@ -182,18 +182,6 @@ background: #e7e7e7;
 	align-items: center;
 }
 
-.location {
-	font-size: 11px;
-	color: #486361;
-	margin-top: 25rpx;
-}
-
-.location_icon{
-	width: 18rpx;
-	height: 22rpx;
-	margin-top: 25rpx;
-}
-
 /* Toolbar */
 .bottom-toolbar {
 	position: fixed; 
