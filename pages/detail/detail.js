@@ -25,7 +25,7 @@ Page({
     isDeleteBTNEnabled: false,
     saveButtonUrl: "/image/not_saved_button.png",
     postSaved: false,
-    priceind: ''
+    priceIndicator: ''
   },  
 	onLoad(options) {
         // decode传进来的URL的data部分
@@ -275,15 +275,15 @@ Page({
         const detailData = JSON.stringify(this.data.postData)
         if (this.data.postData.postType == "selling") {
             this.setData ({
-                priceind: '[$' + this.data.postData.price + ']'
+                priceIndicator: '[$' + this.data.postData.price + ']'
             })
         } else {
             this.setData ({
-                priceind: ''
+                priceIndicator: ''
             })
         }
         return {
-            title: this.data.priceind + ' ' + this.data.postData.title,
+            title: this.data.priceIndicator + ' ' + this.data.postData.title,
             path: `/pages/detail/detail?data=${detailData}`,
             imageUrl: this.data.postData.imageUrls[0],
             success: function() {
@@ -301,15 +301,15 @@ Page({
         const detailData = JSON.stringify(this.data.postData)
         if (this.data.postData.postType == "selling") {
             this.setData ({
-                priceind: '[$' + this.data.postData.price + ']'
+                priceIndicator: '[$' + this.data.postData.price + ']'
             })
         } else {
             this.setData ({
-                priceind: ''
+                priceIndicator: ''
             })
         }
         return {
-            title: this.data.priceind + ' ' + this.data.postData.title,
+            title: this.data.priceIndicator + ' ' + this.data.postData.title,
             path: `/pages/detail/detail?data=${detailData}`,
             imageUrl: this.data.postData.imageUrls[0] 
         };
