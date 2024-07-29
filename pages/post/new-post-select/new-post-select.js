@@ -34,10 +34,5 @@ Page({
 		wx.navigateTo({
 			url: '/pages/post/new-post/new-post',
 		})
-	},
-	onNavigateBackBTNClicked: function() {
-		wx.navigateTo({
-			url: "/pages/tab-bar/index"
-		})
 	}
 })
