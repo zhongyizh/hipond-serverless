@@ -1,11 +1,28 @@
 <!--pages/post/new-post-listing/new-post-listing.wxml-->
 <t-navbar left-arrow />
+
+<t-dialog
+  visible="{{showActSheet}}"
+  title="Hipond物品新旧程度评判标准"
+  confirm-btn="{{ confirmBtn }}"
+  bind:confirm="onConfirm"
+  confirm-btn-disabled="{{confirmBtnDisabled}}"
+  style="--td-button-primary-text-color	: #576B95"
+>
+  <scroll-view slot="content" type="list" scroll-y class="long-content">
+    <view class="content-container">
+      <view class="item"><text class="bold">New/Open-Box：</text>全新或仅开箱</view>
+        <view class="item"><text class="bold">Excellent：</text>功能完好，几乎没有使用痕迹和污渍</view>
+        <view class="item"><text class="bold">Very Good：</text>功能完好，有轻微使用痕迹或可以被清除的污渍</view>
+        <view class="item"><text class="bold">Good：</text>功能完好，有比较明显的使用痕迹，或较难清除掉污渍，不影响使用</view>
+        <view class="item"><text class="bold">Fair：</text>部分功能有故障或缺少部分部件，不影响正常使用</view>
+    </view>
+  </scroll-view>
+</t-dialog>
+
 <view class="new-listing-page-container">
-	<!-- TODO: 需要upload这个区域能横向滚动，而不是整个页面都能滚动 -->
-	<scroll-view class="upload-wrapper" scroll-x enable-flex style="flex-direction: row;">
 		<t-upload class="upload-component" media-type="{{['image']}}" files="{{fileList}}" gridConfig="{{gridConfig}}" max="9"
 			size-limit="{{sizeLimit}}" bind:remove="handleRemove" bind:add="handleAdd"/>
-	</scroll-view>
 	<view class="form-title-container">
 		<view class="title-input-wrapper">
 			<input class="title-input" 
@@ -18,42 +35,71 @@
 		</view>
 		<view class="money-input-wrapper">
 			<view class="money-sign">
-				<text style="color: #00B1A2; font-size: 32rpx;">$</text>
+				<text style="color: #00B1A2; font-size: 26rpx;">$</text>
 			</view>
-			<!-- TODO: 默认的placeholder-style好像没生效 -->
 			<input class="money-input" 
                    id="price"
                    value="{{price}}"
-                   placeholder="价格" 
-                   placeholder-style="color: #A4C5C2; font-size: 34rpx;" 
+                   placeholder="价格*" 
                    bindinput="inputText">
 			</input>
 		</view>
 	</view>
 	<view class="listing-options-container">
-		<view class="condition-dropdown" bindtap="actionSheetTap">
+		<view class="condition-dropdown" bindtap="showActionSheet">
 			<view class="dropdown-label">{{condition}}</view>
 		</view>
-		<action-sheet hidden="{{isActionSheetHidden}}" bindchange="actionSheetChange">
-			<block wx:for="{{actionSheetItems}}" wx:key="item">
-				<action-sheet-item bindtap="actionSheetItemTap" data-clicked-Item="{{item}}">{{item}}</action-sheet-item>  
-			</block>
-			<action-sheet-cancel>取消</action-sheet-cancel>
-			<view class="vertical-space" style="padding-bottom: 20rpx;"></view>
-		</action-sheet>
+  
+  </view>
 		<!-- TODO: 急售 -->
 		<!-- <picker class="expiration-dropdown" mode="date" value="{{ddl}}" start="{{ddl}}" end="2050-12-31" bindchange="bindDateChange" bindcancel="">
 			<view class="dropdown-label">{{displayDDL}}</view>
 		</picker> -->
+  <view class="deliver-method-contaienr">
+
+  <view style="display: flex; flex-direction: row;">
+  <text style="color: #599596; font-size: 26rpx">交易方式*</text>
+  <text style="color: #BBDAD7; font-size: 26rpx">(可多选)</text>
+  </view>
+  <checkbox-group style = "margin-top: -1%;" bindchange="checkboxChange">
+  <checkbox  value="pickup" checked="{{isPickupChecked}}"/>
+  <text style="color: #BBDAD7; font-size: 26rpx; margin-right: 10rpx;">自取</text>
+  <checkbox  value="deliver" checked="{{isDeliverChecked}}"/>
+  <text style="color: #BBDAD7; font-size: 26rpx; margin-right: 10rpx;">送货</text>
+  <checkbox  value="mail" checked="{{isMailChecked}}"/>
+  <text style="color: #BBDAD7; font-size: 26rpx; margin-right: 10rpx;">邮寄</text>
+  </checkbox-group>
 	</view>
+
+<view class="original-price-contaienr">
+
+<view style="display: flex; flex-direction: row;  height: 56rpx;">
+<text style="color: #599596; font-size: 26rpx">原价</text>
+<text style="color: #BBDAD7; font-size: 26rpx">(选填)</text>
+</view>
+
+<view class="money-input-wrapper" style="margin-top: -4%;">
+			<view class="money-sign">
+				<text style="color: #00B1A2; font-size: 26rpx;">$</text>
+			</view>
+			<input class="money-input" 
+                   id="originalPrice"
+                   value="{{originalPrice}}"
+                   placeholder="原价" 
+                   bindinput="inputText">
+			</input>
+		</view>
+</view>
 	<view class="body-text-container">
 		<t-textarea class="body-text-textarea" 
                     id="body"
                     value="{{body}}"
                     maxlength="200"
                     placeholder="留下更详细的交易细节和物品信息…" 
-                    placeholder-style="color: #DAECEB; font-size: 28rpx;"
+                    placeholder-style="color: #DAECEB; font-size: 26rpx;"
                     bind:change="inputText"
+                    disableDefaultPadding="{{true}}"
+                    show-confirm-bar
 		/>
 	</view>
 	<!-- TODO: 添加位置 -->

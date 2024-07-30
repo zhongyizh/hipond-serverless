@@ -4,24 +4,29 @@ import { msgSecCheck } from '../../../services/security.service'
 import { createPost, editPost } from "../../../services/post.service"
 
 const errMsg = new Map([
-	["text", "标题不能为空"],
 	["body", "需要物品描述"],
 	["price", "请输入价格"],
-	["image", "请选至少一张图"]
+  ["image", "请选至少一张图"],
+  ["method", "请选择交易方式"],
+  ["condition", "请选择新旧程度"]
 ]);
 
 Page({
 	data: {
-		// Data Models
+    	// Data Models
+		confirmBtn: { content: '知道了(3s)', variant: 'text' },
+		showActSheet: false,
+		confirmBtnDisabled: true,
 		fileList: [],
-		condition: '全新/仅开箱',
+		condition: '物品新旧程度*',
 		title: '',
 		body: '',
 		price: '',
+		originalPrice: '',
 		// View Models
 		originalCopy: {}, // Store the copy of the original post upon editing.
 		gridConfig: {
-            column: 9,
+            column: 3,
             width: 213,
             height: 213,
 		},
@@ -30,11 +35,40 @@ Page({
 			unit: 'MB',
 			message: '图片大小不超过5MB'
 		},
-		actionSheetItems: ['全新/仅开箱', '良好/轻微使用', '一般/工作良好', '需修理/零件可用'],
-		isActionSheetHidden: true,
-		isFromEdit: false
+		actionSheetItems: ['New/Open-Box', 'Excellent', 'Very Good', 'Good', 'Fair'],
+		isFromEdit: false,
+		isDeliverChecked: false,
+		isPickupChecked: false,
+		isMailChecked: false
     },
-    onLoad() {
+    async onLoad() {
+		await wx.cloud.callFunction({
+			name: 'newUserCheck',
+			data: {
+			},
+			success: res => {
+				if(res.result)
+				{
+				console.log("This is a new user.", res)
+
+				this.setData({
+					showActSheet: true,
+				})  
+				setTimeout(() => {
+					this.setData({
+					confirmBtnDisabled: false
+					});
+				}, 3000);
+				}
+				else
+				{
+				console.log("This is an old user.", res)
+				}
+			},
+			fail: err => {
+				console.error('Failed to check if the user is new user:', err);
+			}
+		});
         // 发帖编辑功能的实现
         // 通过一个event来从「详情页」传数据到「编辑页」：
         // 获取所有打开的EventChannel事件
@@ -46,6 +80,15 @@ Page({
 			this.setData({ isFromEdit: true });
             console.log("new-post-listing.js: onLoad(): onPageEdit triggered: this.data:", this.data);
         })
+    },
+    onConfirm() {
+      // 如果按钮仍然禁用，则直接返回
+      if (this.data.confirmBtnDisabled) {
+        return;
+      }
+      this.setData({
+        showActSheet: false
+      });
     },
 	handleAdd(e) {
 		const { fileList } = this.data;
@@ -62,22 +105,38 @@ Page({
 		this.setData({
 			fileList,
 		});
+  	},
+	showActionSheet(e) {
+		wx.showActionSheet({
+			itemList: this.data.actionSheetItems,
+			success: (res) =>{
+				if(!res.cancle){    
+				this.setData({
+					condition: this.data.actionSheetItems[res.tapIndex]
+				})
+				}else{
+				console.log("Condition selection cancle")
+				}
+			},
+			fail: (res) =>{
+				console.log("fail")
+				console.log(res)
+			},
+			complete: (res) => {
+				console.log("Condition selection complete")
+			}
+		})
 	},
-	actionSheetTap: function(e) {
+	checkboxChange: function (e) {
+		const items = e.detail.value;
+		const isChecked = (id) => items.includes(id);
+		const isDeliverChecked = isChecked("deliver");
+		const isPickupChecked = isChecked("pickup");
+		const isMailChecked = isChecked("mail");
 		this.setData({
-			isActionSheetHidden: false
-		});
-	},
-	actionSheetItemTap: function(e) {
-		let clickedItem = e.currentTarget.dataset.clickedItem;
-		this.setData({
-			isActionSheetHidden: true,
-			condition: clickedItem
-		});
-	},
-	actionSheetChange: function(e) {
-		this.setData({
-			isActionSheetHidden: true
+			isDeliverChecked: isDeliverChecked,
+			isPickupChecked: isPickupChecked,
+			isMailChecked: isMailChecked
 		});
 	},
 	inputText: function(res) {
@@ -91,15 +150,15 @@ Page({
 	},
 	validateForm: function(payloads) {
 		for (const [key, value] of Object.entries(payloads[0])) {
-			if (errMsg.has(key))
-				if (value == "") {
-					wx.showToast({
-						title: errMsg.get(key),
-						icon: 'error',
-						duration: 2000
-					});
-					return false;
-				}
+		if (errMsg.has(key))
+			if (value == "") {
+				wx.showToast({
+					title: errMsg.get(key),
+					icon: 'error',
+					duration: 2000
+				});
+				return false;
+			}
 		}
 		if (payloads[1].length <= 0) {
 			wx.showToast({
@@ -116,12 +175,19 @@ Page({
 			'title': this.data.title ? this.data.title : getPostTitleFromBody(this.data.body),
 			'body': this.data.body,
 			'price': this.data.price,
-			'location': '',
-			'condition': this.data.condition,
+      		'location': '',
+			'condition': this.data.condition !== '物品新旧程度*' ? this.data.condition : '',
 			'postDate': Date.now(),
 			'postType': 'selling',
 			'isImgChecked': false,
-			'viewCount': 0
+			'viewCount': 0,
+			'originalPrice': this.data.originalPrice,
+			'method': !this.data.isDeliverChecked && !this.data.isMailChecked && !this.data.isPickupChecked ? "" : 
+				[
+				this.data.isDeliverChecked ? 'deliver' : '', 
+				this.data.isMailChecked ? 'mail' : '', 
+				this.data.isPickupChecked ? 'pickup' : ''
+				]
 		}
 		var images = this.data.fileList
 		if (!this.validateForm([payload, images])) return false

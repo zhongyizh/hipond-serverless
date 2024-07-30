@@ -43,27 +43,38 @@ background: #e7e7e7;
 
 /* Post Title & Price */
 .title-row {
-	display: flex;
-	justify-content: space-between; 
-	width: 100%; 
-	font-weight: bold; 
-	margin-bottom: 12rpx;
+  width: 100%;
 }
 
 .post-text {
-	font-size: 18px;
-	margin-left: 4%;
-	margin-right: 4%;
-	letter-spacing: 5%;
-	line-height: 21px;
+  display: block;
+  font-size: 36rpx;
+  margin-left: 4%;
+  margin-right: 4%;
+  text-align: left;
+}
+
+.price-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 4%;
+}
+
+.original-price {
+  font-size: 30rpx;
+  letter-spacing: 5%;
+  line-height: 24pt;
+  color: #727A7A; 
+  text-decoration: line-through;
+  margin-right: 10rpx; 
 }
 
 .price-tag {
-	font-size: 18px;
-	margin-right: 6%;
-	letter-spacing: 5%;
-	line-height: 21px;
-	color: #00B1A2;
+  font-size: 36rpx;
+  letter-spacing: 5%;
+  line-height: 24pt;
+  color: #00B1A2;
 }
 
 .horizontal-divider {
@@ -75,35 +86,32 @@ background: #e7e7e7;
 /* Post Options */
 .option-row {
 	display: flex;
-	flex-direction: row;
-	justify-content: space-evenly;
-	height: auto;
-	width: 100%;
-	margin: 28rpx 0rpx 12rpx 0rpx;
+    flex-direction: row;
+    justify-content: space-between;
+    height: auto;
+    width: 100%;
+    margin: 28rpx 0rpx 12rpx 0rpx;
 }
 
-.condition-container {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	min-height: 60rpx;
+.background-shape{
+  height: 60rpx;
+  width: 80%;
+  background: #EEF7F6;
+  border-radius: 30rpx;
+  text-align: center;
+  
 }
 
-.condition-circle {
-	width: 60rpx;
-	height: 60rpx;
+.text-container {
+  color: rgba(89, 149, 150, 1);
+  font-size: 26rpx;
+  font-weight: 400;
 }
 
-.condition-label {
-	max-height: 96rpx;
-	max-width: 144rpx;
-	padding-left: 8rpx;
-	color: #71BEBF;
-	line-height: 48rpx;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	text-align: center;
+.info-icon{
+  height: 22rpx;
+  width: 22rpx;
+  margin-left: 2%;
 }
 
 .ddl-container {
