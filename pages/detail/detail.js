@@ -35,9 +35,8 @@ Page({
     showDialog: false,
     conditionDescription: "",
     confirmBtn: { content: '确定', variant: 'text' },
-    methodOfDeliver: "",
-    
-  },  
+    methodOfDeliver: ""
+  },
 
 	onLoad(options) {
         // decode传进来的URL的data部分
@@ -321,9 +320,15 @@ Page({
     },
     // 分享给朋友
     onShareAppMessage: function() {
-    const detailData = JSON.stringify(this.data.postData)
+        const detailData = JSON.stringify(this.data.postData)
+        var priceIndicator = ''
+        if (this.data.postData.postType == "selling") {
+            priceIndicator = '[$' + this.data.postData.price + ']'
+        } else {
+            priceIndicator = ''
+        }
         return {
-            title: this.data.postData.nickname + '发布的帖子: ' + this.data.postData.title,
+            title: priceIndicator + ' ' + this.data.postData.title,
             path: `/pages/detail/detail?data=${detailData}`,
             imageUrl: this.data.postData.imageUrls[0],
             success: function() {
@@ -339,8 +344,14 @@ Page({
     // 分享到朋友圈
     onShareTimeline: function() {
         const detailData = JSON.stringify(this.data.postData)
+        var priceIndicator = ''
+        if (this.data.postData.postType == "selling") {
+            priceIndicator = '[$' + this.data.postData.price + ']'
+        } else {
+            priceIndicator = ''
+        }
         return {
-            title: this.data.postData.nickname + '发布的帖子: ' + this.data.postData.title,
+            title: priceIndicator + ' ' + this.data.postData.title,
             path: `/pages/detail/detail?data=${detailData}`,
             imageUrl: this.data.postData.imageUrls[0] 
         };
@@ -378,5 +389,15 @@ Page({
             showTooltipOverlay: false,
             showModal: true
         });
-    }
+    },
+
+    onBack: function() {
+        wx.navigateBack();
+    },
+
+    onGoHome: function() {
+        wx.reLaunch({
+            url: '/pages/tab-bar/index/index',
+        });
+    },
 })
