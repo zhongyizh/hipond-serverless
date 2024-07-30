@@ -13,16 +13,16 @@ const errMsg = new Map([
 
 Page({
 	data: {
-    // Data Models
-    confirmBtn: { content: '知道了(3s)', variant: 'text' },
-    showActSheet: false,
-    confirmBtnDisabled: true,
+    	// Data Models
+		confirmBtn: { content: '知道了(3s)', variant: 'text' },
+		showActSheet: false,
+		confirmBtnDisabled: true,
 		fileList: [],
 		condition: '物品新旧程度*',
 		title: '',
 		body: '',
-    price: '',
-    originalPrice: '',
+		price: '',
+		originalPrice: '',
 		// View Models
 		originalCopy: {}, // Store the copy of the original post upon editing.
 		gridConfig: {
@@ -36,42 +36,39 @@ Page({
 			message: '图片大小不超过5MB'
 		},
 		actionSheetItems: ['New/Open-Box', 'Excellent', 'Very Good', 'Good', 'Fair'],
-    isFromEdit: false,
-    isDeliverChecked: false,
-    isPickupChecked: false,
-	isMailChecked: false
+		isFromEdit: false,
+		isDeliverChecked: false,
+		isPickupChecked: false,
+		isMailChecked: false
     },
     async onLoad() {
-      await wx.cloud.callFunction({
-        name: 'newUserCheck',
-        data: {
-        },
-        success: res => {
+		await wx.cloud.callFunction({
+			name: 'newUserCheck',
+			data: {
+			},
+			success: res => {
+				if(res.result)
+				{
+				console.log("This is a new user.", res)
 
-          if(res.result)
-          {
-            console.log("This is a new user.", res)
-
-            this.setData({
-				showActSheet: true,
-            })  
-            setTimeout(() => {
-              this.setData({
-                confirmBtnDisabled: false
-              });
-            }, 3000);
-          }
-          else
-          {
-            console.log("This is an old user.", res)
-          }
-        },
-        fail: err => {
-          console.error('Failed to check if the user is new user:', err);
-        }
-      });
-
-      
+				this.setData({
+					showActSheet: true,
+				})  
+				setTimeout(() => {
+					this.setData({
+					confirmBtnDisabled: false
+					});
+				}, 3000);
+				}
+				else
+				{
+				console.log("This is an old user.", res)
+				}
+			},
+			fail: err => {
+				console.error('Failed to check if the user is new user:', err);
+			}
+		});
         // 发帖编辑功能的实现
         // 通过一个event来从「详情页」传数据到「编辑页」：
         // 获取所有打开的EventChannel事件
@@ -93,7 +90,6 @@ Page({
         showActSheet: false
       });
     },
-
 	handleAdd(e) {
 		const { fileList } = this.data;
 		const { files } = e.detail;
@@ -109,41 +105,40 @@ Page({
 		this.setData({
 			fileList,
 		});
-  },
-  showActionSheet(e) {
-    wx.showActionSheet({
-      itemList: this.data.actionSheetItems,
-      success: (res) =>{
-        if(!res.cancle){    
-          this.setData({
-            condition: this.data.actionSheetItems[res.tapIndex]
-          })
-        }else{
-          console.log("Condition selection cancle")
-        }
-      },
-      fail: (res) =>{
-        console.log("fail")
-        console.log(res)
-      },
-      complete: (res) => {
-        console.log("Condition selection complete")
-      }
-    })
-  },
-  
-  checkboxChange: function (e) {
+  	},
+	showActionSheet(e) {
+		wx.showActionSheet({
+			itemList: this.data.actionSheetItems,
+			success: (res) =>{
+				if(!res.cancle){    
+				this.setData({
+					condition: this.data.actionSheetItems[res.tapIndex]
+				})
+				}else{
+				console.log("Condition selection cancle")
+				}
+			},
+			fail: (res) =>{
+				console.log("fail")
+				console.log(res)
+			},
+			complete: (res) => {
+				console.log("Condition selection complete")
+			}
+		})
+	},
+	checkboxChange: function (e) {
 		const items = e.detail.value;
 		const isChecked = (id) => items.includes(id);
 		const isDeliverChecked = isChecked("deliver");
-    const isPickupChecked = isChecked("pickup");
-    const isMailChecked = isChecked("mail");
+		const isPickupChecked = isChecked("pickup");
+		const isMailChecked = isChecked("mail");
 		this.setData({
 			isDeliverChecked: isDeliverChecked,
-      isPickupChecked: isPickupChecked,
-      isMailChecked: isMailChecked
+			isPickupChecked: isPickupChecked,
+			isMailChecked: isMailChecked
 		});
-  },
+	},
 	inputText: function(res) {
 		const widgetId = res.currentTarget.id;
 		try {
@@ -155,15 +150,15 @@ Page({
 	},
 	validateForm: function(payloads) {
 		for (const [key, value] of Object.entries(payloads[0])) {
-      if (errMsg.has(key))
-				if (value == "") {
-					wx.showToast({
-						title: errMsg.get(key),
-						icon: 'error',
-						duration: 2000
-					});
-					return false;
-        }
+		if (errMsg.has(key))
+			if (value == "") {
+				wx.showToast({
+					title: errMsg.get(key),
+					icon: 'error',
+					duration: 2000
+				});
+				return false;
+			}
 		}
 		if (payloads[1].length <= 0) {
 			wx.showToast({
@@ -180,19 +175,19 @@ Page({
 			'title': this.data.title ? this.data.title : getPostTitleFromBody(this.data.body),
 			'body': this.data.body,
 			'price': this.data.price,
-      'location': '',
+      		'location': '',
 			'condition': this.data.condition !== '物品新旧程度*' ? this.data.condition : '',
 			'postDate': Date.now(),
 			'postType': 'selling',
 			'isImgChecked': false,
-      'viewCount': 0,
-      'originalPrice': this.data.originalPrice,
-      'method': !this.data.isDeliverChecked && !this.data.isMailChecked && !this.data.isPickupChecked ? "" : 
-      [
-        this.data.isDeliverChecked ? 'deliver' : '', 
-        this.data.isMailChecked ? 'mail' : '', 
-        this.data.isPickupChecked ? 'pickup' : ''
-        ]
+			'viewCount': 0,
+			'originalPrice': this.data.originalPrice,
+			'method': !this.data.isDeliverChecked && !this.data.isMailChecked && !this.data.isPickupChecked ? "" : 
+				[
+				this.data.isDeliverChecked ? 'deliver' : '', 
+				this.data.isMailChecked ? 'mail' : '', 
+				this.data.isPickupChecked ? 'pickup' : ''
+				]
 		}
 		var images = this.data.fileList
 		if (!this.validateForm([payload, images])) return false

@@ -2,40 +2,40 @@
 import { ListingConditions } from "../../models/posts.model"
 import { deletePost } from "../../services/post.service"
 const conditionMapping = {
-  "全新/仅开箱": "New/Open-Box",
-  "良好/轻微使用": "Very Good",
-  "一般/工作良好": "Good",
-  "需修理/零件可用": "Fair",
-  "未提供":"Unknown",
-  "":"Unknown"
-  };
-
-  const labelsMap = new Map([
+    "全新/仅开箱": "New/Open-Box",
+    "良好/轻微使用": "Very Good",
+    "一般/工作良好": "Good",
+    "需修理/零件可用": "Fair",
+    "未提供":"Unknown",
+    "":"Unknown"
+};
+const labelsMap = new Map([
     ["pickup", "自取"],
     ["mail", "邮寄"],
     ["deliver", "送货"]
-  ]); 
+]); 
+
 Page({
 	data: {
 		postData: [],
 		conditionForDisplay: '',
 		conditionIconPath: '',
-    isOwnerFlag: false,
-    showModal: false,
-    tooltip: false,
-    showTooltipOverlay: false,
-    menuButtonTop: 0,
-    menuButtonLeft: 0,
-    menuButtonHeight: 0,
-    menuButtonWidth: 0,
-    isEditBTNEnabled: false,
-    isDeleteBTNEnabled: false,
-    saveButtonUrl: "/image/not_saved_button.png",
-    postSaved: false,
-    showDialog: false,
-    conditionDescription: "",
-    confirmBtn: { content: '确定', variant: 'text' },
-    methodOfDeliver: ""
+        isOwnerFlag: false,
+        showModal: false,
+        tooltip: false,
+        showTooltipOverlay: false,
+        menuButtonTop: 0,
+        menuButtonLeft: 0,
+        menuButtonHeight: 0,
+        menuButtonWidth: 0,
+        isEditBTNEnabled: false,
+        isDeleteBTNEnabled: false,
+        saveButtonUrl: "/image/not_saved_button.png",
+        postSaved: false,
+        showDialog: false,
+        conditionDescription: "",
+        confirmBtn: { content: '确定', variant: 'text' },
+        methodOfDeliver: ""
   },
 
 	onLoad(options) {
