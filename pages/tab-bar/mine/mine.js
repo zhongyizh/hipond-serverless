@@ -169,7 +169,7 @@ Page({
 		const postIndex = event.currentTarget.dataset.index
 		const postData = JSON.stringify(this.data.savedPost[postIndex])
 		wx.navigateTo({
-			url: `/pages/detail/detail?data=${postData}`
+			url: `/pages/detail/detail?data=${encodeURIComponent(postData)}`
 		});
 	},
 	navigateToDetail(event) {
@@ -187,7 +187,7 @@ Page({
 		Object.assign(postData, userData)
 		const data = JSON.stringify(postData)
 		wx.navigateTo({
-			url: `/pages/detail/detail?data=${data}`
+			url: `/pages/detail/detail?data=${encodeURIComponent(data)}`
 		});
 	},
 	// 分享给朋友

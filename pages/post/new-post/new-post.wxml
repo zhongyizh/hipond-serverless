@@ -1,11 +1,20 @@
 <!--pages/post/new-post/new-post.wxml-->
 <t-navbar left-arrow />
 <view class="new-post-page-container">
-	<!-- TODO: 需要upload这个区域能横向滚动，而不是整个页面都能滚动 -->
-	<scroll-view class="upload-wrapper" scroll-x enable-flex style="flex-direction: row;">
-		<t-upload class="upload-component" media-type="{{['image']}}" files="{{fileList}}" gridConfig="{{gridConfig}}" max="9"
-			size-limit="{{sizeLimit}}" bind:remove="handleRemove" bind:add="handleAdd"/>
-	</scroll-view>
+	<t-upload
+		class="upload-component"
+		draggable
+		disable
+		media-type="{{['image']}}"
+		files="{{fileList}}"
+		gridConfig="{{gridConfig}}"
+		max="9"
+		size-limit="{{sizeLimit}}"
+		bind:success="handleSuccess"
+		bind:remove="handleRemove"
+		bind:click="handleClick"
+		bind:drop="handleDrop"
+	/>
 	<view class="form-title-container">
 		<view class="title-input-wrapper">
 			<input class="title-input" 
