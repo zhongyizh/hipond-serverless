@@ -65,7 +65,7 @@
   </view>
   <!-- Post Body -->
   <view class="post-body">
-		{{postData.body}}
+		<text decode="true">{{postData.body}}</text>
   </view>
 </view>
 <!-- User Information -->

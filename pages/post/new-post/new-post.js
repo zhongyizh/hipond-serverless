@@ -19,7 +19,7 @@ Page({
 		// View Models
 		originalCopy: {}, // Store the copy of the original post upon editing.
 		gridConfig: {
-            column: 9,
+            column: 3,
             width: 213,
             height: 213,
 		},
@@ -43,12 +43,10 @@ Page({
             console.log("new-post.js: onLoad(): onPageEdit triggered: this.data:", this.data);
         })
     },
-	handleAdd(e) {
-		const { fileList } = this.data;
+	handleSuccess(e) {
 		const { files } = e.detail;
-		// 选择完所有图片之后，统一上传，因此选择完就直接展示
 		this.setData({
-			fileList: [...fileList, ...files], // 此时设置了 fileList 之后才会展示选择的图片
+		  	fileList: files,
 		});
 	},
 	handleRemove(e) {
@@ -57,6 +55,16 @@ Page({
 		fileList.splice(index, 1);
 		this.setData({
 			fileList,
+		});
+	},
+	handleClick(e) {
+		console.log(e.detail.file);
+	},
+	handleDrop(e) {
+		const { fileList } = this.data;
+		const { files } = e.detail;
+		this.setData({
+			fileList: files,
 		});
 	},
 	inputText: function(res) {
