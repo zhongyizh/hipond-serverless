@@ -1,6 +1,8 @@
 // pages/login/login.js
 import { getMyUserInfo } from '../../utils/util'
 
+// 邮编map
+var pastData = require('../../utils/zipcode.js');
 Page({
 	data: {
 		nickname: "",
@@ -13,10 +15,10 @@ Page({
 		isPhoneChecked: false,
 		isEmailChecked: false,
 		isDisabled: true,
-		isFocusNickname: false
+    isFocusNickname: false,
 	},
-	async onLoad() {
-		wx.showLoading({
+	async onLoad() {    
+    wx.showLoading({
 			title: '获取用户信息中，请耐心等待...',
 			mask: true
 		})

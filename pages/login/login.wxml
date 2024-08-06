@@ -28,7 +28,7 @@
 	<view class="info-line"></view>
 	<view class="info">
 		<view class="info-title">
-			<text>邮编</text>
+			<text>所在地邮编</text>
 		</view>
 		<input bindinput="zipcodeChange" class="info-text" placeholder="请输入常住地邮编" type="text" value="{{zipcode}}"></input>
 	</view>
