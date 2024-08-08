@@ -1,4 +1,4 @@
-var localData = {
+var zipCodeData = {
     "11542": {
         "city": "Glen Cove", 
         "state_id": "NY"
@@ -135154,5 +135154,5 @@ var localData = {
 };
 
 module.exports = {
-pastData: localData
+data: zipCodeData
 }
