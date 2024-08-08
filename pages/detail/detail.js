@@ -113,11 +113,11 @@ Page({
         const phone = postData.phone ? '手机号: ' + postData.phone : '';
         const email = postData.emailAddress ? '邮箱：' + postData.emailAddress : '';
         let contact = '';
-        if (phone && email) {
+        if (this.data.postData.isPhoneChecked && this.data.postData.isEmailChecked) {
             contact = phone + '\n' + email;
-        } else if (phone) {
+        } else if (this.data.postData.isPhoneChecked) {
             contact = phone;
-        } else if (email) {
+        } else if (this.data.postData.isEmailChecked) {
             contact = email;
         }
         console.log('成功复制到剪贴板：' + contact)
@@ -264,7 +264,7 @@ Page({
                         // originalPrice: this.data.postData.originalPrice,
                         // isDeliverChecked: this.data.postData.method[0] == "deliver" ? true : false,
                         // isMailChecked: this.data.postData.method[1] == "mail" ? true : false,
-                        // isPickupChecked: this.data.postData.method[2] == "pickup" ? true : false
+                        // isPickupChecked: this.data.postData.method[2] == "pickup" ? true : false，
 
                         
                     }

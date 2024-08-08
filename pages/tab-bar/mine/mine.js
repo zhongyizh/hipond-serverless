@@ -1,5 +1,6 @@
 // pages/tab-bar/mine/mine.js
 import { getMyUserInfo } from '../../../utils/util'
+var zipCodeInfo = require('../../../utils/zipcode.js');
 
 Page({
 	data: {
@@ -22,14 +23,15 @@ Page({
 		offsetSelling: 0,
 		offsetSaving: 0,
 		savedIdList: [],
-		savedPost: []
+		savedPost: [],
+		geoInfo: ""
 	},
 	async onLoad() {
     	if(typeof this.getTabBar === 'function' && this.getTabBar()) {
 			this.getTabBar().setData({
 				selected: this.data.currentTabbarIndex
 			})
-    	}
+		}
 	},
 	async onShow() {
 		await this.getMyProfile()
@@ -119,6 +121,9 @@ Page({
 			userInfo: userData
 		})
 		wx.hideLoading()
+		this.setData({
+			geoInfo: zipCodeInfo.data[[this.data.userInfo.zipcode]].city + ", " + zipCodeInfo.data[[this.data.userInfo.zipcode]].state_id,
+		})
 	},
 	async getTagsCount() {
 		// TODO: 不知道为什么_openid: undefined也能拿到数据
@@ -183,6 +188,8 @@ Page({
 			nickname: currentUserInfo.nickname,
 			zipcode: currentUserInfo.zipcode,
 			isUserVerified: currentUserInfo.isUserVerified,
+			isPhoneChecked: currentUserInfo.isPhoneChecked,
+			isEmailChecked: currentUserInfo.isEmailChecked
 		}
 		Object.assign(postData, userData)
 		const data = JSON.stringify(postData)
