@@ -136,13 +136,27 @@ Page({
         const postData = this.data.postData
         const phone = postData.phone ? '手机号: ' + postData.phone : '';
         const email = postData.emailAddress ? '邮箱：' + postData.emailAddress : '';
+        const other = postData.otherContact ? '其他联系方式: ' + postData.otherContact: "";
         let contact = '';
+        if(!this.data.postData.isOtherContactChecked)
+        {
         if (this.data.postData.isPhoneChecked && this.data.postData.isEmailChecked) {
             contact = phone + '\n' + email;
         } else if (this.data.postData.isPhoneChecked) {
             contact = phone;
         } else if (this.data.postData.isEmailChecked) {
             contact = email;
+        }
+        }
+        else
+        {
+            if (this.data.postData.isPhoneChecked && this.data.postData.isEmailChecked) {
+                contact = other + '\n' + phone + '\n' + email;
+            } else if (this.data.postData.isPhoneChecked) {
+                contact =  other + '\n' + phone;
+            } else if (this.data.postData.isEmailChecked) {
+                contact =  other + '\n' + email;
+            }
         }
         console.log('成功复制到剪贴板：' + contact)
         wx.setClipboardData({

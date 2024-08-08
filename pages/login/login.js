@@ -118,9 +118,9 @@ Page({
 				zipcode: userData.zipcode,
 				isVerified: userData.isUserVerified,
 				emailAddress: userData.emailAddress,
-				isPhoneChecked: userData.isPhoneChecked,
-				isEmailChecked: userData.isEmailChecked,
-				isOtherContactChecked: userData.isOtherContactChecked
+				isPhoneChecked: userData.isPhoneChecked ? userData.isPhoneChecked : false,
+				isEmailChecked: userData.isEmailChecked ? userData.isEmailChecked : false,
+				isOtherContactChecked: userData.isOtherContactChecked ? userData.isOtherContactChecked : false
 			})
 			this.updateButtonStatus();
 		}
@@ -128,8 +128,14 @@ Page({
 	updateButtonStatus() {
 		// 按钮启用条件: nickname不为空，两个复选框至少选中一个且对应的输入框不为空
 		let isDisabled = true;
-		if (this.data.nickname !== "" &&
-			((this.data.isPhoneChecked && this.data.phone !== "") || (this.data.isEmailChecked && this.data.emailAddress !== "") || (this.data.isOtherContactChecked && this.data.otherContact !== ""))){
+
+		const isPhoneValid = !this.data.isPhoneChecked || (this.data.isPhoneChecked && this.data.phone !== "");
+		const isEmailValid = !this.data.isEmailChecked || (this.data.isEmailChecked && this.data.emailAddress !== "");
+		const isOtherContactValid = !this.data.isOtherContactChecked || (this.data.isOtherContactChecked && this.data.otherContact !== "");
+
+		const atLeastOneCheckedAndEntered = (this.data.isPhoneChecked && this.data.phone !== "") || (this.data.isEmailChecked && this.data.emailAddress !== "") || (this.data.isOtherContactChecked && this.data.otherContact !== "");
+
+		if (this.data.nickname !== "" && atLeastOneCheckedAndEntered && isPhoneValid && isEmailValid && isOtherContactValid) {
 			isDisabled = false;
 		}
 		this.setData({
@@ -145,7 +151,7 @@ Page({
 		const isPhoneChecked = this.data.isPhoneChecked
 		const isEmailChecked = this.data.isEmailChecked
 		const isOtherContactChecked = this.data.isOtherContactChecked
-		console.log(this.data.isEmailChecked)
+		const otherContact = this.data.otherContact
 		let avatarUrl = this.data.avatarUrl;
 		if (isChangeAvatar) {
 			avatarUrl = await this.uploadAvatar()
@@ -156,9 +162,10 @@ Page({
 			zipcode: zipcode,
 			phone: phone,
 			avatarUrl: avatarUrl,
+			otherContact: otherContact,
 			isPhoneChecked: isPhoneChecked,
 			isEmailChecked: isEmailChecked,
-			isOtherContactChecked = isOtherContactChecked
+			isOtherContactChecked: isOtherContactChecked
 		}
 
 		wx.cloud.callFunction({

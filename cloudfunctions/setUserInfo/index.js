@@ -23,7 +23,9 @@ exports.main = async (event, context) => {
 				phone: event.phone,
 				avatarUrl: event.avatarUrl,
 				isPhoneChecked:event.isPhoneChecked,
-				isEmailChecked:event.isEmailChecked
+				isEmailChecked:event.isEmailChecked,
+				isOtherContactChecked: event.isOtherContactChecked,
+				otherContact: event.otherContact
 			},
 			success: function(res) {
 				console.log(res)
