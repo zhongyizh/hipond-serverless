@@ -157,6 +157,10 @@ Page({
             } else if (this.data.postData.isEmailChecked) {
                 contact =  other + '\n' + email;
             }
+            else
+            {
+                contact = other
+            }
         }
         console.log('成功复制到剪贴板：' + contact)
         wx.setClipboardData({
@@ -304,6 +308,7 @@ Page({
                         isDeliverChecked: method[0] == "deliver",
                         isMailChecked: method[1] == "mail",
                         isPickupChecked: method[2] == "pickup"
+
 
 
                         
