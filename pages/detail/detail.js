@@ -133,6 +133,10 @@ Page({
             } else if (this.data.postData.isEmailChecked) {
                 contact =  other + '\n' + email;
             }
+            else
+            {
+                contact = other
+            }
         }
         console.log('成功复制到剪贴板：' + contact)
         wx.setClipboardData({
@@ -275,10 +279,10 @@ Page({
                         // ddl: this.data.postData.ddl,
                         body: this.data.postData.body,
                         title: this.data.postData.title,
-                        // originalPrice: this.data.postData.originalPrice,
-                        // isDeliverChecked: this.data.postData.method[0] == "deliver" ? true : false,
-                        // isMailChecked: this.data.postData.method[1] == "mail" ? true : false,
-                        // isPickupChecked: this.data.postData.method[2] == "pickup" ? true : false，
+                        originalPrice: this.data.postData.originalPrice,
+                        isDeliverChecked: this.data.postData.method[0] == "deliver" ? true : false,
+                        isMailChecked: this.data.postData.method[1] == "mail" ? true : false,
+                        isPickupChecked: this.data.postData.method[2] == "pickup" ? true : false
 
                         
                     }
