@@ -59,6 +59,9 @@ async function editPost(newPostData) {
 	// 计算要删除的文件 D = (A - C)
 	const filesToDelete = oldFileList.difference(filesToKeep);
 	
+	if (filesToAdd.size == 0) {
+		newPostData.isImgChecked = true
+	}
 	console.log("⏳ post.service.js: editPost(): Optimizing Image Uploads: (filesToKeep, filesToAdd, filesToDelete) = ", filesToKeep, filesToAdd, filesToDelete);
 	// 从数据库中清除掉要被删除的图片
 	if (filesToDelete.size > 0) {

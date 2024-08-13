@@ -117,6 +117,10 @@ Page({
 			title: '上传中...',
 			mask: true
 		})
+		// 直接返回主页
+		wx.reLaunch({
+            url: '/pages/tab-bar/index/index',
+        })
 		
 		try {
 			// 先审核文字部分
@@ -142,9 +146,11 @@ Page({
 				payload._id = this.data.originalCopy._id;
 				await editPost(payload);
 			}
-	
-			wx.hideLoading();
-			wx.navigateBack();
+			wx.showToast({
+				title: '上传成功',
+				icon: 'success',
+				duration: 3000
+			});
 		} catch (error) {
 			console.error("Upload failed: ", error);
 			wx.hideLoading();
@@ -153,6 +159,8 @@ Page({
 				icon: 'error',
 				duration: 2000
 			});
+		} finally {
+			wx.hideLoading(); // 最后隐藏indicator
 		}
 	}
 })
