@@ -38,6 +38,7 @@ async function createPost(newPostData) {
 async function editPost(newPostData) {
 	const db = wx.cloud.database();
 	if (!newPostData._id) return false;
+	// TODO: id和别的postData最好分开作为两个参数传入，不然看上去很奇怪
 	const postId = newPostData._id;
 	delete newPostData['_id'];
 	console.log("⏳ post.service.js: editPost(): Editing Post: ", newPostData);
