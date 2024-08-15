@@ -1,19 +1,24 @@
 // pages/login/login.js
-import { getMyUserInfo } from '../../utils/util'
+import {
+	getMyUserInfo
+} from '../../utils/util'
 
+// 邮编map
 Page({
 	data: {
 		nickname: "",
 		zipcode: "",
 		phone: "",
 		emailAddress: "",
+		otherContact: "",
 		avatarUrl: "/image/avatar_icon_default_show.png",
 		isChangeAvatar: false,
 		isVerified: false,
 		isPhoneChecked: false,
 		isEmailChecked: false,
+		isOtherContactChecked: false,
 		isDisabled: true,
-		isFocusNickname: false
+		isFocusNickname: false,
 	},
 	async onLoad() {
 		wx.showLoading({
@@ -71,9 +76,12 @@ Page({
 		const isChecked = (id) => items.includes(id);
 		const isPhoneChecked = isChecked("cb-phone");
 		const isEmailChecked = isChecked("cb-email");
+		const isOtherContactChecked = isChecked("cb-other-contact");
+
 		this.setData({
 			isPhoneChecked: isPhoneChecked,
-			isEmailChecked: isEmailChecked
+			isEmailChecked: isEmailChecked,
+			isOtherContactChecked: isOtherContactChecked
 		});
 		this.updateButtonStatus();
 	},
@@ -91,6 +99,15 @@ Page({
 		})
 		this.updateButtonStatus();
 	},
+
+	otherContactChange(res) {
+		var textVal = res.detail.value;
+		this.setData({
+			otherContact: textVal
+		})
+		this.updateButtonStatus();
+	},
+
 	async loadUserInfoData() {
 		const userData = await getMyUserInfo()
 		if (userData && userData.nickname) {
@@ -100,27 +117,25 @@ Page({
 				phone: userData.phone,
 				zipcode: userData.zipcode,
 				isVerified: userData.isUserVerified,
-				emailAddress: userData.emailAddress
+				emailAddress: userData.emailAddress,
+				isPhoneChecked: userData.isPhoneChecked ? userData.isPhoneChecked : false,
+				isEmailChecked: userData.isEmailChecked ? userData.isEmailChecked : false,
+				isOtherContactChecked: userData.isOtherContactChecked ? userData.isOtherContactChecked : false
 			})
-			// TODO: 这个好像有逻辑漏洞
-			if (userData.phone !== "") {
-				this.setData({
-					isPhoneChecked: true
-				});
-			}
-			if (userData.emailAddress !== "") {
-				this.setData({
-					isEmailChecked: true
-				});
-			}
 			this.updateButtonStatus();
 		}
 	},
 	updateButtonStatus() {
 		// 按钮启用条件: nickname不为空，两个复选框至少选中一个且对应的输入框不为空
 		let isDisabled = true;
-		if (this.data.nickname !== "" &&
-		((this.data.isPhoneChecked && this.data.phone !== "") || (this.data.isEmailChecked && this.data.emailAddress !== ""))) {
+
+		const isPhoneValid = !this.data.isPhoneChecked || (this.data.isPhoneChecked && this.data.phone !== "");
+		const isEmailValid = !this.data.isEmailChecked || (this.data.isEmailChecked && this.data.emailAddress !== "");
+		const isOtherContactValid = !this.data.isOtherContactChecked || (this.data.isOtherContactChecked && this.data.otherContact !== "");
+
+		const atLeastOneCheckedAndEntered = (this.data.isPhoneChecked && this.data.phone !== "") || (this.data.isEmailChecked && this.data.emailAddress !== "") || (this.data.isOtherContactChecked && this.data.otherContact !== "");
+
+		if (this.data.nickname !== "" && atLeastOneCheckedAndEntered && isPhoneValid && isEmailValid && isOtherContactValid) {
 			isDisabled = false;
 		}
 		this.setData({
@@ -128,12 +143,15 @@ Page({
 		});
 	},
 	async saveUserInfo() {
-    const nickname = this.data.nickname
-    const emailAddress = this.data.emailAddress
-    const phone = this.data.phone
-    const isChangeAvatar = this.data.isChangeAvatar
+		const nickname = this.data.nickname
+		const emailAddress = this.data.emailAddress
+		const phone = this.data.phone
+		const isChangeAvatar = this.data.isChangeAvatar
 		const zipcode = this.data.zipcode
-
+		const isPhoneChecked = this.data.isPhoneChecked
+		const isEmailChecked = this.data.isEmailChecked
+		const isOtherContactChecked = this.data.isOtherContactChecked
+		const otherContact = this.data.otherContact
 		let avatarUrl = this.data.avatarUrl;
 		if (isChangeAvatar) {
 			avatarUrl = await this.uploadAvatar()
@@ -143,33 +161,41 @@ Page({
 			nickname: nickname,
 			zipcode: zipcode,
 			phone: phone,
-			avatarUrl: avatarUrl
+			avatarUrl: avatarUrl,
+			otherContact: otherContact,
+			isPhoneChecked: isPhoneChecked,
+			isEmailChecked: isEmailChecked,
+			isOtherContactChecked: isOtherContactChecked
 		}
 
 		wx.cloud.callFunction({
 			name: 'setUserInfo',
 			data: data,
-			success: function(res) {
+			success: function (res) {
 				if (res.result) {
 					wx.showToast({
 						title: '保存成功',
 						icon: 'success',
 						duration: 1000,
 						mask: true,
-						complete: function() {
-							setTimeout(function() { wx.navigateBack() }, 1000)
+						complete: function () {
+							setTimeout(function () {
+								wx.navigateBack()
+							}, 1000)
 						}
 					})
 				}
 			},
-			fail: function(res) {
+			fail: function (res) {
 				wx.showToast({
 					title: '保存失败',
 					icon: 'error',
 					duration: 1000,
 					mask: true,
-					complete: function() {
-						setTimeout(function() { wx.navigateBack() }, 1000)
+					complete: function () {
+						setTimeout(function () {
+							wx.navigateBack()
+						}, 1000)
 					}
 				})
 			}

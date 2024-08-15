@@ -28,7 +28,7 @@
 	<view class="info-line"></view>
 	<view class="info">
 		<view class="info-title">
-			<text>邮编</text>
+			<text>所在地邮编</text>
 		</view>
 		<input bindinput="zipcodeChange" class="info-text" placeholder="请输入常住地邮编" type="text" value="{{zipcode}}"></input>
 	</view>
@@ -49,6 +49,14 @@
 			</view>
 			<input bindinput="emailChange" class="info-text" placeholder="请输入邮箱地址" type="text" value="{{emailAddress}}"></input>
 			<checkbox value="cb-email" class="cb" checked="{{isEmailChecked}}"/>
+		</view>
+		<view class="info-line"></view>
+		<view class="info">
+			<view class="info-title">
+				<text>其他联系方式</text>
+			</view>
+			<input bindinput="otherContactChange" class="info-text" placeholder="请输入其他联系方式" type="text" value="{{otherContact}}"></input>
+			<checkbox value="cb-other-contact" class="cb" checked="{{isOtherContactChecked}}"/>
 		</view>
 		<view class="info-line"></view>
 		<view class="bottom-info"><text>* 请勾选至少一项联系方式，有意向的买家将获取此联系方式并联系你进行交易。</text></view>
