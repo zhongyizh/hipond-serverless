@@ -118,6 +118,7 @@ Page({
 				zipcode: userData.zipcode,
 				isVerified: userData.isUserVerified,
 				emailAddress: userData.emailAddress,
+				otherContact: userData.otherContact,
 				isPhoneChecked: userData.isPhoneChecked ? userData.isPhoneChecked : false,
 				isEmailChecked: userData.isEmailChecked ? userData.isEmailChecked : false,
 				isOtherContactChecked: userData.isOtherContactChecked ? userData.isOtherContactChecked : false
