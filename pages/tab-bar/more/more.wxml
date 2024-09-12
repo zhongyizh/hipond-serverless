@@ -1,2 +1,15 @@
 <!--pages/tab-bar/more/more.wxml-->
-<text>pages/tab-bar/more/more.wxml</text>
+<view class="container">
+  <image src="/image/Hipond_Banner.png" style="width: 100%;top: 9.9%;position: absolute;" mode="widthFix"></image>
+  <text class="contact-line-1">联系HIPOND客服</text>
+  <view class="contact-line-2">
+	<image src="/image/wechat.png" style="width: 50rpx; height: 50rpx;"></image>
+	<text style="font-size: 34rpx;font-weight: 700; margin-left: 25rpx; ">微信号：HIPOND</text>
+  </view>
+  <image src="/image/service_qrcode.jpg" style="top:54%;position: absolute; height: 170rpx; width: 170rpx;"mode="widthFix"></image>
+  <text style="top:67%;position: absolute; color: #000;font-size: 19rpx;font-weight: 500;letter-spacing: 4rpx;">HIPOND v0.3.0</text>
+  <view class="contact-line-3">
+	<image src="/image/gongzhonghao_qrcode.png" style="width: 256rpx; height: 150rpx;"></image>
+	<image src="/image/xiaohongshu_qrcode.png" style="width: 256rpx; height: 150rpx;"></image>
+  </view>
+</view>

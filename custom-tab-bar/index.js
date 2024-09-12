@@ -26,8 +26,8 @@ Component({
             text: "我的"
         } , {
             pagePath: "/pages/tab-bar/more/more",
-            iconPath: "/image/tab-bar/tab_notification_normal.png",
-            selectedIconPath: "/image/tab-bar/tab_notification_active.png",
+            iconPath: "/image/tab-bar/tab_more_normal.png",
+            selectedIconPath: "/image/tab-bar/tab_more_active.png",
             text: "更多"
         } ]
     },
