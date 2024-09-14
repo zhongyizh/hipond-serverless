@@ -7,13 +7,15 @@
 		"pages/post/new-post-listing/new-post-listing",
 		"pages/post/new-post/new-post",
 		"pages/detail/detail",
-		"pages/verification/verification"
+		"pages/verification/verification",
+		"pages/tab-bar/shop/shop",
+		"pages/tab-bar/more/more"
 	],
 	"window": {
 		"navigationBarTextStyle": "black",
-    "navigationStyle": "custom",
-    "enableShareAppMessage": true,
-    "enableShareTimeline": true
+		"navigationStyle": "custom",
+		"enableShareAppMessage": true,
+		"enableShareTimeline": true
 	},
 	"tabBar": {
 		"custom": true,
@@ -26,6 +28,16 @@
 				"pagePath": "pages/tab-bar/index/index",
 				"iconPath": "image/tab-bar/tab_index_normal.png",
 				"selectedIconPath": "image/tab-bar/tab_index_active.png"
+			},
+			{
+				"pagePath": "pages/tab-bar/shop/shop",
+				"iconPath": "image/tab-bar/tab_shop_normal.png",
+				"selectedIconPath": "image/tab-bar/tab_shop_active.png"
+			},
+			{
+				"pagePath": "pages/tab-bar/more/more",
+				"iconPath": "image/tab-bar/tab_notification_normal.png",
+				"selectedIconPath": "image/tab-bar/tab_notification_active.png"
 			},
 			{
 				"pagePath": "pages/tab-bar/mine/mine",

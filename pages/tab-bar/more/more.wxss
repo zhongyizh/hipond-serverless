@@ -1,0 +1,34 @@
+/* pages/tab-bar/more/more.wxss */
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.contact-line-1 {
+	color: #85E4DC;
+	text-align: center;
+	font-size: 50rpx;
+	font-weight: 700;
+	top: 45%;
+	position: absolute;
+}
+
+.contact-line-2 {
+	color: #85E4DC;
+	top: 50%;
+	position: absolute;
+	display: flex;
+	flex-direction: row;
+
+}
+
+.contact-line-3 {
+	top: 74%;
+	position: absolute;
+	display: flex;
+	flex-direction: row;
+	align-items: space;
+	justify-content: space-between; 
+	width: 80%;
+
+}

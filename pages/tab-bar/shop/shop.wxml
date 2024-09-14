@@ -1,0 +1,4 @@
+<!--pages/tab-bar/shop/shop.wxml-->
+<view>
+  <web-view src="https://dacd7c-c3.myshopify.com" ></web-view>
+</view>

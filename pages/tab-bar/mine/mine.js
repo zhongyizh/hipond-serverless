@@ -4,7 +4,7 @@ var zipCodeInfo = require('../../../utils/zipcode.js');
 
 Page({
 	data: {
-		currentTabbarIndex: 2,
+		currentTabbarIndex: 3,
 		currentTagIndex: 0,
 		tags: [{
 			text: "动态",
