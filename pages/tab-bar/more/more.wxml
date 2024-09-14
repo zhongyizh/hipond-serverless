@@ -9,7 +9,7 @@
   <image src="/image/service_qrcode.jpg" style="top:54%;position: absolute; height: 170rpx; width: 170rpx;"mode="widthFix"></image>
   <text style="top:67%;position: absolute; color: #000;font-size: 19rpx;font-weight: 500;letter-spacing: 4rpx;">HIPOND v0.3.0</text>
   <view class="contact-line-3">
-	<image src="/image/gongzhonghao_qrcode.png" style="width: 256rpx; height: 150rpx;"></image>
-	<image src="/image/xiaohongshu_qrcode.png" style="width: 256rpx; height: 150rpx;"></image>
+	<image src="cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/gongzhonghao_qrcode.png" style="width: 256rpx; height: 150rpx;"></image>
+	<image src="cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/xiaohongshu_qrcode.png" style="width: 256rpx; height: 150rpx;"></image>
   </view>
 </view>
