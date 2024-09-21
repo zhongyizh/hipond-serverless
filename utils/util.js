@@ -5,21 +5,22 @@ async function getUserInfo(userid) {
 	return userData
 }
 
-function getMyUserInfo() {
+function getMyUserInfo(userid) { 
 	return new Promise((resolve, reject) => {
 		wx.cloud.callFunction({
 			name: 'getUserInfo',
-			data: {},
+			data: { userid },
 			success: res => {
 				resolve(res.result);
 			},
 			fail: err => {
-				console.error('Failed to get current userinfo')
+				console.error('Failed to get current userinfo');
 				reject(err);
 			}
 		})
 	})
 }
+
 
 async function getPostDisplayData(limit = 20, offset = 0) {
 	return new Promise((resolve, reject) => {

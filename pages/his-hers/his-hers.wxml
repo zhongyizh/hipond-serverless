@@ -1,0 +1,72 @@
+<!--pages/his-hers/his-hers.wxml-->
+<t-navbar left-arrow />
+<view class="user-background">
+	<image class="banner" mode="aspectFill" src="/image/default_user_banner.jpg"></image>
+	<view class="gradient"/>
+	<view class="own-header">
+		<view class="header-top">
+			<view class="own-header-img-div">
+				<image class="own-header-img" lazyLoad="true" mode="aspectFill" src="{{userInfo.avatarUrl ? userInfo.avatarUrl : '/image/avatar_icon_default_show.png'}}"></image>
+			</view>
+			<view class="header-middle">
+				<text class="name-text">{{userInfo.nickname ? userInfo.nickname : '用户未登录'}}</text>
+				<image class="verification_icon" src="/image/student_verification_icon.svg" hidden="{{!userInfo.isUserVerified}}"></image>
+			</view>
+			<view class="header-location">我的常住地：{{geoInfo ? geoInfo : '未知'}}</view>
+		</view>
+
+	</view>
+</view>
+<view class="tools">
+	<t-sticky offset-top="55">
+		<view class="nav">
+			<view bindtap="select" class="tag-box" wx:for="{{tags}}" wx:key="index">
+				<view class="tags-item-text {{currentTagIndex == index ? 'active' : ''}}" data-index="{{index}}"> {{item.text}}
+					<text class="tags-item-count" data-index="{{index}}"> {{item.count}} </text>
+				</view>
+			</view>
+		</view>
+	</t-sticky>
+	<view class="body-box">
+		<view wx:if="{{currentTagIndex == 0}}" class="scroll-view-border">
+			<!-- 用于测试Sticky吸顶效果 -->
+			<!-- <scroll-view class="scroll-view" type="custom" scroll-y="true" style="height: 950px"> -->
+      <view wx:if="{{tags[0].count!=0}}">
+        <scroll-view class="scroll-view" type="custom" scroll-y="true" style="min-height: 700rpx">
+          <grid-view type="masonry" cross-axis-count="2" cross-axis-gap="4" main-axis-gap="5">
+            <view wx:for="{{posts}}" wx:if="{{item.postType=='life'}}" wx:key="_id" class="grid-box" bindtap="navigateToDetail" data-index="{{index}}">
+              <image src="{{item.imageUrls[0]}}" mode="widthFix"></image>
+              <view class="content-box">
+                <view class="content-title-box"> {{item.title}}</view>
+              </view>
+            </view>
+          </grid-view>
+        </scroll-view>
+      </view>
+      <view wx:else class="selling-image-container">
+        <image src="/image/button_post_2nd.png" class="selling-image"></image>
+        <text class="sellingtext">TA还没有发布任何帖子哦</text>
+      </view>
+		</view>
+		<view wx:elif="{{currentTagIndex == 1}}" class="scroll-view-border">
+      <view wx:if="{{tags[1].count!=0}}">
+        <scroll-view class="scroll-view" type="custom" scroll-y="true" style="min-height: 700rpx">
+          <grid-view type="masonry" cross-axis-count="2" cross-axis-gap="4" main-axis-gap="5">
+            <block wx:for="{{posts}}" wx:key="_id">
+              <view wx:if="{{item.postType=='selling'}}" class="grid-box" bindtap="navigateToDetail" data-index="{{index}}">
+                <image src="{{item.imageUrls[0]}}" mode="widthFix"></image>
+                <view class="content-box">
+                  <view class="content-title-box"> {{item.title}}</view>
+                </view>
+              </view>
+            </block>
+          </grid-view>
+        </scroll-view>
+      </view>
+      <view wx:else class="selling-image-container">
+        <image src="/image/button_post_2nd.png" class="selling-image"></image>
+        <text class="sellingtext">TA还没有发布任何物品在售哦</text>
+      </view>
+		</view>
+	</view>
+</view>

@@ -70,7 +70,9 @@
 </view>
 <!-- User Information -->
 <view class="user-info">
-	<image src="{{postData.avatarUrl}}" class="avatar" />
+	<navigator class="header-box header-right" url="/pages/his-hers/his-hers?targetUserId={{postData._openid}}"> 
+		<image src="{{postData.avatarUrl}}" class="avatar" />
+	</navigator>
 	<view class="left-content">
 		<view>
 			<text class="nickname">{{postData.nickname}}</text>
