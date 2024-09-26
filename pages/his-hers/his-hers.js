@@ -1,9 +1,10 @@
 // pages/tab-bar/mine/mine.js
-import { getMyUserInfo } from '../../../utils/util'
-var zipCodeInfo = require('../../../utils/zipcode.js');
+import { getMyUserInfo } from '../../utils/util'
+var zipCodeInfo = require('../../utils/zipcode.js');
 
 Page({
 	data: {
+		targetUserId: "",
 		currentTabbarIndex: 3,
 		currentTagIndex: 0,
 		tags: [{
@@ -12,9 +13,6 @@ Page({
 		}, {
 			text: "在售",
 			count: 0
-		}, {
-			text: "收藏",
-			count: 0
 		}],
 		userInfo: {},
 		posts: [],
@@ -22,16 +20,12 @@ Page({
     	offsetLife: 0,
 		offsetSelling: 0,
 		offsetSaving: 0,
-		savedIdList: [],
-		savedPost: [],
 		geoInfo: ""
 	},
-	async onLoad() {
-    	if(typeof this.getTabBar === 'function' && this.getTabBar()) {
-			this.getTabBar().setData({
-				selected: this.data.currentTabbarIndex
-			})
-		}
+	async onLoad(option) {
+		this.setData({
+			targetUserId: option.targetUserId
+		})
 	},
 	async onShow() {
 		await this.getMyProfile()
@@ -65,9 +59,6 @@ Page({
 			case 1: // 在售页面
           		this.getSelling()
 				break;
-      		case 2: // 收藏页面
-				this.getMySaves()
-          		break;
 			default:
 				console.log("Invalid current tag index")
 		}
@@ -97,26 +88,13 @@ Page({
 			})
 		}
 	},
-	async getMySaves() {
-		const db = wx.cloud.database()
-		const tempSavedList = []
-		for (const id of this.data.savedIdList) {
-			const tempPost = await db.collection('posts').where({
-				_id: id
-			}).get()
-			tempSavedList.push(tempPost.data[0])
-		}
-		this.setData({
-			savedPost: tempSavedList
-		})
-  },
 	async getMyProfile() {
 		// 要先执行这个，这个拿了userInfo里面有openid！
 		wx.showLoading({
 			title: '获取用户信息中，请耐心等待...',
 			mask: true
 		})
-		const userData = await getMyUserInfo()
+		const userData = await getMyUserInfo(this.data.targetUserId)
 		this.setData({
 			userInfo: userData
 		})
@@ -132,8 +110,7 @@ Page({
 				geoInfo: "未知"
 			})
 		}
-		wx.hideLoading()
-
+		wx.hideLoading() 
 	},
 	async getTagsCount() {
 		// TODO: 不知道为什么_openid: undefined也能拿到数据
@@ -148,20 +125,11 @@ Page({
 			_openid: userId,
 			postType: "selling"
 		}).count()
-		const saveRecord = await db.collection('saveList').where({
-			_id: userId
-    }).get()
-    if (saveRecord.data.length != 0)
-    {
-      this.setData({
-        savedIdList: saveRecord.data[0].list
-      })
-    }
+		
 		
 		let newTags = this.data.tags
 		newTags[0].count = lifeCount.total
 		newTags[1].count = sellingCount.total
-		newTags[2].count = this.data.savedIdList.length
 		this.setData({
 			tags: newTags
 		})
@@ -180,13 +148,7 @@ Page({
 		}).limit(limit).skip(offset).get()
 		return postsListResult.data
 	},
-	navigateToDetailSaved(event) {
-		const postIndex = event.currentTarget.dataset.index
-		const postData = JSON.stringify(this.data.savedPost[postIndex])
-		wx.navigateTo({
-			url: `/pages/detail/detail?data=${encodeURIComponent(postData)}`
-		});
-	},
+
 	navigateToDetail(event) {
 		const postIndex = event.currentTarget.dataset.index
 		let postData = this.data.posts[postIndex]
@@ -212,7 +174,7 @@ Page({
 		return {
 			title: 'Hipond你的留学之家',
 			path: '/pages/tab-bar/mine/mine?pageId=' + this.data.currentPageId,
-			imageUrl: 'cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/button_post_2nd.png',
+			imageUrl: '/image/button_post_2nd.png',
 			success: function(res) {
 				// 分享成功后的回调
 				console.log('分享成功');
@@ -228,7 +190,7 @@ Page({
 		return {
 			title: 'Hipond你的留学之家',
 			path: '/pages/tab-bar/mine/mine?pageId=' + this.data.currentPageId,
-			imageUrl: 'cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/button_post_2nd.png' 
+			imageUrl: '/image/button_post_2nd.png' 
 		};
 	},
 })

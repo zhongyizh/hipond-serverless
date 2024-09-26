@@ -1,23 +1,20 @@
-<!--pages/mine.wxml-->
+<!--pages/his-hers/his-hers.wxml-->
+<t-navbar left-arrow />
 <view class="user-background">
 	<image class="banner" mode="aspectFill" src="/image/default_user_banner.jpg"></image>
 	<view class="gradient"/>
 	<view class="own-header">
 		<view class="header-top">
-			<navigator class="own-header-img-div" url="/pages/login/login">
+			<view class="own-header-img-div">
 				<image class="own-header-img" lazyLoad="true" mode="aspectFill" src="{{userInfo.avatarUrl ? userInfo.avatarUrl : '/image/avatar_icon_default_show.png'}}"></image>
-			</navigator>
+			</view>
 			<view class="header-middle">
 				<text class="name-text">{{userInfo.nickname ? userInfo.nickname : '用户未登录'}}</text>
 				<image class="verification_icon" src="/image/student_verification_icon.svg" hidden="{{!userInfo.isUserVerified}}"></image>
 			</view>
 			<view class="header-location">我的常住地：{{geoInfo}}</view>
 		</view>
-			<view class="header-bottom">
-				<view class="header-right-box">
-					<navigator class="header-box header-right" url="/pages/login/login"> 编辑资料 </navigator>
-				</view>
-			</view>
+
 	</view>
 </view>
 <view class="tools">
@@ -47,8 +44,8 @@
         </scroll-view>
       </view>
       <view wx:else class="selling-image-container">
-        <image src="cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/button_post_2nd.png" class="selling-image"></image>
-        <text class="sellingtext">你还没有发布任何帖子哦</text>
+        <image src="/image/button_post_2nd.png" class="selling-image"></image>
+        <text class="sellingtext">TA还没有发布任何帖子哦</text>
       </view>
 		</view>
 		<view wx:elif="{{currentTagIndex == 1}}" class="scroll-view-border">
@@ -67,30 +64,9 @@
         </scroll-view>
       </view>
       <view wx:else class="selling-image-container">
-        <image src="cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/button_post_2nd.png" class="selling-image"></image>
-        <text class="sellingtext">你还没有发布任何物品在售哦</text>
+        <image src="/image/button_post_2nd.png" class="selling-image"></image>
+        <text class="sellingtext">TA还没有发布任何物品在售哦</text>
       </view>
 		</view>
-		<view wx:elif="{{currentTagIndex == 2}}" class="scroll-view-border">
-      <view wx:if="{{tags[2].count!=0}}">
-        <scroll-view class="scroll-view" type="custom" scroll-y="true" style="min-height: 700rpx">
-          <grid-view type="masonry" cross-axis-count="2" cross-axis-gap="4" main-axis-gap="5">
-            <block wx:for="{{savedPost}}" wx:key="_id">
-              <view class="grid-box" bindtap="navigateToDetailSaved" data-index="{{index}}">
-                <image src="{{item.imageUrls[0]}}" mode="widthFix"></image>
-                <view class="content-box">
-                  <view class="content-title-box"> {{item.title}}</view>
-                </view>
-              </view>
-            </block>
-          </grid-view>
-        </scroll-view>
-      </view>
-      <view wx:else class="saved-image-container">
-        <image src="cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/button_post_life.png" class="saved-image"></image>
-        <text class="savedtext">你还没有收藏任何帖子哦</text>
-        <text class="savedtext2">快去首页逛一逛吧</text>
-      </view>
-    </view>
 	</view>
 </view>
