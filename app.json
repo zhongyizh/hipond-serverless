@@ -9,7 +9,8 @@
 		"pages/detail/detail",
 		"pages/verification/verification",
 		"pages/tab-bar/shop/shop",
-		"pages/tab-bar/more/more"
+		"pages/tab-bar/more/more",
+		"pages/his-hers/his-hers"
 	],
 	"window": {
 		"navigationBarTextStyle": "black",
