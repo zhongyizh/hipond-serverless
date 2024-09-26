@@ -2,12 +2,12 @@
 <t-navbar class="custom-navbar" left-arrow />
 <view class="new-post-select-selector">
 	<view class="new-post-2nd" bindtap="post2nd">
-		<image src="/image/button_post_2nd.png" class="new-2nd"></image>
+		<image src="cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/button_post_2nd.png" class="new-2nd"></image>
 		<view class="image-overlay"></view>
 		<view class="button-text">卖二手</view>
 	</view>
 	<view class="new-post-life" bindtap="postLife">
-		<image src="/image/button_post_life.png" class="new-life"></image>
+		<image src="cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/button_post_life.png" class="new-life"></image>
 		<view class="image-overlay"></view>
 		<view class="button-text">晒生活</view>
 	</view>
