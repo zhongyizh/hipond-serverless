@@ -98,7 +98,8 @@ Page({
 		this.setData({
 			userInfo: userData
 		})
-		if(this.data.userInfo.zipcode)
+		// TODO：这里要根据实际需求改
+		if (this.data.userInfo.zipcode && zipCodeInfo.data[[this.data.userInfo.zipcode]])
 		{
 			this.setData({
 				geoInfo: zipCodeInfo.data[[this.data.userInfo.zipcode]].city + ", " + zipCodeInfo.data[[this.data.userInfo.zipcode]].state_id,
@@ -107,7 +108,7 @@ Page({
 		else
 		{
 			this.setData({
-				geoInfo: "未知"
+				geoInfo: this.data.userInfo.zipcode ? this.data.userInfo.zipcode : "未知"
 			})
 		}
 		wx.hideLoading() 
@@ -174,7 +175,7 @@ Page({
 		return {
 			title: 'Hipond你的留学之家',
 			path: '/pages/tab-bar/mine/mine?pageId=' + this.data.currentPageId,
-			imageUrl: '/image/button_post_2nd.png',
+			imageUrl: 'cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/button_post_2nd.png',
 			success: function(res) {
 				// 分享成功后的回调
 				console.log('分享成功');
@@ -190,7 +191,7 @@ Page({
 		return {
 			title: 'Hipond你的留学之家',
 			path: '/pages/tab-bar/mine/mine?pageId=' + this.data.currentPageId,
-			imageUrl: '/image/button_post_2nd.png' 
+			imageUrl: 'cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/button_post_2nd.png' 
 		};
 	},
 })
