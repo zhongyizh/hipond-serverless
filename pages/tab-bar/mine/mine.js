@@ -120,10 +120,20 @@ Page({
 		this.setData({
 			userInfo: userData
 		})
+		if(this.data.userInfo.zipcode)
+		{
+			this.setData({
+				geoInfo: zipCodeInfo.data[[this.data.userInfo.zipcode]].city + ", " + zipCodeInfo.data[[this.data.userInfo.zipcode]].state_id,
+			})
+		}
+		else
+		{
+			this.setData({
+				geoInfo: "未知"
+			})
+		}
 		wx.hideLoading()
-		this.setData({
-			geoInfo: zipCodeInfo.data[[this.data.userInfo.zipcode]].city + ", " + zipCodeInfo.data[[this.data.userInfo.zipcode]].state_id,
-		})
+
 	},
 	async getTagsCount() {
 		// TODO: 不知道为什么_openid: undefined也能拿到数据

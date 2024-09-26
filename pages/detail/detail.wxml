@@ -73,13 +73,13 @@
 	<navigator class="header-box header-right" url="/pages/his-hers/his-hers?targetUserId={{postData._openid}}"> 
 		<image src="{{postData.avatarUrl}}" class="avatar" />
 	</navigator>
-	<view class="left-content">
+	<navigator class="left-content" url="/pages/his-hers/his-hers?targetUserId={{postData._openid}}">
 		<view>
-			<text class="nickname">{{postData.nickname}}</text>
+			<text class="nickname" style="width: 5%;">{{postData.nickname}}</text>
 			<image class="verification_icon" src="/image/student_verification_icon.png" hidden="{{!postData.isUserVerified}}"></image>
 		</view>
 		<text class="post-date">发布于{{postData.postDate}}</text>
-	</view>
+	</navigator>
 </view>
 
 <!-- Toolbar -->
