@@ -47,7 +47,7 @@
         </scroll-view>
       </view>
       <view wx:else class="selling-image-container">
-        <image src="/image/button_post_2nd.png" class="selling-image"></image>
+        <image src="cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/button_post_2nd.png" class="selling-image"></image>
         <text class="sellingtext">你还没有发布任何帖子哦</text>
       </view>
 		</view>
@@ -67,7 +67,7 @@
         </scroll-view>
       </view>
       <view wx:else class="selling-image-container">
-        <image src="/image/button_post_2nd.png" class="selling-image"></image>
+        <image src="cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/button_post_2nd.png" class="selling-image"></image>
         <text class="sellingtext">你还没有发布任何物品在售哦</text>
       </view>
 		</view>
@@ -87,7 +87,7 @@
         </scroll-view>
       </view>
       <view wx:else class="saved-image-container">
-        <image src="/image/button_post_life.png" class="saved-image"></image>
+        <image src="cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/button_post_life.png" class="saved-image"></image>
         <text class="savedtext">你还没有收藏任何帖子哦</text>
         <text class="savedtext2">快去首页逛一逛吧</text>
       </view>

@@ -64,7 +64,7 @@ Page({
 		return {
 			title: 'Hipond你的留学之家',
 			path: '/pages/tab-bar/index/index?pageId=' + this.data.currentPageId,
-			imageUrl: '/image/button_post_2nd.png',
+			imageUrl: 'cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/button_post_2nd.png',
 			success: function() {
 			// 分享成功后的回调
 			console.log('分享成功');
@@ -80,7 +80,7 @@ Page({
 		return {
 			title: 'Hipond你的留学之家',
 			path: '/pages/tab-bar/index/index?pageId=' + this.data.currentPageId,
-			imageUrl: '/image/button_post_2nd.png' 
+			imageUrl: 'cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/button_post_2nd.png' 
 		};
 	},
 })
