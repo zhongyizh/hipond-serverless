@@ -1,6 +1,9 @@
 // pages/detail/detail.js
 import { ListingConditions } from "../../models/posts.model"
-import { deletePost } from "../../services/post.service"
+import { deletePost, createComment, deleteComment } from "../../services/post.service"
+import { getComments, getReplies } from "../../utils/util"
+import { msgSecCheck } from '../../services/security.service'
+
 const conditionMapping = {
     "全新/仅开箱": "New/Open-Box",
     "良好/轻微使用": "Very Good",
@@ -35,36 +38,44 @@ Page({
         showDialog: false,
         conditionDescription: "",
         confirmBtn: { content: '确定', variant: 'text' },
-        methodOfDeliver: ""
-  },
+        methodOfDeliver: "",
+        currentuserid: "",
+        comments: [],
+        showInput: false,
+        parent: null,
+        inputContent: '',
+        replyToCmt: null, // stores comment ID when replying
+        replyToUser: null,
+        inputPlaceholder: "说点什么...",
+        inputValue: '',
+        prefix: '',
+        offset: 0,
+        currentPostsCount: 0,
+        pageurl: ""
+    },
 
 	onLoad(options) {
         // decode传进来的URL的data部分
-        const data = decodeURIComponent(options.data);
+        const data = decodeURIComponent(options.data)
+        this.setData({
+            pageurl: '/pages/detail/detail?data=' + options.data,
+        })
 		const postData = JSON.parse(data)
 		postData.postDate = this.parseDate(postData.postDate)
         this.setData({ postData })
-        //转换之前的成色命名方式
-        if (conditionMapping.hasOwnProperty(this.data.postData.condition)) {
-          this.setData({
-            "postData.condition": conditionMapping[this.data.postData.condition]
-          })
-        }
-
+        // 加载评论
+        this.displayComments()
         // 判定当前用户是不是帖子的所有者：
-        this.isOwner().then(isOwner => {
-            this.setData({ 
-                isEditBTNEnabled: this.data.postData.isImgChecked && isOwner, 
-                isDeleteBTNEnabled: isOwner 
-            });
-        }).catch(error => {
-            this.setData({ 
-                isEditBTNEnabled: false, 
-                isDeleteBTNEnabled: false 
-            }); 
-        });
+        this.checkOwnership()
+        // 转换之前的成色命名方式
+        if (conditionMapping.hasOwnProperty(this.data.postData.condition)) {
+            this.setData({
+                "postData.condition": conditionMapping[this.data.postData.condition]
+            })
+        }
+        // 加载收藏数量
         this.setData({
-          "postData.saveCount": this.data.postData.saveCount ? this.data.postData.saveCount: 0 
+            "postData.saveCount": this.data.postData.saveCount ? this.data.postData.saveCount: 0 
         })
         wx.cloud.callFunction({
 			name: 'checkSaveStatus',
@@ -114,9 +125,168 @@ Page({
 		// Get the Year, Month, and Day components
 		const year = dateObject.getFullYear();
 		const month = ('0' + (dateObject.getMonth() + 1)).slice(-2); // Adding 1 because getMonth() returns 0-indexed month
-		const day = ('0' + dateObject.getDate()).slice(-2);
-		return month + '/' + day + '/' + year
+        const day = ('0' + dateObject.getDate()).slice(-2);
+        const hour = ('0' + dateObject.getHours()).slice(-2);
+        const miniute = ('0' + dateObject.getMinutes()).slice(-2);
+		return month + '/' + day + '/' + year + ' ' + hour + ':' + miniute
+    },
+    onReachBottom() {
+		this.displayComments()
 	},
+    async checkOwnership() {
+        try {
+            const { isOwner, userOpenId } = await this.isOwner();
+            this.setData({
+                isEditBTNEnabled: this.data.postData.isImgChecked && isOwner,
+                isDeleteBTNEnabled: isOwner,
+                currentUserOpenId: userOpenId
+            });
+            console.log("Is Owner: ", isOwner, " User ID: ", userOpenId);
+        } catch (error) {
+            console.error("Error in checking ownership: ", error);
+            this.setData({
+                isEditBTNEnabled: false,
+                isDeleteBTNEnabled: false
+            });
+        }
+    },
+    async displayComments() {
+        const db = wx.cloud.database()
+		const countResult = await db.collection('comments').where({
+            postId: this.data.postData._id,
+            parent: "Post"
+		}).count()
+		const total = countResult.total
+        const isEnd = this.data.offset >= total
+        const loadlimit = 20
+		if (!isEnd) {
+			const postComments = await getComments(this.data.postData._id, loadlimit, this.data.offset)
+			const currentLength = postComments.length
+            const newOffset = this.data.offset + currentLength
+            const commentsWithReplyOffset = postComments.map(comment => ({
+                ...comment,
+                replies: [],
+                replyOffset: 0,
+                showReplies: false,
+                formatDate: this.parseDate(comment.postDate)
+            }));
+			this.setData({
+				comments: [...this.data.comments, ...commentsWithReplyOffset],
+				offset: newOffset
+			})
+		}
+    },
+    async displayReplies(event) {
+        const db = wx.cloud.database()
+        const commentIndex = event.currentTarget.dataset.index;
+        const cmtId = event.currentTarget.dataset.commentid;
+        const cmtrId = event.currentTarget.dataset.userid;
+        const currentComment = this.data.comments[commentIndex]
+		const countResult = await db.collection('comments').where({
+            postId: this.data.postData._id,
+            parent: cmtId,
+            _tgtCmtId: cmtId,
+            _tgtId: cmtrId
+		}).count()
+		const total = countResult.total
+        const isEnd = currentComment.replyOffset >= total
+        const loadlimit = 5
+        console.log("index: " + commentIndex + "cmtId: " + cmtId + "cmtrId: " + cmtrId + "limit: " + loadlimit + "total: " + total)
+        if (!isEnd) {
+            const postReplies = await getReplies(cmtId, cmtrId, loadlimit, currentComment.replyOffset)
+            const currentLength = postReplies.length
+            const newOffset = currentComment.replyOffset + currentLength
+            const replies = postReplies.map(reply => ({
+                ...reply,
+                formatDate: this.parseDate(reply.postDate)
+            }));
+            const updatedComments = [...this.data.comments]
+            updatedComments[commentIndex] = {
+                ...this.data.comments[commentIndex],
+                replies: [...this.data.comments[commentIndex].replies, ...replies],
+                replyOffset: newOffset,
+                showReplies: true
+            };
+            this.setData({
+                comments: updatedComments
+            });
+        }
+    },
+    closeReplies: function(event) {
+        const commentIndex = event.currentTarget.dataset.index
+        const updatedComments = this.data.comments
+        updatedComments[commentIndex] = {
+            ...this.data.comments[commentIndex],
+            replies: [],
+            replyOffset: 0,
+            showReplies: false
+        };
+        this.setData({
+            comments: updatedComments
+        });
+    },
+    onInput: function(event) {
+        this.setData({
+          inputValue: event.detail.value
+        });
+    },
+    async upload() {
+		var payload = {
+            'parent': this.data.parent ? this.data.parent: "Post",
+            '_tgtCmtId': this.data.replyToCmt ? this.data.replyToCmt: "Post",
+            '_tgtId': this.data.replyToUser ? this.data.replyToUser: "Author",
+			'body': this.data.inputValue,
+			'location': '',
+			'postDate': Date.now(),
+			'postId': this.data.postData._id,
+            'isImgChecked': false,
+            'repliesCount': 0,
+            'likeCount': 0
+		}
+		
+		wx.showLoading({
+			title: '上传中...',
+			mask: true
+		})
+		// 返回帖子界面
+        this.hideReplyOptions()
+		
+		try {
+			// 审核文字部分
+			const isBodyChecked = await msgSecCheck(payload.body)
+			if (!isBodyChecked) {
+				wx.showToast({
+					title: '内容含违规信息',
+					icon: 'error',
+					duration: 2000
+				})
+				return false
+			}
+			else console.log("✅ detail.js: upload(): Text Content Check Passed!");
+            
+			// 发布评论
+			await createComment(payload);
+			
+			wx.showToast({
+				title: '评论成功',
+				icon: 'success',
+				duration: 3000
+			});
+		} catch (error) {
+			console.error("Upload failed: ", error);
+			wx.hideLoading();
+			wx.showToast({
+				title: '评论失败',
+				icon: 'error',
+				duration: 2000
+			});
+		} finally {
+            wx.hideLoading(); // 最后隐藏indicator
+            wx.reLaunch({
+                url: this.data.pageurl
+            })
+		}
+    },
 	async incrementViewCount() {
 		wx.cloud.callFunction({
 			name: 'incrementViewCount',
@@ -262,23 +432,25 @@ Page({
     isOwner: async function() {
         // 先获取当前帖子作者的openId
         let authorOpenId = this.data.postData._openid;
-        return new Promise((resolve, reject) => {
-            wx.cloud.callFunction({
+        try {
+            const res = await wx.cloud.callFunction({
                 name: 'getUserInfo',
-                success: function(res) {
-                    // 再使用云函数获取用户的openId
-                    let userOpenId = res.result._id;
-                    // 比较是不是一个人，如果是的话就说明当前用户是帖子的所有者
-                    console.log("detail.js: isOwner(): trynna check if current user owns the post: " + userOpenId + 
-                                (userOpenId == authorOpenId ? " 是 " : " 不是 ") + authorOpenId);
-                    resolve(userOpenId == authorOpenId);
-                },
-                fail: function(res) {
-                    console.log("detail.js: isOwner(): get user info failed! ");
-                    reject(false);
-                }
-            })
-        });
+            });
+            let userOpenId = res.result._id;
+            console.log("Current User: ", userOpenId, " Post Author: ", authorOpenId);
+            // Compare the userOpenId and authorOpenId and return the userOpenId for further use
+            return {
+                isOwner: userOpenId == authorOpenId,
+                userOpenId: userOpenId
+            };
+        } catch (error) {
+            console.error("Failed to get user info: ", error);
+            return {
+                isOwner: false,
+                userOpenId: null
+            };
+        }
+        
     },
     editPost: function() {
         console.log("detail.js: editPost(): ",this.data.postData);
@@ -338,6 +510,36 @@ Page({
             }); 
         });
     },
+    onDeleteCmt: function(event) { 
+        const commentId = event.currentTarget.dataset.commentid;
+        const parent = event.currentTarget.dataset.parent;
+        new Promise((resolve, reject) => {
+            wx.showModal({
+                title: "确认删除？",
+                content: "删除的评论将不可恢复",
+                success: function(res) {
+                    resolve(res.confirm);
+                }
+            })
+        }).then(isConfirmed => {
+            if (!isConfirmed) return;
+            wx.showLoading({
+                title: '删除中...',
+                mask: true
+            })
+            deleteComment(commentId, parent).then(() => {
+                wx.hideLoading();
+                wx.showToast({
+                    title: '已删除',
+                    icon: 'success',
+                    duration: 3000
+                });
+                wx.reLaunch({
+                    url: this.data.pageurl
+                })
+            }); 
+        });
+    },
     // 分享给朋友
     onShareAppMessage: function() {
         const detailData = JSON.stringify(this.data.postData)
@@ -375,6 +577,38 @@ Page({
             path: `/pages/detail/detail?data=${detailData}`,
             imageUrl: this.data.postData.imageUrls[0] 
         };
+    },
+
+    showReplyOptions: function(event) {
+        const rawparent = event.currentTarget.dataset.parent
+        var parent = null
+        const commentId = event.currentTarget.dataset.commentid
+        const userId = event.currentTarget.dataset.userid
+        const nickname = event.currentTarget.dataset.nickname
+        if (rawparent == "Post") {
+            parent = commentId
+        } else {
+            parent = rawparent
+        }
+        this.setData({
+            showInput: true,
+            parent: parent ? parent : null,
+            replyToCmt: commentId ? commentId : null,
+            replyToUser: userId ? userId : null,
+            inputPlaceholder: nickname ? `@${nickname}` : '说点什么...', // Update placeholder
+            prefix: nickname ? `@${nickname} ` : ''
+        });
+    },
+
+    hideReplyOptions: function(event) {
+        this.setData({
+            showInput: false,
+            parent: null,
+            replyToCmt: null,
+            replyToUser: null,
+            inputPlaceholder: '说点什么...',
+            prefix: ''
+        });
     },
 
     showShareOptions: function() {

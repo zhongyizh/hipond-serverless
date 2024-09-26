@@ -68,6 +68,7 @@
 		<text decode="true">{{postData.body}}</text>
   </view>
 </view>
+
 <!-- User Information -->
 <view class="user-info">
 	<image src="{{postData.avatarUrl}}" class="avatar" />
@@ -80,6 +81,56 @@
 	</view>
 </view>
 
+<!-- Comment Area -->
+<view class="comments-section">
+  <!-- <view class="horizontal-divider"></view> -->
+  <view class="cmt-title">评论</view>
+  <!-- Loop through the list of comments -->
+  <block wx:for="{{comments}}" wx:key="commentId">
+    <view class="comment-item">
+      <!-- Comment details -->
+      <image src="{{item.avatarUrl}}" class="cmtavatar"></image>
+      <view class="comment-info-container">
+        <text class="username">{{item.nickname}}</text>
+        <view class="content" bindtap="showReplyOptions" data-parent="{{item.parent}}" data-commentid="{{item._id}}" data-userid="{{item._openid}}" data-nickname="{{item.nickname}}">
+          {{item.body}}
+        </view>
+        <view>
+          <text class="cmt-date">{{item.formatDate}}</text>
+          <text wx:if="{{item._openid == currentUserOpenId}}" class="cmt-delete" bindtap="onDeleteCmt" style="color: tomato;" data-commentid="{{item._id}}" data-parent="{{item.parent}}">删除</text>
+        </view>
+      </view>
+    </view>
+    <!-- Nested replies (second-layer comments), hidden by default -->
+    <view class="nested-replies" wx:if="{{item.showReplies}}">
+      <block wx:for="{{item.replies}}" wx:key="nestedCommentId">
+        <view class="nested-comment-item">
+          <image src="{{item.avatarUrl}}" class="cmtavatar"></image>
+          <view class="comment-info-container">
+            <text class="username">{{item.nickname}} 回复 {{item._tgtusername}}</text>
+            <view class="content" bindtap="showReplyOptions" data-parent="{{item.parent}}" data-commentid="{{item._id}}" data-userid="{{item._openid}}" data-nickname="{{item.nickname}}">
+              {{item.body}}
+            </view>
+            <view>
+              <text class="cmt-date">{{item.formatDate}}</text>
+              <text wx:if="{{item._openid == currentUserOpenId}}" class="cmt-delete" bindtap="onDeleteCmt" style="color: tomato;" data-commentid="{{item._id}}" data-parent="{{item.parent}}">删除</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+    <!-- Nested replies button, only show if there are replies -->
+    <block wx:if="{{item.repliesCount > 0}}" class="toggle-replies-container">
+      <view wx:if="{{item.replyOffset < item.repliesCount}}" class="toggle-replies-btn" bindtap="displayReplies" data-index="{{index}}" data-commentid="{{item._id}}" data-userid="{{item._openid}}">
+        ---展开{{item.repliesCount-item.replyOffset}}条回复---
+      </view>
+      <view wx:else="" class="toggle-replies-btn" bindtap="closeReplies" data-index="{{index}}" data-commentid="{{item._id}}" data-userid="{{item._openid}}">
+        ---收起{{item.repliesCount}}条回复---
+      </view>
+    </block>
+  </block>
+</view>
+
 <!-- Toolbar -->
 <view class="bottom-toolbar">
 	<block wx:if = "{{postData.postType == 'selling'}}">
@@ -88,6 +139,12 @@
 		<!-- <text bindtap="onTapContact" class="contact-button" wx:if="{{postData.post_status == 0}}">联系TA</text>
 		<text bindtap="onTapContact" class="contact-button-hold" wx:if="{{postData.post_status == 1}}">On Hold</text>
 		<text class="contact-button-sold" wx:if="{{postData.post_status == 2}}">已售出</text> -->
+	</block>
+  <block wx:else="">
+    <view class="comment-btn" bindtap="showReplyOptions">
+      <image class="cmt-image" src="/image/comment_icon.svg"></image>
+      <text class="comment-text">说点什么...</text>
+    </view>
 	</block>
 	<view class="toolbar-right">
 		<text wx:if="{{isEditBTNEnabled}}" class="edit-btn" bindtap="editPost">编辑</text>
@@ -113,6 +170,11 @@
 					分享朋友圈请点击 · · · 这里~
 				</cover-view>
 			</cover-view>
+		</view>
+		<view class="input-area" wx:if="{{showInput}}">
+      <view class="input-overlay" bindtap="hideReplyOptions"></view>
+			<textarea class="input-box" type="text" placeholder="{{inputPlaceholder}}" bindinput="onInput" />
+			<button class="submit-btn" bindtap="upload">发送</button>
 		</view>
 	</view>
 </view>
