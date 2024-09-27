@@ -120,7 +120,8 @@ Page({
 		this.setData({
 			userInfo: userData
 		})
-		if(this.data.userInfo.zipcode)
+		// TODO：这里要根据实际需求改
+		if (this.data.userInfo.zipcode && zipCodeInfo.data[[this.data.userInfo.zipcode]])
 		{
 			this.setData({
 				geoInfo: zipCodeInfo.data[[this.data.userInfo.zipcode]].city + ", " + zipCodeInfo.data[[this.data.userInfo.zipcode]].state_id,
@@ -129,7 +130,7 @@ Page({
 		else
 		{
 			this.setData({
-				geoInfo: "未知"
+				geoInfo: this.data.userInfo.zipcode ? this.data.userInfo.zipcode : "未知"
 			})
 		}
 		wx.hideLoading()
