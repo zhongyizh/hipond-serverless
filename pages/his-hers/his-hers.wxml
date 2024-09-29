@@ -12,7 +12,7 @@
 				<text class="name-text">{{userInfo.nickname ? userInfo.nickname : '用户未登录'}}</text>
 				<image class="verification_icon" src="/image/student_verification_icon.svg" hidden="{{!userInfo.isUserVerified}}"></image>
 			</view>
-			<view class="header-location">我的常住地：{{geoInfo}}</view>
+			<view class="header-location">TA的常住地：{{geoInfo ? geoInfo : "未知"}}</view>
 		</view>
 
 	</view>
