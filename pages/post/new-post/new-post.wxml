@@ -31,7 +31,7 @@
                     id="body"
                     value="{{body}}"
                     maxlength="1000"
-					indicator="true"
+		    indicator="true"
                     placeholder="帖子正文" 
                     placeholder-style="color: #DAECEB; font-size: 28rpx;"
                     bind:change="inputText"
