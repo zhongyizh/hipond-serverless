@@ -28,7 +28,10 @@ Page({
 			unit: 'MB',
 			message: '图片大小不超过5MB'
 		},
-		isFromEdit: false
+		isFromEdit: false,
+		titleLength: 0,
+		textLength: 0,
+		isDisabled: false
     },
     onLoad() {
         // 发帖编辑功能的实现
@@ -67,10 +70,29 @@ Page({
 			fileList: files,
 		});
 	},
-	inputText: function(res) {
+	inputTitle: function(res) {
 		const widgetId = res.currentTarget.id;
+		const titleLength = res.detail.value.length;
 		try {
 			this.data[widgetId] = res.detail.value;
+			this.setData({
+				titleLength: titleLength
+		  	});
+		}
+		catch {
+			console.log("❌ new-post-listing: upload(): Unrecognized Input Box id");
+		}
+	},
+	inputText: function(res) {
+		const widgetId = res.currentTarget.id;
+		const currentLength = res.detail.value.length;
+		const disabled = currentLength > 1000
+		try {
+			this.data[widgetId] = res.detail.value;
+			this.setData({
+				textLength: currentLength,
+				isDisabled: disabled
+		  	});
 		}
 		catch {
 			console.log("❌ new-post-listing: upload(): Unrecognized Input Box id");

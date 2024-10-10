@@ -57,6 +57,16 @@
 	height: 500rpx;
 }
 
+.word-count {
+	font-size: 26rpx;
+	color: #DAECEB;
+}
+
+.word-count-red {
+	font-size: 26rpx;
+	color: red;
+}
+
 .location-container {
 	display: flex;
 	flex-direction: row;
