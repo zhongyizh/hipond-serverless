@@ -21,8 +21,8 @@
                    id="title"
                    value="{{title}}"
 				   maxlength="25"
-                   placeholder="分享你的生活"
-                   placeholder-style="color: #BBDAD7; font-size: 34rpx;"
+                   placeholder="添加标题"
+                   placeholder-style="color: #BBDAD7; font-size: 28rpx;"
                    bindinput="inputTitle"
 			/>
 		</view>
@@ -31,10 +31,13 @@
 		<t-textarea class="body-text-textarea" 
                     id="body"
                     value="{{body}}"
-                    placeholder="帖子正文" 
+                    placeholder="你今天过得怎么样？" 
                     placeholder-style="color: #DAECEB; font-size: 28rpx;"
 					bind:change="inputText"
 		/>
+		
+	</view>
+	<view class="word-count-wrapper">
 		<text class="word-count {{isDisabled ? 'word-count-red' : ''}}">{{textLength}}/1000</text>
 	</view>
 	<!-- TODO: 添加位置 -->
