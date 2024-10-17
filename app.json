@@ -12,6 +12,9 @@
 		"pages/tab-bar/more/more",
 		"pages/his-hers/his-hers"
 	],
+	"requiredPrivateInfos": [
+		"choosePoi"
+	],
 	"window": {
 		"navigationBarTextStyle": "black",
 		"navigationStyle": "custom",

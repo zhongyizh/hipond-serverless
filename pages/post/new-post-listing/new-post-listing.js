@@ -39,7 +39,8 @@ Page({
 		isFromEdit: false,
 		isDeliverChecked: false,
 		isPickupChecked: false,
-		isMailChecked: false
+		isMailChecked: false,
+		postLocation: ""
     },
     async onLoad() {
 		await wx.cloud.callFunction({
@@ -170,6 +171,24 @@ Page({
 		}
 		return true;
 	},
+
+	chooseLocation(){
+		console.log("123")
+		var that = this
+		wx.choosePoi({
+			success(res)
+			{
+				that.setData({
+					postLocation: res.address
+				})
+			},
+			fail(res){
+				console.log(res)
+			},
+			complete(res){
+			}
+		})
+	},
 	async upload() {
 		var payload = {
 			'title': this.data.title ? this.data.title : getPostTitleFromBody(this.data.body),
@@ -182,6 +201,7 @@ Page({
 			'isImgChecked': false,
 			'viewCount': 0,
 			'originalPrice': this.data.originalPrice,
+			'postLocation':this.data.postLocation,
 			'method': !this.data.isDeliverChecked && !this.data.isMailChecked && !this.data.isPickupChecked ? "" : 
 				[
 				this.data.isDeliverChecked ? 'deliver' : '', 

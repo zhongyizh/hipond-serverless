@@ -1,87 +1,75 @@
 <!--pages/detail/detail.wxml-->
 <t-navbar t-class-placeholder="t-navbar-placeholder" t-class-content="t-navbar-content" title="">
   <view slot="capsule" class="custom-capsule">
-    <t-icon
-      size="20"
-      bind:tap="onBack"
-      aria-role="button"
-      aria-label="返回"
-      name="chevron-left"
-      class="custom-capsule__icon back"
-    />
-    <t-icon
-      size="20"
-      bind:tap="onGoHome"
-      aria-role="button"
-      aria-label="首页"
-      name="home"
-      class="custom-capsule__icon home"
-    />
+    <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon back" />
+    <t-icon size="20" bind:tap="onGoHome" aria-role="button" aria-label="首页" name="home" class="custom-capsule__icon home" />
   </view>
 </t-navbar>
 
-<t-dialog
-  visible="{{showDialog}}"
-  title="物品状态{{postData.condition}}"
-  content="{{conditionDescription}}"
-  confirm-btn="{{confirmBtn}}"
-  bind:confirm="closeDialog"
-  style="--td-button-primary-text-color	: #576B95"
-/>
+<t-dialog visible="{{showDialog}}" title="物品状态{{postData.condition}}" content="{{conditionDescription}}" confirm-btn="{{confirmBtn}}" bind:confirm="closeDialog" style="--td-button-primary-text-color	: #576B95" />
 
 <view class="container">
   <!-- Image Carousel -->
   <swiper class="carousel" autoplay="true" interval="5000" duration="300" indicator-dots="true">
-		<block wx:for="{{postData.imageUrls}}" wx:key="*this">
-			<swiper-item>
-				<image src="{{item}}" mode="aspectFit" />
-			</swiper-item>
-		</block>
+    <block wx:for="{{postData.imageUrls}}" wx:key="*this">
+      <swiper-item>
+        <image src="{{item}}" mode="aspectFit" />
+      </swiper-item>
+    </block>
   </swiper>
   <!-- Post Title & Price -->
   <view class="title-row">
-		<text class="post-text">{{postData.title}}</text>
+    <text class="post-text">{{postData.title}}</text>
     <view class="price-container" wx:if="{{postData.price}}">
-        <text wx:if="{{postData.originalPrice}}"class="original-price">原价${{postData.originalPrice}}</text>
-        <text class="price-tag">价格${{postData.price}}</text>
-    </view>  
+      <text wx:if="{{postData.originalPrice}}" class="original-price">原价${{postData.originalPrice}}</text>
+      <text class="price-tag">价格${{postData.price}}</text>
     </view>
+  </view>
   <view class="horizontal-divider"></view>
   <!-- Post Options -->
   <view wx:if="{{postData.postType == 'selling'}}" class="option-row">
     <view class="background-shape" style="margin-left: 4%; margin-right: 1%; align-items: center; justify-content: center;display: flex; padding: 0 1.5%;  ">
       <view class="text-container">物品新旧 {{postData.condition}}</view>
-      <image class= "info-icon"src="/image/info-icon.svg" bindtap="conditionButton"> </image>
+      <image class="info-icon" src="/image/info-icon.svg" bindtap="conditionButton"> </image>
 
     </view>
     <view class="background-shape" style="margin-left: 1%; margin-right: 4%;">
       <view class="text-container" style="margin-top: 4%;">交易方式 {{methodOfDeliver}}</view>
     </view>
-		<!-- TODO: 急售 -->
-		<!-- <view wx:if="{{postData.isUrgent}}" class="ddl-container">
+    <!-- TODO: 急售 -->
+    <!-- <view wx:if="{{postData.isUrgent}}" class="ddl-container">
 			<text class="ddl-status-label">急售</text>
 			<text class="ddl-date-label">{{"by " + ddl_forDisplay}}</text>
 		</view> -->
   </view>
   <!-- Post Body -->
   <view class="post-body">
-		<text decode="true">{{postData.body}}</text>
+    <text decode="true">{{postData.body}}</text>
   </view>
 </view>
 
 <!-- User Information -->
 <view class="user-info">
-	<navigator class="header-box header-right" url="/pages/his-hers/his-hers?targetUserId={{postData._openid}}"> 
-		<image src="{{postData.avatarUrl}}" class="avatar" />
-	</navigator>
-	<navigator class="left-content" url="/pages/his-hers/his-hers?targetUserId={{postData._openid}}">
-		<view>
+  <!-- Left side: Avatar, nickname, verification, post date (wrapped in a navigator) -->
+  <navigator class="user-details" url="/pages/his-hers/his-hers?targetUserId={{postData._openid}}">
+    <image src="{{postData.avatarUrl}}" class="avatar" />
+    <view class="text-group">
+      <view>
 			<text class="nickname" style="width: 5%;">{{postData.nickname}}</text>
 			<image class="verification_icon" src="/image/student_verification_icon.png" hidden="{{!postData.isUserVerified}}"></image>
 		</view>
-		<text class="post-date">发布于{{postData.postDate}}</text>
-	</navigator>
+      <text class="post-date">发布于{{postData.postDate}}</text>
+    </view>
+  </navigator>
+  
+  <!-- Right side: Additional info -->
+  <view class="additional-info-container">
+    <image wx:if="{{postData.postLocation}}" src="/image/location_icon.png" class="location-icon"></image>
+    <text class="additional-info">{{postData.postLocation}}</text>
+  </view>
 </view>
+
+
 
 <!-- Comment Area -->
 <view class="comments-section">
@@ -135,48 +123,48 @@
 
 <!-- Toolbar -->
 <view class="bottom-toolbar">
-	<block wx:if = "{{postData.postType == 'selling'}}">
-		<text bindtap="onTapContact" class="contact-button" wx:if="{{postData.postType == 'selling' && isEditBTNEnabled == false}}">联系TA</text>
-		<!-- TODO: On Hold/已售出 -->
-		<!-- <text bindtap="onTapContact" class="contact-button" wx:if="{{postData.post_status == 0}}">联系TA</text>
+  <block wx:if="{{postData.postType == 'selling'}}">
+    <text bindtap="onTapContact" class="contact-button" wx:if="{{postData.postType == 'selling' && isEditBTNEnabled == false}}">联系TA</text>
+    <!-- TODO: On Hold/已售出 -->
+    <!-- <text bindtap="onTapContact" class="contact-button" wx:if="{{postData.post_status == 0}}">联系TA</text>
 		<text bindtap="onTapContact" class="contact-button-hold" wx:if="{{postData.post_status == 1}}">On Hold</text>
 		<text class="contact-button-sold" wx:if="{{postData.post_status == 2}}">已售出</text> -->
-	</block>
+  </block>
   <block wx:else="">
     <view class="comment-btn" bindtap="showReplyOptions">
       <image class="cmt-image" src="/image/comment_icon.svg"></image>
       <text class="comment-text">说点什么...</text>
     </view>
-	</block>
-	<view class="toolbar-right">
-		<text wx:if="{{isEditBTNEnabled}}" class="edit-btn" bindtap="editPost">编辑</text>
-		<text wx:if="{{isDeleteBTNEnabled}}" class="delete-btn" style="color: tomato;" bindtap="onDeletePostBTNClicked">删除</text>
-		<view class="view-count-container">
-			<image class="view-count-image" src="/image/view-count.svg"></image>
-			<text>{{postData.viewCount + 1}}</text>
-		</view>
-		<image class="save-button" src="{{saveButtonUrl}}" bindtap="savePost"> </image>
-		<text class="save-count-text">{{postData.saveCount}}</text>
-		<image class="share-btn" bindtap="showShareOptions" src="/image/share_button.svg"></image>
-		<view class="modal" wx:if="{{showModal}}">
-			<view class="modal-overlay" bindtap="hideShareOptions"></view>
-			<view class="modal-content">
-				<button class="modal-btn" open-type="share">分享给朋友</button>
-				<button class="modal-btn" bindtap="showTooltip">分享到朋友圈</button>
-				<button class="modal-btn" bindtap="hideShareOptions">取消</button>
-			</view>
-			<cover-view class="tooltip-overlay" wx:if="{{showTooltipOverlay}}" bindtap="hideTooltipAndShowShareOptions"></cover-view>
-			<cover-view class="tooltip" wx:if="{{tooltip}}" style="top: {{menuButtonTop + menuButtonHeight + 15}}px; left: {{menuButtonLeft - 125}}px;">
-				<cover-view class="tooltip-arrow" style="top: {{menuButtonTop + menuButtonHeight + 5}}px; left: {{menuButtonLeft+menuButtonWidth/4}}px;"></cover-view>
-				<cover-view class="tooltip-content">
-					分享朋友圈请点击 · · · 这里~
-				</cover-view>
-			</cover-view>
-		</view>
-		<view class="input-area" wx:if="{{showInput}}">
+  </block>
+  <view class="toolbar-right">
+    <text wx:if="{{isEditBTNEnabled}}" class="edit-btn" bindtap="editPost">编辑</text>
+    <text wx:if="{{isDeleteBTNEnabled}}" class="delete-btn" style="color: tomato;" bindtap="onDeletePostBTNClicked">删除</text>
+    <view class="view-count-container">
+      <image class="view-count-image" src="/image/view-count.svg"></image>
+      <text>{{postData.viewCount + 1}}</text>
+    </view>
+    <image class="save-button" src="{{saveButtonUrl}}" bindtap="savePost"> </image>
+    <text class="save-count-text">{{postData.saveCount}}</text>
+    <image class="share-btn" bindtap="showShareOptions" src="/image/share_button.svg"></image>
+    <view class="modal" wx:if="{{showModal}}">
+      <view class="modal-overlay" bindtap="hideShareOptions"></view>
+      <view class="modal-content">
+        <button class="modal-btn" open-type="share">分享给朋友</button>
+        <button class="modal-btn" bindtap="showTooltip">分享到朋友圈</button>
+        <button class="modal-btn" bindtap="hideShareOptions">取消</button>
+      </view>
+      <cover-view class="tooltip-overlay" wx:if="{{showTooltipOverlay}}" bindtap="hideTooltipAndShowShareOptions"></cover-view>
+      <cover-view class="tooltip" wx:if="{{tooltip}}" style="top: {{menuButtonTop + menuButtonHeight + 15}}px; left: {{menuButtonLeft - 125}}px;">
+        <cover-view class="tooltip-arrow" style="top: {{menuButtonTop + menuButtonHeight + 5}}px; left: {{menuButtonLeft+menuButtonWidth/4}}px;"></cover-view>
+        <cover-view class="tooltip-content">
+          分享朋友圈请点击 · · · 这里~
+        </cover-view>
+      </cover-view>
+    </view>
+    <view class="input-area" wx:if="{{showInput}}">
       <view class="input-overlay" bindtap="hideReplyOptions"></view>
-			<textarea class="input-box" type="text" placeholder="{{inputPlaceholder}}" bindinput="onInput" />
-			<button class="submit-btn" bindtap="upload">发送</button>
-		</view>
-	</view>
+      <textarea class="input-box" type="text" placeholder="{{inputPlaceholder}}" bindinput="onInput" />
+      <button class="submit-btn" bindtap="upload">发送</button>
+    </view>
+  </view>
 </view>

@@ -12,99 +12,87 @@
   <scroll-view slot="content" type="list" scroll-y class="long-content">
     <view class="content-container">
       <view class="item"><text class="bold">New/Open-Box：</text>全新或仅开箱</view>
-        <view class="item"><text class="bold">Excellent：</text>功能完好，几乎没有使用痕迹和污渍</view>
-        <view class="item"><text class="bold">Very Good：</text>功能完好，有轻微使用痕迹或可以被清除的污渍</view>
-        <view class="item"><text class="bold">Good：</text>功能完好，有比较明显的使用痕迹，或较难清除掉污渍，不影响使用</view>
-        <view class="item"><text class="bold">Fair：</text>部分功能有故障或缺少部分部件，不影响正常使用</view>
+      <view class="item"><text class="bold">Excellent：</text>功能完好，几乎没有使用痕迹和污渍</view>
+      <view class="item"><text class="bold">Very Good：</text>功能完好，有轻微使用痕迹或可以被清除的污渍</view>
+      <view class="item"><text class="bold">Good：</text>功能完好，有比较明显的使用痕迹，或较难清除掉污渍，不影响使用</view>
+      <view class="item"><text class="bold">Fair：</text>部分功能有故障或缺少部分部件，不影响正常使用</view>
     </view>
   </scroll-view>
 </t-dialog>
 
 <view class="new-listing-page-container">
-		<t-upload class="upload-component" media-type="{{['image']}}" files="{{fileList}}" gridConfig="{{gridConfig}}" max="9"
-			size-limit="{{sizeLimit}}" bind:remove="handleRemove" bind:add="handleAdd"/>
-	<view class="form-title-container">
-		<view class="title-input-wrapper">
-			<input class="title-input" 
-                   id="title"
-                   value="{{title}}"
-                   placeholder="写标题更容易成功卖出哦"
-                   placeholder-style="color: #BBDAD7; font-size: 34rpx;"
-                   bindinput="inputText"
-			/>
-		</view>
-		<view class="money-input-wrapper">
-			<view class="money-sign">
-				<text style="color: #00B1A2; font-size: 26rpx;">$</text>
-			</view>
-			<input class="money-input" 
-                   id="price"
-                   value="{{price}}"
-                   placeholder="价格*" 
-                   bindinput="inputText">
-			</input>
-		</view>
-	</view>
-	<view class="listing-options-container">
-		<view class="condition-dropdown" bindtap="showActionSheet">
-			<view class="dropdown-label">{{condition}}</view>
-		</view>
-  
+  <t-upload class="upload-component" media-type="{{['image']}}" files="{{fileList}}" gridConfig="{{gridConfig}}" max="9" size-limit="{{sizeLimit}}" bind:remove="handleRemove" bind:add="handleAdd" />
+  <view class="form-title-container">
+    <view class="title-input-wrapper">
+      <input class="title-input" id="title" value="{{title}}" placeholder="写标题更容易成功卖出哦" placeholder-style="color: #BBDAD7; font-size: 34rpx;" bindinput="inputText" />
+    </view>
+    <view class="money-input-wrapper">
+      <view class="money-sign">
+        <text style="color: #00B1A2; font-size: 26rpx;">$</text>
+      </view>
+      <input class="money-input" id="price" value="{{price}}" placeholder="价格*" bindinput="inputText">
+      </input>
+    </view>
   </view>
-		<!-- TODO: 急售 -->
-		<!-- <picker class="expiration-dropdown" mode="date" value="{{ddl}}" start="{{ddl}}" end="2050-12-31" bindchange="bindDateChange" bindcancel="">
+  <view class="listing-options-container">
+    <view class="condition-dropdown" bindtap="showActionSheet">
+      <view class="dropdown-label">{{condition}}</view>
+    </view>
+
+  </view>
+  <!-- TODO: 急售 -->
+  <!-- <picker class="expiration-dropdown" mode="date" value="{{ddl}}" start="{{ddl}}" end="2050-12-31" bindchange="bindDateChange" bindcancel="">
 			<view class="dropdown-label">{{displayDDL}}</view>
 		</picker> -->
   <view class="deliver-method-contaienr">
 
-  <view style="display: flex; flex-direction: row;">
-  <text style="color: #599596; font-size: 26rpx">交易方式*</text>
-  <text style="color: #BBDAD7; font-size: 26rpx">(可多选)</text>
+    <view style="display: flex; flex-direction: row;">
+      <text style="color: #599596; font-size: 26rpx">交易方式*</text>
+      <text style="color: #BBDAD7; font-size: 26rpx">(可多选)</text>
+    </view>
+    <checkbox-group style="margin-top: -1%;" bindchange="checkboxChange">
+      <checkbox value="pickup" checked="{{isPickupChecked}}" />
+      <text style="color: #BBDAD7; font-size: 26rpx; margin-right: 10rpx;">自取</text>
+      <checkbox value="deliver" checked="{{isDeliverChecked}}" />
+      <text style="color: #BBDAD7; font-size: 26rpx; margin-right: 10rpx;">送货</text>
+      <checkbox value="mail" checked="{{isMailChecked}}" />
+      <text style="color: #BBDAD7; font-size: 26rpx; margin-right: 10rpx;">邮寄</text>
+    </checkbox-group>
   </view>
-  <checkbox-group style = "margin-top: -1%;" bindchange="checkboxChange">
-  <checkbox  value="pickup" checked="{{isPickupChecked}}"/>
-  <text style="color: #BBDAD7; font-size: 26rpx; margin-right: 10rpx;">自取</text>
-  <checkbox  value="deliver" checked="{{isDeliverChecked}}"/>
-  <text style="color: #BBDAD7; font-size: 26rpx; margin-right: 10rpx;">送货</text>
-  <checkbox  value="mail" checked="{{isMailChecked}}"/>
-  <text style="color: #BBDAD7; font-size: 26rpx; margin-right: 10rpx;">邮寄</text>
-  </checkbox-group>
-	</view>
 
-<view class="original-price-contaienr">
+  <view class="original-price-contaienr">
 
-<view style="display: flex; flex-direction: row;  height: 56rpx;">
-<text style="color: #599596; font-size: 26rpx">原价</text>
-<text style="color: #BBDAD7; font-size: 26rpx">(选填)</text>
-</view>
+    <view style="display: flex; flex-direction: row;  height: 56rpx;">
+      <text style="color: #599596; font-size: 26rpx">原价</text>
+      <text style="color: #BBDAD7; font-size: 26rpx">(选填)</text>
+    </view>
 
-<view class="money-input-wrapper" style="margin-top: -4%;">
-			<view class="money-sign">
-				<text style="color: #00B1A2; font-size: 26rpx;">$</text>
-			</view>
-			<input class="money-input" 
-                   id="originalPrice"
-                   value="{{originalPrice}}"
-                   placeholder="原价" 
-                   bindinput="inputText">
-			</input>
-		</view>
-</view>
-	<view class="body-text-container">
-		<t-textarea class="body-text-textarea" 
-                    id="body"
-                    value="{{body}}"
-                    maxlength="200"
-                    placeholder="留下更详细的交易细节和物品信息…" 
-                    placeholder-style="color: #DAECEB; font-size: 26rpx;"
-                    bind:change="inputText"
-                    disableDefaultPadding="{{true}}"
-                    show-confirm-bar
-		/>
-	</view>
-	<!-- TODO: 添加位置 -->
-	<!-- <view class="location-container">
-		<button class="location-button mini-btn" plain="{{true}}">添加位置</button>
-	</view> -->
-	<button class="submit-button" bind:tap="upload">发 布</button>
+    <view class="money-input-wrapper" style="margin-top: -4%;">
+      <view class="money-sign">
+        <text style="color: #00B1A2; font-size: 26rpx;">$</text>
+      </view>
+      <input class="money-input" id="originalPrice" value="{{originalPrice}}" placeholder="原价" bindinput="inputText">
+      </input>
+    </view>
+  </view>
+  <view class="body-text-container">
+    <t-textarea class="body-text-textarea" id="body" value="{{body}}" maxlength="200" placeholder="留下更详细的交易细节和物品信息…" placeholder-style="color: #DAECEB; font-size: 26rpx;" bind:change="inputText" disableDefaultPadding="{{true}}" show-confirm-bar />
+  </view>
+  <!-- TODO: 添加位置 -->
+  <view class="location-container">
+    <view class="location-text-wrapper">
+      <image wx:if="{{postLocation}}" src="/image/location_icon_light.png" class="location-icon"></image>
+      <text class="location-text">{{postLocation}}</text>
+    </view>
+    <button class="location-button" plain="{{true}}" bind:tap="chooseLocation">
+        <image src="\image\location_icon_light.png" class="location-icon"></image>
+        <text wx:if="{{postLocation}}">修改位置</text>
+        <text wx:else>添加位置</text>
+    </button>
+  </view>
+
+
+
+
+  <button class="submit-button" bind:tap="upload">发 布</button>
 </view>

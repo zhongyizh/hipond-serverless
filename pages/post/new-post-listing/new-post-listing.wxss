@@ -166,25 +166,46 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
 
 .location-container {
 	display: flex;
-	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
 	width: 100%;
-	justify-content: flex-end;
-}
+  }
+  
+  .location-text-wrapper {
+	display: flex;
+	align-items: center;
+	margin-top: 4%;
+	margin-left: 4%;
+  }
+  
+  .location-text {
+	font-size: 22rpx;
+	color:  #A4C5C2;
+	font-weight: 400;
 
-.location-button {
-  appearance: none;
-  margin: 24rpx 4% 0rpx 0rpx !important;
-	height: 50rpx !important;
-	width: 180rpx !important;
+  }
+  
+  .location-button {
+	margin: 24rpx 4% 0 0;
+	height: 42rpx;
+	width: 145rpx;
 	padding: 7rpx;
-  font-size: small;
-  font-weight: 350;
+	font-size: 22rpx;
+	font-weight: 400;
 	color: #A4C5C2 !important;
 	border: 1px solid #DAECEB !important;
-	border-radius: 25rpx;
-	background: none;
-}
-
+	border-radius: 10rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  }
+  
+  .location-icon {
+	margin-right: 15rpx;
+	width: 22.5rpx;
+	height: 28.64rpx;
+  }
+  
 .submit-button {
 	border-radius: 50rpx;
 	background-color: #85e4dc;	
