@@ -178,7 +178,7 @@ Page({
 			success(res)
 			{	
 				that.setData({
-					postLocation: res.address
+					postLocation: res.address ? res.address : ""
 				})
 			},
 			fail(res){
