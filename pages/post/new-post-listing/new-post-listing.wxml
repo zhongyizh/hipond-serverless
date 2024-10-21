@@ -85,7 +85,7 @@
       <text class="location-text">{{postLocation}}</text>
     </view>
     <button class="location-button" plain="{{true}}" bind:tap="chooseLocation">
-        <image src="\image\location_icon_light.png" class="location-icon"></image>
+        <image src="/image/location_icon_light.png" class="location-icon"></image>
         <text wx:if="{{postLocation}}">修改位置</text>
         <text wx:else>添加位置</text>
     </button>

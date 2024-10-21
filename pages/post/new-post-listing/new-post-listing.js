@@ -173,11 +173,10 @@ Page({
 	},
 
 	chooseLocation(){
-		console.log("123")
 		var that = this
 		wx.choosePoi({
 			success(res)
-			{
+			{	
 				that.setData({
 					postLocation: res.address
 				})
