@@ -186,8 +186,8 @@ Page({
         const currentComment = this.data.comments[commentIndex]
 		const countResult = await db.collection('comments').where({
             postId: this.data.postData._id,
-            parent: cmtId,
-            _tgtId: cmtrId
+            parent: cmtId
+            // _tgtId: cmtrId
 		}).count()
 		const total = countResult.total
         const isEnd = currentComment.replyOffset >= total
