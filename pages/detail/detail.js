@@ -51,7 +51,8 @@ Page({
         prefix: '',
         offset: 0,
         currentPostsCount: 0,
-        pageurl: ""
+        pageurl: "",
+        commentCounts: 0
     },
 
 	onLoad(options) {
@@ -73,6 +74,7 @@ Page({
                 "postData.condition": conditionMapping[this.data.postData.condition]
             })
         }
+        this.countComments(postData._id)
         // 加载收藏数量
         this.setData({
             "postData.saveCount": this.data.postData.saveCount ? this.data.postData.saveCount: 0 
@@ -85,9 +87,9 @@ Page({
 			success: (res) => {
 				if (res.result) {
 					this.setData({
-            postSaved: res.result,
-            saveButtonUrl: "/image/saved_button.png",
-            "postData.saveCount": this.data.postData.saveCount + 1
+                        postSaved: res.result,
+                        saveButtonUrl: "/image/saved_button.png",
+                        "postData.saveCount": this.data.postData.saveCount + 1
 					})
 				}
 			},
@@ -185,7 +187,7 @@ Page({
 		const countResult = await db.collection('comments').where({
             postId: this.data.postData._id,
             parent: cmtId,
-            _tgtCmtId: cmtId,
+            // _tgtCmtId: cmtId,
             _tgtId: cmtrId
 		}).count()
 		const total = countResult.total
@@ -211,6 +213,30 @@ Page({
                 comments: updatedComments
             });
         }
+    },
+    countComments: function(postId) {
+        wx.cloud.callFunction({
+            name: 'checkCommentCounts',
+            data: {
+                postId: postId
+            },
+            success: res => {
+                if (res.result && res.result.success) {
+                    // Store the count in appData
+                    const totalCount = res.result.count;
+                    this.setData({
+                        commentCounts: totalCount
+                    });
+            
+                    console.log('Total count of comments and replies saved to appData:', totalCount);
+                } else {
+                    console.error('Error retrieving count from cloud function:', res);
+                }
+            },
+            fail: err => {
+                console.error('Failed to call cloud function:', err);
+            }
+        });
     },
     closeReplies: function(event) {
         const commentIndex = event.currentTarget.dataset.index
@@ -300,7 +326,101 @@ Page({
 				console.error('Failed to update view count', err);
 			}
 		});
-	},
+    },
+    likeComment: function(e) {
+		const commentId = e.currentTarget.dataset.commentid;
+        const isLiked = e.currentTarget.dataset.liked;
+        const currentLikes = e.currentTarget.dataset.likes;
+
+        // Find the index of the comment in the comments array
+        const commentIndex = this.data.comments.findIndex(item => item._id === commentId);
+        console.log(commentIndex)
+        if (commentIndex !== -1) {
+            let updatedComments = [...this.data.comments];
+            let newLikeCount = isLiked ? currentLikes - 1 : currentLikes + 1;  // Update likes count
+            // Toggle the like image status and update the like count
+            updatedComments[commentIndex].isLiked = !isLiked;
+            updatedComments[commentIndex].likeCount = newLikeCount;
+            if (updatedComments[commentIndex].isLiked) {
+				updatedComments[commentIndex].likeButtonUrl = "/image/saved_button.png"
+			} else {
+				updatedComments[commentIndex].likeButtonUrl = "/image/not_liked_button.svg"
+			}
+
+            // Update the UI
+            this.setData({
+                comments: updatedComments
+            });
+
+            // Call a backend function to update the like count in the database
+            this.updateLikesOnServer(commentId);
+            // wx.cloud.callFunction({
+            //     name: 'likeComment',  // The name of your cloud function
+            //     data: {
+            //     commentId: commentId  // Pass the comment ID to the cloud function
+            //     },
+            //     success: res => {
+            //     console.log('Like status updated successfully:', res);
+            //     },
+            //     fail: err => {
+            //     console.error('Failed to update like status:', err);
+            //     }
+            // });
+        } else {
+            console.error("Cannot find target comment")
+        }
+    },
+    likeReply: function(e) {
+		const commentId = e.currentTarget.dataset.commentid;
+        const isLiked = e.currentTarget.dataset.liked;
+        const currentLikes = e.currentTarget.dataset.likes;
+        const parentId = e.currentTarget.dataset.parent;
+
+        // Find the index of the comment in the comments array
+        const parentIndex = this.data.comments.findIndex(item => item._id === parentId);
+        // const commentIndex = this.data.comments.replies.findIndex(item => item._id === commentId);
+        console.log(parentIndex)
+        if (parentIndex !== -1) {
+            const commentIndex = this.data.comments[parentIndex].replies.findIndex(item => item._id === commentId);
+            if (commentIndex !== -1) {
+                let updatedComments = [...this.data.comments];
+                let newLikeCount = isLiked ? currentLikes - 1 : currentLikes + 1;  // Update likes count
+                // Toggle the like image status and update the like count
+                updatedComments[parentIndex].replies[commentIndex].isLiked = !isLiked;
+                updatedComments[parentIndex].replies[commentIndex].likeCount = newLikeCount;
+                if (updatedComments[parentIndex].replies[commentIndex].isLiked) {
+                    updatedComments[parentIndex].replies[commentIndex].likeButtonUrl = "/image/saved_button.png"
+                } else {
+                    updatedComments[parentIndex].replies[commentIndex].likeButtonUrl = "/image/not_liked_button.svg"
+                }
+                // Update the UI
+                this.setData({
+                    comments: updatedComments
+                });
+                // Call a backend function to update the like count in the database
+                this.updateLikesOnServer(commentId);
+            } else {
+                console.error("Cannot find target comment")
+            }
+        } else {
+            console.error("Cannot find target comment")
+        }
+    },
+    updateLikesOnServer: function(commentId) {
+        // Call the cloud function to update the like status and like count in the database
+        wx.cloud.callFunction({
+          name: 'likeComment',  // The name of your cloud function
+          data: {
+            commentId: commentId  // Pass the comment ID to the cloud function
+          },
+          success: res => {
+            console.log('Like status updated successfully:', res);
+          },
+          fail: err => {
+            console.error('Failed to update like status:', err);
+          }
+        });
+    },
     onTapContact() {
         // TODO: On Hold/已售出
         const postData = this.data.postData
@@ -506,7 +626,14 @@ Page({
             })
             deletePost(this.data.postData._id, this.data.postData.imageUrls).then(() => {
                 wx.hideLoading();
-                wx.navigateBack();
+                wx.reLaunch({
+                    url: '/pages/tab-bar/index/index',
+                });
+                wx.showToast({
+                    title: '已删除',
+                    icon: 'success',
+                    duration: 3000
+                });
             }); 
         });
     },
