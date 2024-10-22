@@ -63,9 +63,9 @@
   </navigator>
   
   <!-- Right side: Additional info -->
-  <view class="additional-info-container">
+  <view class="location-text-container">
     <image wx:if="{{postData.postLocation}}" src="/image/location_icon.png" class="location-icon"></image>
-    <text class="additional-info">{{postData.postLocation}}</text>
+    <text class="location-text">{{postData.postLocation}}</text>
   </view>
 </view>
 
