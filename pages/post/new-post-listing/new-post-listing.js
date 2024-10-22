@@ -177,6 +177,17 @@ Page({
 		wx.choosePoi({
 			success(res)
 			{	
+			// 	var address = res.address
+			// const result = address.split(",");
+			// if (result[result.length - 1].includes("-")) {
+			// 	result[result.length - 1] = result[result.length - 1].split("-")[0];
+			// }
+			// const modifiedAddress = result.slice(0, -1).join(",").trim();
+			// var displayAddress = modifiedAddress
+			// if (displayAddress.length > 30)
+			// {
+			// 	displayAddress = displayAddress.slice(0,30) + "..."
+			// }
 				that.setData({
 					postLocation: res.address ? res.address : ""
 				})

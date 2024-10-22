@@ -91,8 +91,5 @@
     </button>
   </view>
 
-
-
-
   <button class="submit-button" bind:tap="upload">发 布</button>
 </view>
