@@ -165,26 +165,54 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
 }
 
 .location-container {
-	display: flex;
-	flex-direction: row;
-	width: 100%;
-	justify-content: flex-end;
+    display: flex;
+    justify-content: space-between; 
+    align-items: flex-start; 
+    width: 100%;
+}
+
+.location-text-wrapper {
+    display: flex;
+    align-items: center; 
+    margin: 4% 0 0 4%;
+    width: 70%; 
+    overflow: hidden; 
+}
+
+.location-icon {
+    margin-right: 10rpx; 
+    width: 22.5rpx;
+    height: 28.64rpx;
+}
+
+.location-text {
+    font-size: 22rpx;
+    color: #A4C5C2;
+    font-weight: 400;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    max-width: calc(100% - 40rpx); 
 }
 
 .location-button {
-  appearance: none;
-  margin: 24rpx 4% 0rpx 0rpx !important;
-	height: 50rpx !important;
-	width: 180rpx !important;
-	padding: 7rpx;
-  font-size: small;
-  font-weight: 350;
-	color: #A4C5C2 !important;
-	border: 1px solid #DAECEB !important;
-	border-radius: 25rpx;
-	background: none;
+    margin: 24rpx 4% 0 0; 
+    height: 42rpx;
+    width: 145rpx; 
+    padding: 7rpx;
+    font-size: 22rpx;
+    font-weight: 400;
+    color: #A4C5C2 !important;
+    border: 1px solid #DAECEB !important;
+    border-radius: 10rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+
+
+  
 .submit-button {
 	border-radius: 50rpx;
 	background-color: #85e4dc;	
