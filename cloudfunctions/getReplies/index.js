@@ -81,49 +81,4 @@ exports.main = async (event, context) => {
 		console.error('Error fetching comments:', error);
 		return {};
 	}
-	// const result = await db.collection('comments').aggregate()
-	// 	.match({
-	// 		parent: cmtId
-	// 	})
-	// 	.lookup({
-	// 		from: 'userInfo',
-	// 		localField: '_openid',
-	// 		foreignField: '_id',
-	// 		as: 'userInfo',
-	// 	})
-	// 	.lookup({
-	// 		from: 'userInfo', // Fetch target user's info (_tgtId)
-	// 		localField: '_tgtId',
-	// 		foreignField: '_id',
-	// 		as: 'tgtUserInfo',
-	// 	})
-	// 	.replaceRoot({
-	// 		// newRoot: $.mergeObjects([ $.arrayElemAt(['$userInfo', 0]), '$$ROOT' ])
-	// 		newRoot: $.mergeObjects([
-	// 			$.arrayElemAt(['$userInfo', 0]), 
-	// 			'$$ROOT',
-	// 			{
-	// 				_tgtusername: $.arrayElemAt(['$tgtUserInfo.nickname', 0]) // Add _tgtusername field
-	// 			}
-	// 		])
-	// 	})
-	// 	.project({
-	// 		userInfo: 0,
-	// 		tgtUserInfo: 0
-	// 	})
-	// 	.sort({
-	// 		postDate: 1
-	// 	})
-	// 	.skip(offset)
-	// 	.limit(limit)
-	// 	.end()
-	// 	.then(res => {
-	// 		console.log(res)
-	// 		return res.list
-	// 	})
-	// 	.catch(err => {
-	// 		console.error(err)
-	// 		return {}
-	// 	})
-	// return result
 }

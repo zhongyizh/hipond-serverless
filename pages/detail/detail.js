@@ -187,7 +187,6 @@ Page({
 		const countResult = await db.collection('comments').where({
             postId: this.data.postData._id,
             parent: cmtId,
-            // _tgtCmtId: cmtId,
             _tgtId: cmtrId
 		}).count()
 		const total = countResult.total
@@ -354,18 +353,6 @@ Page({
 
             // Call a backend function to update the like count in the database
             this.updateLikesOnServer(commentId);
-            // wx.cloud.callFunction({
-            //     name: 'likeComment',  // The name of your cloud function
-            //     data: {
-            //     commentId: commentId  // Pass the comment ID to the cloud function
-            //     },
-            //     success: res => {
-            //     console.log('Like status updated successfully:', res);
-            //     },
-            //     fail: err => {
-            //     console.error('Failed to update like status:', err);
-            //     }
-            // });
         } else {
             console.error("Cannot find target comment")
         }

@@ -180,43 +180,6 @@ async function deleteComment(commentId, parent) {
 				reject(err);
 			}
 		})
-		// db.collection("comments").doc(commentId).get({
-		// 	success: async function(res) {
-		// 		try {
-		// 			// Remove the target comment
-		// 			await db.collection('comments').doc(commentId).remove();
-		// 			console.log("🚮 Successfully Deleted the Comment: ", commentId);
-		// 			// Check if the deleted comment is a reply, and update parent if necessary
-		// 			if (parent != "Post") {
-		// 				await db.collection('comments').doc(parent).update({
-		// 					data: {
-		// 						repliesCount: _.inc(-1) // Decrease repliesCount by 1
-		// 					}
-		// 				});
-		// 				console.log("📉 Updated repliesCount for parent comment: ", parent);
-		// 			} else {
-		// 				// Delete all child replies (where parent = commentId)
-		// 				const childReplies = await db.collection('comments').where({
-		// 					parent: commentId
-		// 				}).get();
-		// 				// Iterate over each child reply and delete it
-		// 				for (let i = 0; i < childReplies.data.length; i++) {
-		// 					var childCommentId = childReplies.data[i]._id;
-		// 					await db.collection('comments').doc(childCommentId).remove();;
-		// 				}
-		// 			}
-		// 			// Resolve the final promise after all deletions
-		// 			resolve(res);
-
-		// 		} catch (err) {
-		// 			console.error("❌ Error while deleting comment or updating repliesCount: ", err);
-		// 			reject(err);
-		// 		}
-		// 	},
-		// 	fail: function(err) {
-		// 		reject(err);
-		// 	}
-		// });
 	});
 }
 

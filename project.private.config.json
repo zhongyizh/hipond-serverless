@@ -5,7 +5,7 @@
 		"compileHotReLoad": true,
 		"skylineRenderEnable": false,
 		"urlCheck": true,
-		"bigPackageSizeSupport": true
+		"bigPackageSizeSupport": false
 	},
 	"libVersion": "3.4.2"
 }
