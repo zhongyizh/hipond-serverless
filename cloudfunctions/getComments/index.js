@@ -13,6 +13,18 @@ exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext();
 	const openid = wxContext.OPENID;
 	try {
+		const likeListRes = await db.collection('likeCmtList').where({
+			_id: openid
+		}).get();
+		if (likeListRes.data.length === 0) {
+			await db.collection('likeCmtList').add({
+				data: {
+					_id: openid,
+					list: []
+				}
+			});
+			console.log(`Created new likeCmtList entry for user: ${openid}`);
+		}
 		// Aggregation pipeline to get the comments with user info and pagination
 		const result = await db.collection('comments').aggregate()
 			.match({
@@ -39,33 +51,27 @@ exports.main = async (event, context) => {
 			.limit(limit)
 			.end();
 		const comments = result.list;
+		const likeCmtList = (likeListRes.data.length > 0) ? likeListRes.data[0].list : [];
 		// Check if the current user has liked each comment
-		const checkLikePromises = comments.map(async comment => {
-		  	const likeRes = await db.collection('likeCmtList')
-				.where({
-					_id: openid
-				})
-				.get();
-			const data = likeRes.data[0].list
-			if (data.includes(comment._id)) {
-				comment.isLiked = true
-				comment.likeButtonUrl = "/image/saved_button.png"
+		const commentsWithLikes = comments.map(comment => {
+			if (likeCmtList.includes(comment._id)) {
+				comment.isLiked = true;
+				comment.likeButtonUrl = "/image/saved_button.png";
 			} else {
-				comment.isLiked = false
-				comment.likeButtonUrl = "/image/not_liked_button.svg"
-			};
-			// comment.isLiked = likeRes.data.length > 0; 
+				comment.isLiked = false;
+				comment.likeButtonUrl = "/image/not_liked_button.svg";
+			}
 			return comment;
 		});
-	
-		// Wait for all like checks to finish
-		const commentsWithLikes = await Promise.all(checkLikePromises);
 		console.log('comments: ', commentsWithLikes);
 		return {
 		  commentsWithLikes
 		};
 	} catch (error) {
 		console.error('Error fetching comments:', error);
-		return {};
+		return {
+			success: false,
+			error: error
+		};
 	}
 }
