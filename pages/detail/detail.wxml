@@ -160,29 +160,24 @@
       <image class="cmt-image" src="/image/comment_icon.svg"></image>
       <text class="comment-text">说点什么...</text>
     </view>
-    <view wx:if="{{isEditBTNEnabled}}" class="toolbar-left">
-      <view class="view-count-container">
-        <image class="view-count-image" src="/image/view-count.svg"></image>
-        <text>{{postData.viewCount + 1}}</text>
-      </view>
-      <view class="edit-container">
-        <image class="edit-image" src="/image/edit_button.png" bindtap="editPost"></image>
-        <text  class="edit-btn" bindtap="editPost">编辑</text>
-      </view>
-      <view class="delete-container">
-        <image class="delete-image" src="/image/delete_button.png" bindtap="onDeletePostBTNClicked"></image>
-        <text  class="delete-btn" style="color: tomato;" bindtap="onDeletePostBTNClicked">删除</text>
-      </view>
-      <!-- <text wx:if="{{isDeleteBTNEnabled}}" class="delete-btn" style="color: tomato;" bindtap="onDeletePostBTNClicked">删除</text> -->
-    </view>
 	</block>
+  <!-- Left toolbar when browse own posts -->
+  <view wx:if="{{isEditBTNEnabled}}" class="toolbar-left">
+    <view class="view-count-container">
+      <image class="view-count-image" src="/image/view-count.svg"></image>
+      <text>{{postData.viewCount + 1}}</text>
+    </view>
+    <view class="edit-container">
+      <image class="edit-image" src="/image/edit_button.png" bindtap="editPost"></image>
+      <text  class="edit-btn" bindtap="editPost">编辑</text>
+    </view>
+    <view class="delete-container">
+      <image class="delete-image" src="/image/delete_button.png" bindtap="onDeletePostBTNClicked"></image>
+      <text  class="delete-btn" style="color: tomato;" bindtap="onDeletePostBTNClicked">删除</text>
+    </view>
+  </view>
+  <!-- Right toolbar for save, comments and share -->
 	<view class="toolbar-right">
-		<!-- <text wx:if="{{isEditBTNEnabled}}" class="edit-btn" bindtap="editPost">编辑</text>
-		<text wx:if="{{isDeleteBTNEnabled}}" class="delete-btn" style="color: tomato;" bindtap="onDeletePostBTNClicked">删除</text> -->
-		<!-- <view class="view-count-container">
-			<image class="view-count-image" src="/image/view-count.svg"></image>
-			<text>{{postData.viewCount + 1}}</text>
-		</view> -->
     <view class="save-count-container">
       <image class="save-btn" src="{{saveButtonUrl}}" bindtap="savePost"> </image>
       <text>{{postData.saveCount}}</text>
@@ -207,19 +202,12 @@
 				</cover-view>
 			</cover-view>
 		</view>
-		<!-- <view class="input-area" wx:if="{{showInput}}">
-      <view class="input-overlay" bindtap="hideReplyOptions"></view>
-      <view class="input-container">
-        <textarea class="input-box" placeholder="{{inputPlaceholder}}" bindinput="onInput"></textarea>
-        <button class="submit-btn" bindtap="upload">发送</button>
-      </view>
-		</view> -->
 	</view>
 </view>
+<!-- Input text area for comment -->
 <view class="input-area" wx:if="{{showInput}}">
   <view class="input-overlay" bindtap="hideReplyOptions"></view>
   <view class="input-container">
-    <!-- <textarea class="input-box" placeholder="{{inputPlaceholder}}" bindinput="onInput"></textarea> -->
     <t-textarea
       class="input-box"
       placeholder="{{inputPlaceholder}}"
