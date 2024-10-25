@@ -1,6 +1,5 @@
 // pages/tab-bar/mine/mine.js
 import { getMyUserInfo } from '../../../utils/util'
-var zipCodeInfo = require('../../../utils/zipcode.js');
 
 Page({
 	data: {
@@ -121,18 +120,19 @@ Page({
 			userInfo: userData
 		})
 		// TODO：这里要根据实际需求改
-		if (this.data.userInfo.zipcode && zipCodeInfo.data[[this.data.userInfo.zipcode]])
-		{
-			this.setData({
-				geoInfo: zipCodeInfo.data[[this.data.userInfo.zipcode]].city + ", " + zipCodeInfo.data[[this.data.userInfo.zipcode]].state_id,
-			})
-		}
-		else
-		{
-			this.setData({
-				geoInfo: this.data.userInfo.zipcode ? this.data.userInfo.zipcode : "未知"
-			})
-		}
+		var zipcpde = this.data.userInfo.zipcode
+		await wx.cloud.callFunction({
+			name: 'zipcode',
+			data: {"zipcode":zipcpde},
+			success: res => {
+				this.setData({
+					geoInfo: res.result
+				})
+			},
+			fail: err => {
+				console.error('Failed to get current geoInfo');
+			}
+		})
 		wx.hideLoading()
 
 	},
