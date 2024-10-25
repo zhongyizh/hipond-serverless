@@ -145,6 +145,28 @@
 	margin-top: 8px;
 }
 
+/* Post Location */
+.post-location {
+	background-color: #EEF7F6;
+	color: #08605F;
+	border-radius: 8rpx; 
+	padding: 16rpx 16rpx;
+	margin-left: 4%;
+	margin-right: 4%;
+	margin-top: 2%;
+	margin-bottom: 2%;
+	font-size: 18rpx;
+	display: flex;
+	align-items: center; 
+	font-weight: 700;
+}
+
+.location-icon {
+	margin-right: 10rpx;
+	width: 18rpx;
+	height: 21.14rpx;
+  }
+
 /* User Information */
 .user-info {
 	display: flex;
@@ -168,7 +190,6 @@
 .user-details {
 	display: flex;
 	align-items: center;
-	/* Align avatar and text group vertically */
 	gap: 10rpx;
 	/* Space between avatar and text */
 }
@@ -176,11 +197,12 @@
 .text-group {
 	display: flex;
 	flex-direction: column;
+	margin-top: -2%;
 	/* Stack nickname, verification, and post date vertically */
 }
 
 .nickname {
-	font-size: 11pt;
+	font-size: 26rpx;
 }
 
 .verification_icon {
@@ -196,26 +218,9 @@
 	color: #486361;
 }
 
-.location-text-container {
-	display: flex;
-	align-items: center;
-	margin-right: 8%;
-	margin-top: 5%;
-	width: 50%;
-  }
 
 
-.location-icon {
-	margin-right: 10rpx;
-	width: 22rpx;
-	height: 26rpx;
-	flex-shrink: 0; 
-  }
 
-.location-text {
-	font-size: 9px;
-	color: #486361;
-}
 
 .comments-section {
 	border-top: 1px solid #DAECEB;

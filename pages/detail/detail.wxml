@@ -47,10 +47,11 @@
     <text decode="true">{{postData.body}}</text>
   </view>
 </view>
-
-<!-- User Information -->
+<view class="post-location">
+  <image src="/image/location_icon.png" class="location-icon" /> <!-- Add your location icon -->
+  <text>{{postData.postLocation}}</text>
+</view><!-- User Information -->
 <view class="user-info">
-  <!-- Left side: Avatar, nickname, verification, post date (wrapped in a navigator) -->
   <navigator class="user-details" url="/pages/his-hers/his-hers?targetUserId={{postData._openid}}">
     <image src="{{postData.avatarUrl}}" class="avatar" />
     <view class="text-group">
@@ -60,13 +61,7 @@
 		</view>
       <text class="post-date">发布于{{postData.postDate}}</text>
     </view>
-  </navigator>
-  
-  <!-- Right side: Additional info -->
-  <view class="location-text-container">
-    <image wx:if="{{postData.postLocation}}" src="/image/location_icon.png" class="location-icon"></image>
-    <text class="location-text">{{postData.postLocation}}</text>
-  </view>
+  </navigator>  
 </view>
 
 
