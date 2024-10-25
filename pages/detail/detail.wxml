@@ -47,7 +47,7 @@
     <text decode="true">{{postData.body}}</text>
   </view>
 </view>
-<view class="post-location">
+<view wx:if="{{postData.postLocation}}" class="post-location">
   <image src="/image/location_icon.png" class="location-icon" /> <!-- Add your location icon -->
   <text>{{postData.postLocation}}</text>
 </view><!-- User Information -->
