@@ -51,7 +51,8 @@ async function getComments(postId, limit, offset) {
 				offset: offset
 			},
 			success: res => {
-				resolve(res.result);
+				console.log(res.result.commentsWithLikes)
+				resolve(res.result.commentsWithLikes);
 			},
 			fail: err => {
 				console.error(err)
@@ -72,7 +73,8 @@ async function getReplies(cmtId, cmtrId, limit, offset) {
 				offset: offset
 			},
 			success: res => {
-				resolve(res.result);
+				console.log(res.result.commentsWithLikes)
+				resolve(res.result.commentsWithLikes);
 			},
 			fail: err => {
 				console.error(err)

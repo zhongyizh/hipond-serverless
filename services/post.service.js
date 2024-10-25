@@ -54,21 +54,22 @@ async function createComment(newCmtData) {
     if (newCmtData.parent) {
         // Increment the repliesCount of the target comment
         console.log("⏳ post.service.js: createComment(): Incrementing repliesCount for comment: ", newCmtData.parent);
-        
+        console.log(newCmtData.parent);
         await new Promise((resolve, reject) => {
-            db.collection('comments').doc(newCmtData.parent).update({
-                data: {
-                    repliesCount: db.command.inc(1)
-                },
-                success: res => {
-                    console.log("✔ post.service.js: createComment(): Incremented repliesCount for comment: ", newCmtData.parent);
-                    resolve(res);
-                },
-                fail: err => {
-                    console.error("❌ post.service.js: createComment(): Failed to increment repliesCount for comment: ", err);
-                    reject(err);
-                }
-            });
+			wx.cloud.callFunction({
+				name: 'incrementReplyCount',
+				data: {
+					parent: newCmtData.parent
+				},
+				success: res => {
+					console.log("✔ post.service.js: createComment(): Incremented repliesCount for comment: ", newCmtData.parent);
+					resolve(res);
+				},
+				fail: err => {
+					console.error("❌ post.service.js: createComment(): Failed to increment repliesCount for comment: ", err);
+					reject(err);
+				}
+			})
         });
     }
 
@@ -134,83 +135,52 @@ async function editPost(newPostData) {
 
 async function deletePost(postId) {
 	const db = wx.cloud.database();
-	return new Promise((resolve, reject) => {
-		db.collection("posts").doc(postId).get({
-			success: function(res) {
-				const imageUrls = res.data.imageUrls;
-				db.collection('posts').doc(postId).remove({
-					success: res => {
-						resolve(res);
-						console.log("🚮 post.service.js: deletePost(): Deleting Post Images...");
-						deleteImages(imageUrls);
-						console.log("🚮 post.service.js: deletePost(): Successfully Deleted the Post: ", postId);
-					},
-					fail: err => {
-						reject(err);
-					}
-				})
-			}
-		})
-	});
+	try {
+		const post = await db.collection("posts").doc(postId).get();
+		const imageUrls = post.data.imageUrls;
+		// get only comments is enough
+		const comments = await db.collection('comments').where({
+		  postId: postId,
+		  _tgtCmtId: "Post"
+		}).get();
+		// iterate over comments
+		for (let i = 0; i < comments.data.length; i++) {
+		  const commentId = comments.data[i]._id;
+		  await deleteComment(commentId, "Post"); // delete each comment and its replies
+		}
+
+		await db.collection('posts').doc(postId).remove();
+		console.log("🚮 Deleting Post Images...");
+		await deleteImages(imageUrls);
+	
+		console.log("🚮 Successfully Deleted the Post and All Associated Comments and Replies: ", postId);
+		return Promise.resolve();
+	} catch (err) {
+		console.error("❌ Error while deleting post, comments, or images: ", err);
+		return Promise.reject(err);
+	}
 }
 
 async function deleteComment(commentId, parent) {
 	const db = wx.cloud.database();
 	const _ = db.command;
 	return new Promise((resolve, reject) => {
-		db.collection("comments").doc(commentId).get({
-			success: async function(res) {
-				try {
-					// Remove the target comment
-					await db.collection('comments').doc(commentId).remove();
-					console.log("🚮 Successfully Deleted the Comment: ", commentId);
-					// Check if the deleted comment is a reply, and update parent if necessary
-					if (parent != "Post") {
-						await db.collection('comments').doc(parent).update({
-							data: {
-								repliesCount: _.inc(-1) // Decrease repliesCount by 1
-							}
-						});
-						console.log("📉 Updated repliesCount for parent comment: ", parent);
-					} else {
-						// Delete all child replies (where parent = commentId)
-						const childReplies = await db.collection('comments').where({
-							parent: commentId
-						}).get();
-						// Iterate over each child reply and delete it
-						for (let i = 0; i < childReplies.data.length; i++) {
-							var childCommentId = childReplies.data[i]._id;
-							await db.collection('comments').doc(childCommentId).remove();;
-						}
-					}
-					// Resolve the final promise after all deletions
-					resolve(res);
-
-				} catch (err) {
-					console.error("❌ Error while deleting comment or updating repliesCount: ", err);
-					reject(err);
-				}
+		wx.cloud.callFunction({
+			name: 'deleteComments',
+			data: {
+				commentId: commentId,
+				parent: parent
 			},
-			fail: function(err) {
+			success: res => {
+				console.log("✔ Successfully delete comment: ", parent);
+				resolve(res);
+			},
+			fail: err => {
+				console.error("❌ Failed to delete comment: ", err);
 				reject(err);
 			}
-		});
+		})
 	});
-	// return new Promise((resolve, reject) => {
-	// 	db.collection("comments").doc(commentId).get({
-	// 		success: function(res) {
-	// 			db.collection('comments').doc(commentId).remove({
-	// 				success: res => {
-	// 					resolve(res);
-	// 					console.log("🚮 post.service.js: deleteComment(): Successfully Deleted the Comment: ", commentId);
-	// 				},
-	// 				fail: err => {
-	// 					reject(err);
-	// 				}
-	// 			})
-	// 		}
-	// 	})
-	// });
 }
 
 module.exports = {

@@ -4,7 +4,8 @@
 	"setting": {
 		"compileHotReLoad": true,
 		"skylineRenderEnable": false,
-		"urlCheck": true
+		"urlCheck": true,
+		"bigPackageSizeSupport": false
 	},
 	"libVersion": "3.4.2"
 }

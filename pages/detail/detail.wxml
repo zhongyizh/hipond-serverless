@@ -70,6 +70,7 @@
 <view class="comments-section">
   <!-- <view class="horizontal-divider"></view> -->
   <view class="cmt-title">评论</view>
+  <view wx:if="{{commentCounts == 0}}" class="empty-comment">这里空空如也~</view>
   <!-- Loop through the list of comments -->
   <block wx:for="{{comments}}" wx:key="commentId">
     <view class="comment-item">
@@ -80,8 +81,14 @@
         <view class="content" bindtap="showReplyOptions" data-parent="{{item.parent}}" data-commentid="{{item._id}}" data-userid="{{item._openid}}" data-nickname="{{item.nickname}}">
           {{item.body}}
         </view>
-        <view>
+        <view class="cmt-header-container">
           <text class="cmt-date">{{item.formatDate}}</text>
+          <view class="cmt-header">
+            <image class="cmt-like-button" bindtap="likeComment" src="{{item.likeButtonUrl}}" data-commentid="{{item._id}}" data-liked="{{item.isLiked}}" data-likes="{{item.likeCount}}"> </image>
+            <text class="cmt-like-number">{{item.likeCount}}</text>
+          </view>
+        </view>
+        <view>
           <text wx:if="{{item._openid == currentUserOpenId}}" class="cmt-delete" bindtap="onDeleteCmt" style="color: tomato;" data-commentid="{{item._id}}" data-parent="{{item.parent}}">删除</text>
         </view>
       </view>
@@ -96,8 +103,14 @@
             <view class="content" bindtap="showReplyOptions" data-parent="{{item.parent}}" data-commentid="{{item._id}}" data-userid="{{item._openid}}" data-nickname="{{item.nickname}}">
               {{item.body}}
             </view>
-            <view>
+            <view class="cmt-header">
               <text class="cmt-date">{{item.formatDate}}</text>
+              <view class="cmt-header">
+                <image class="cmt-like-button" bindtap="likeReply" src="{{item.likeButtonUrl}}" data-commentid="{{item._id}}" data-liked="{{item.isLiked}}" data-likes="{{item.likeCount}}" data-parent="{{item.parent}}"> </image>
+                <text class="cmt-like-number">{{item.likeCount}}</text>
+              </view>
+            </view>
+            <view>
               <text wx:if="{{item._openid == currentUserOpenId}}" class="cmt-delete" bindtap="onDeleteCmt" style="color: tomato;" data-commentid="{{item._id}}" data-parent="{{item.parent}}">删除</text>
             </view>
           </view>
@@ -126,40 +139,67 @@
 		<text class="contact-button-sold" wx:if="{{postData.post_status == 2}}">已售出</text> -->
   </block>
   <block wx:else="">
-    <view class="comment-btn" bindtap="showReplyOptions">
+    <view wx:if="{{!isEditBTNEnabled}}" class="comment-btn" bindtap="showReplyOptions">
       <image class="cmt-image" src="/image/comment_icon.svg"></image>
       <text class="comment-text">说点什么...</text>
     </view>
-  </block>
-  <view class="toolbar-right">
-    <text wx:if="{{isEditBTNEnabled}}" class="edit-btn" bindtap="editPost">编辑</text>
-    <text wx:if="{{isDeleteBTNEnabled}}" class="delete-btn" style="color: tomato;" bindtap="onDeletePostBTNClicked">删除</text>
+
+	</block>
+  <!-- Left toolbar when browse own posts -->
+  <view wx:if="{{isEditBTNEnabled}}" class="toolbar-left">
     <view class="view-count-container">
       <image class="view-count-image" src="/image/view-count.svg"></image>
       <text>{{postData.viewCount + 1}}</text>
     </view>
-    <image class="save-button" src="{{saveButtonUrl}}" bindtap="savePost"> </image>
-    <text class="save-count-text">{{postData.saveCount}}</text>
-    <image class="share-btn" bindtap="showShareOptions" src="/image/share_button.svg"></image>
-    <view class="modal" wx:if="{{showModal}}">
-      <view class="modal-overlay" bindtap="hideShareOptions"></view>
-      <view class="modal-content">
-        <button class="modal-btn" open-type="share">分享给朋友</button>
-        <button class="modal-btn" bindtap="showTooltip">分享到朋友圈</button>
-        <button class="modal-btn" bindtap="hideShareOptions">取消</button>
-      </view>
-      <cover-view class="tooltip-overlay" wx:if="{{showTooltipOverlay}}" bindtap="hideTooltipAndShowShareOptions"></cover-view>
-      <cover-view class="tooltip" wx:if="{{tooltip}}" style="top: {{menuButtonTop + menuButtonHeight + 15}}px; left: {{menuButtonLeft - 125}}px;">
-        <cover-view class="tooltip-arrow" style="top: {{menuButtonTop + menuButtonHeight + 5}}px; left: {{menuButtonLeft+menuButtonWidth/4}}px;"></cover-view>
-        <cover-view class="tooltip-content">
-          分享朋友圈请点击 · · · 这里~
-        </cover-view>
-      </cover-view>
+
+    <view class="edit-container">
+      <image class="edit-image" src="/image/edit_button.png" bindtap="editPost"></image>
+      <text  class="edit-btn" bindtap="editPost">编辑</text>
     </view>
-    <view class="input-area" wx:if="{{showInput}}">
-      <view class="input-overlay" bindtap="hideReplyOptions"></view>
-      <textarea class="input-box" type="text" placeholder="{{inputPlaceholder}}" bindinput="onInput" />
-      <button class="submit-btn" bindtap="upload">发送</button>
+    <view class="delete-container">
+      <image class="delete-image" src="/image/delete_button.png" bindtap="onDeletePostBTNClicked"></image>
+      <text  class="delete-btn" style="color: tomato;" bindtap="onDeletePostBTNClicked">删除</text>
     </view>
+  </view>
+  <!-- Right toolbar for save, comments and share -->
+	<view class="toolbar-right">
+    <view class="save-count-container">
+      <image class="save-btn" src="{{saveButtonUrl}}" bindtap="savePost"> </image>
+      <text>{{postData.saveCount}}</text>
+    </view>
+    <view class="comment-count-container">
+      <image class="cmt-btn" bindtap="showReplyOptions" src="/image/cmt_button.svg"></image>
+      <text>{{commentCounts}}</text>
+    </view>
+		<image class="share-btn" bindtap="showShareOptions" src="/image/share_button.svg"></image>
+		<view class="modal" wx:if="{{showModal}}">
+			<view class="modal-overlay" bindtap="hideShareOptions"></view>
+			<view class="modal-content">
+				<button class="modal-btn" open-type="share">分享给朋友</button>
+				<button class="modal-btn" bindtap="showTooltip">分享到朋友圈</button>
+				<button class="modal-btn" bindtap="hideShareOptions">取消</button>
+			</view>
+			<cover-view class="tooltip-overlay" wx:if="{{showTooltipOverlay}}" bindtap="hideTooltipAndShowShareOptions"></cover-view>
+			<cover-view class="tooltip" wx:if="{{tooltip}}" style="top: {{menuButtonTop + menuButtonHeight + 15}}px; left: {{menuButtonLeft - 125}}px;">
+				<cover-view class="tooltip-arrow" style="top: {{menuButtonTop + menuButtonHeight + 5}}px; left: {{menuButtonLeft+menuButtonWidth/4}}px;"></cover-view>
+				<cover-view class="tooltip-content">
+					分享朋友圈请点击 · · · 这里~
+				</cover-view>
+			</cover-view>
+		</view>
+	</view>
+</view>
+<!-- Input text area for comment -->
+<view class="input-area" wx:if="{{showInput}}">
+  <view class="input-overlay" bindtap="hideReplyOptions"></view>
+  <view class="input-container">
+    <t-textarea
+      class="input-box"
+      placeholder="{{inputPlaceholder}}"
+      disableDefaultPadding="{{true}}"
+      autosize="{{true}}"
+      bind:change="onInput"
+    />
+    <button class="submit-btn" bindtap="upload">发送</button>
   </view>
 </view>
