@@ -39,7 +39,8 @@ Page({
 		isFromEdit: false,
 		isDeliverChecked: false,
 		isPickupChecked: false,
-		isMailChecked: false
+		isMailChecked: false,
+		postLocation: ""
     },
     async onLoad() {
 		await wx.cloud.callFunction({
@@ -170,6 +171,29 @@ Page({
 		}
 		return true;
 	},
+
+	chooseLocation(){
+		var that = this
+		wx.choosePoi({
+			success(res)
+			{	
+				var address = res.address
+				const result = address.split(",")
+				if (result[result.length - 2].includes("-")) {
+					result[result.length - 2] = result[result.length - 2].split("-")[0];
+				}
+				const modifiedAddress = result.slice(1, -1).join(",").trim();
+				that.setData({
+					postLocation: modifiedAddress ? modifiedAddress : ""
+				})
+			},
+			fail(res){
+				console.log(res)
+			},
+			complete(res){
+			}
+		})
+	},
 	async upload() {
 		var payload = {
 			'title': this.data.title ? this.data.title : getPostTitleFromBody(this.data.body),
@@ -182,6 +206,7 @@ Page({
 			'isImgChecked': false,
 			'viewCount': 0,
 			'originalPrice': this.data.originalPrice,
+			'postLocation':this.data.postLocation,
 			'method': !this.data.isDeliverChecked && !this.data.isMailChecked && !this.data.isPickupChecked ? "" : 
 				[
 				this.data.isDeliverChecked ? 'deliver' : '', 

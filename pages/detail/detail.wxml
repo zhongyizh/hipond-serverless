@@ -1,87 +1,70 @@
 <!--pages/detail/detail.wxml-->
 <t-navbar t-class-placeholder="t-navbar-placeholder" t-class-content="t-navbar-content" title="">
   <view slot="capsule" class="custom-capsule">
-    <t-icon
-      size="20"
-      bind:tap="onBack"
-      aria-role="button"
-      aria-label="返回"
-      name="chevron-left"
-      class="custom-capsule__icon back"
-    />
-    <t-icon
-      size="20"
-      bind:tap="onGoHome"
-      aria-role="button"
-      aria-label="首页"
-      name="home"
-      class="custom-capsule__icon home"
-    />
+    <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon back" />
+    <t-icon size="20" bind:tap="onGoHome" aria-role="button" aria-label="首页" name="home" class="custom-capsule__icon home" />
   </view>
 </t-navbar>
 
-<t-dialog
-  visible="{{showDialog}}"
-  title="物品状态{{postData.condition}}"
-  content="{{conditionDescription}}"
-  confirm-btn="{{confirmBtn}}"
-  bind:confirm="closeDialog"
-  style="--td-button-primary-text-color	: #576B95"
-/>
+<t-dialog visible="{{showDialog}}" title="物品状态{{postData.condition}}" content="{{conditionDescription}}" confirm-btn="{{confirmBtn}}" bind:confirm="closeDialog" style="--td-button-primary-text-color	: #576B95" />
 
 <view class="container">
   <!-- Image Carousel -->
   <swiper class="carousel" autoplay="true" interval="5000" duration="300" indicator-dots="true">
-		<block wx:for="{{postData.imageUrls}}" wx:key="*this">
-			<swiper-item>
-				<image src="{{item}}" mode="aspectFit" />
-			</swiper-item>
-		</block>
+    <block wx:for="{{postData.imageUrls}}" wx:key="*this">
+      <swiper-item>
+        <image src="{{item}}" mode="aspectFit" />
+      </swiper-item>
+    </block>
   </swiper>
   <!-- Post Title & Price -->
   <view class="title-row">
-		<text class="post-text">{{postData.title}}</text>
+    <text class="post-text">{{postData.title}}</text>
     <view class="price-container" wx:if="{{postData.price}}">
-        <text wx:if="{{postData.originalPrice}}"class="original-price">原价${{postData.originalPrice}}</text>
-        <text class="price-tag">价格${{postData.price}}</text>
-    </view>  
+      <text wx:if="{{postData.originalPrice}}" class="original-price">原价${{postData.originalPrice}}</text>
+      <text class="price-tag">价格${{postData.price}}</text>
     </view>
+  </view>
   <view class="horizontal-divider"></view>
   <!-- Post Options -->
   <view wx:if="{{postData.postType == 'selling'}}" class="option-row">
     <view class="background-shape" style="margin-left: 4%; margin-right: 1%; align-items: center; justify-content: center;display: flex; padding: 0 1.5%;  ">
       <view class="text-container">物品新旧 {{postData.condition}}</view>
-      <image class= "info-icon"src="/image/info-icon.svg" bindtap="conditionButton"> </image>
+      <image class="info-icon" src="/image/info-icon.svg" bindtap="conditionButton"> </image>
 
     </view>
     <view class="background-shape" style="margin-left: 1%; margin-right: 4%;">
       <view class="text-container" style="margin-top: 4%;">交易方式 {{methodOfDeliver}}</view>
     </view>
-		<!-- TODO: 急售 -->
-		<!-- <view wx:if="{{postData.isUrgent}}" class="ddl-container">
+    <!-- TODO: 急售 -->
+    <!-- <view wx:if="{{postData.isUrgent}}" class="ddl-container">
 			<text class="ddl-status-label">急售</text>
 			<text class="ddl-date-label">{{"by " + ddl_forDisplay}}</text>
 		</view> -->
   </view>
   <!-- Post Body -->
   <view class="post-body">
-		<text decode="true">{{postData.body}}</text>
+    <text decode="true">{{postData.body}}</text>
   </view>
 </view>
-
-<!-- User Information -->
+<view wx:if="{{postData.postLocation}}" class="post-location">
+  <image src="/image/location_icon.png" class="location-icon" /> <!-- Add your location icon -->
+  <text>{{postData.postLocation}}</text>
+</view><!-- User Information -->
 <view class="user-info">
-	<navigator class="header-box header-right" url="/pages/his-hers/his-hers?targetUserId={{postData._openid}}"> 
-		<image src="{{postData.avatarUrl}}" class="avatar" />
-	</navigator>
-	<navigator class="left-content" url="/pages/his-hers/his-hers?targetUserId={{postData._openid}}">
-		<view>
+  <navigator class="user-details" url="/pages/his-hers/his-hers?targetUserId={{postData._openid}}">
+    <image src="{{postData.avatarUrl}}" class="avatar" />
+    <view class="text-group">
+      <view>
 			<text class="nickname" style="width: 5%;">{{postData.nickname}}</text>
 			<image class="verification_icon" src="/image/student_verification_icon.png" hidden="{{!postData.isUserVerified}}"></image>
 		</view>
-		<text class="post-date">发布于{{postData.postDate}}</text>
-	</navigator>
+      <text class="post-date">发布于{{postData.postDate}}</text>
+    </view>
+  </navigator>  
 </view>
+
+
 
 <!-- Comment Area -->
 <view class="comments-section">
@@ -151,18 +134,19 @@
 
 <!-- Toolbar -->
 <view class="bottom-toolbar">
-	<block wx:if = "{{postData.postType == 'selling'}}">
-		<text bindtap="onTapContact" class="contact-button" wx:if="{{postData.postType == 'selling' && isEditBTNEnabled == false}}">联系TA</text>
-		<!-- TODO: On Hold/已售出 -->
-		<!-- <text bindtap="onTapContact" class="contact-button" wx:if="{{postData.post_status == 0}}">联系TA</text>
+  <block wx:if="{{postData.postType == 'selling'}}">
+    <text bindtap="onTapContact" class="contact-button" wx:if="{{postData.postType == 'selling' && isEditBTNEnabled == false}}">联系TA</text>
+    <!-- TODO: On Hold/已售出 -->
+    <!-- <text bindtap="onTapContact" class="contact-button" wx:if="{{postData.post_status == 0}}">联系TA</text>
 		<text bindtap="onTapContact" class="contact-button-hold" wx:if="{{postData.post_status == 1}}">On Hold</text>
 		<text class="contact-button-sold" wx:if="{{postData.post_status == 2}}">已售出</text> -->
-	</block>
+  </block>
   <block wx:else="">
     <view wx:if="{{!isEditBTNEnabled}}" class="comment-btn" bindtap="showReplyOptions">
       <image class="cmt-image" src="/image/comment_icon.svg"></image>
       <text class="comment-text">说点什么...</text>
     </view>
+
 	</block>
   <!-- Left toolbar when browse own posts -->
   <view wx:if="{{isEditBTNEnabled}}" class="toolbar-left">
