@@ -254,7 +254,7 @@
 	margin-right: 0%;
 	gap: 5px;
 	padding-top: 10rpx;
-	padding-bottom: 10rpx;
+	/* padding-bottom: 10rpx; */
 }
 
 .comment-info-container {
@@ -289,13 +289,13 @@
 	justify-content: start;
 }
 
-.cmt-header-container, .cmt-header {
+.cmt-header-container {
 	display: flex;
 	justify-content: space-between;  /* Align date to left and like button to right */
 	align-items: center;  /* Vertically center the text */
 }
 
-.cmt-date {
+.cmt-date, .cmt-header {
 	margin-top: 10rpx;
 	font-size: 9px;
 	color: #666;
@@ -358,12 +358,9 @@
 	display: flex;
 	justify-content: start;
 	margin-left: 4%;
-	margin-right: 4%;
 	gap: 5px;
 	padding-top: 10rpx;
-	/* padding-bottom: 10rpx; */
 }
-
 
 /* Toolbar */
 .bottom-toolbar {
@@ -473,21 +470,13 @@
 	position: fixed;
 	margin-top: 2.5%;
 	left: 32rpx;
-	width: 320rpx; 
+	width: 50%; 
 	height: 50rpx; 
 	display: flex;
 	align-items: center; 
 	justify-content: start;
 	letter-spacing: 3rpx;
 	
-	/* display: flex;
-	flex-direction: row;
-	align-items: center; 
-	justify-content: flex-end; 
-	text-align: right;
-	margin-top: 2.5%;
-	margin-right: 5%;
-	margin-left: 5%; */
 }
 
 .edit-image, .delete-image {
@@ -498,7 +487,16 @@
 	color: rgba(0,0,0,.5);
     margin: 0 6px 2px 6px;
 }
-.save-btn, .cmt-btn, .share-btn {
+.view-count-image, .save-btn, .cmt-btn {
+	width: 20px;
+	height: 20px;
+	background-size: cover;
+	opacity: .5;
+	color: rgba(0,0,0,.5);
+    margin: 0 6px 2px 6px;
+}
+
+.share-btn {
 	width: 20px;
 	height: 20px;
 	background-size: cover;
@@ -514,28 +512,16 @@
 	text-align: right;
 	color: #888;
 	font-size: 14px;
-	max-width: 100rpx;
 	max-height: 20px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-.view-count-image {
-	width: 20px;
-	height: 20px;
-	background-size: cover;
-	opacity: .5;
-	color: rgba(0, 0, 0, .5);
-	margin: 0 6px 2px 6px;
-}
-
-
-/* .edit-btn, .delete-btn{
+.edit-btn, .delete-btn{
     font-size: 10pt;
     color: #727A7A;
     font-weight: 700;
-    margin: 1px 6px 0px 6px;
-} */
+}
 
 .input-area {
 	display: flex;
@@ -547,32 +533,19 @@
 	width: 100%;
 	z-index: 1000;
 	box-shadow:  0px 0px 30px 10px rgba(0,0,0,0.03);
-	/* height: 140rpx; */
 }
 
 .input-container {
 	width: 95%;
 	background-color: #FFFFFF;
 	display: flex;
-	align-items: center; /* Align items vertically center */
+	align-items: center;
 	justify-content: flex-end;
 	padding: 12px;
-	/* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
 	flex-direction: column;
 	position: relative;
 	border-radius: 0px;
 	padding-bottom: 30px;
-	/* width: 95%;
-	background-color: #fff;
-	align-items: flex-start;
-	justify-content: flex-end;
-	padding: 12px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	display: flex;
-	flex-direction: column;
-	position: relative;
-	min-height: 25px;
-	max-height: 150px; */
 }
 
 .input-overlay {
@@ -599,16 +572,6 @@
 	box-sizing: border-box;
 	float: left;
 	width: 100%;
-	/* margin-bottom: 2.5%; */
-	/* flex: 1;
-    font-size: 16px;
-    border-radius: 5px;
-    resize: none;
-    min-height: 25px;
-    max-height: 150px;
-	overflow-y: auto;
-	background-color: #EEF7F6;
-	text-align: left; */
 }
 
 .submit-btn {

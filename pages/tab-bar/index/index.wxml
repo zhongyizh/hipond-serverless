@@ -5,9 +5,9 @@
   </view>
 </t-navbar>
 <view class="scroll-view-border">
-	<scroll-view class="scroll-view" type="custom" scroll-y="true">
-		<grid-view class="grid-view" type="masonry" cross-axis-count="2" cross-axis-gap="4" main-axis-gap="5">
-			<view wx:for="{{list}}" wx:key="_id" class="grid-box" bindtap="navigateToDetail" data-index="{{index}}">
+  <scroll-view class="scroll-view" type="custom" scroll-y="true">
+    <grid-view class="grid-view" type="masonry" cross-axis-count="2" cross-axis-gap="4" main-axis-gap="5">
+      <view wx:for="{{list}}" wx:key="_id" class="grid-box" bindtap="navigateToDetail" data-index="{{index}}">
         <view class="selling-post-container">
           <image src="{{item.imageUrls[0]}}" mode="widthFix"></image>
           <view class="content-box">
@@ -18,9 +18,9 @@
                 <text>{{item.nickname}}</text>
                 <image class="verification_icon" src="/image/student_verification_icon.svg" hidden="{{!item.isUserVerified}}"></image>
               </view>
-							<view class="price-tag-container" wx:if="{{item.price}}">
-								<view class="price-tag-label">${{item.price}}</view>
-							</view>
+              <view class="price-tag-container" wx:if="{{item.price}}">
+                <view class="price-tag-label">${{item.price}}</view>
+              </view>
               <view class="view-count-container" wx:if="{{!item.price}}">
                 <image class="view-count-image" src="/image/view-count.svg"></image>
                 <text>{{item.viewCount}}</text>
@@ -28,7 +28,7 @@
             </view>
           </view>
         </view>
-			</view>
-		</grid-view>
-	</scroll-view>
+      </view>
+    </grid-view>
+  </scroll-view>
 </view>
