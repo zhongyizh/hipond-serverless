@@ -56,7 +56,7 @@ exports.main = async (event, context) => {
 		const commentsWithLikes = comments.map(comment => {
 			if (likeCmtList.includes(comment._id)) {
 				comment.isLiked = true;
-				comment.likeButtonUrl = "/image/saved_button.png";
+				comment.likeButtonUrl = "/image/liked_button.svg";
 			} else {
 				comment.isLiked = false;
 				comment.likeButtonUrl = "/image/not_liked_button.svg";

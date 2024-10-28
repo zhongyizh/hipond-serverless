@@ -1,7 +1,7 @@
 // pages/detail/detail.js
 import { ListingConditions } from "../../models/posts.model"
 import { deletePost, createComment, deleteComment } from "../../services/post.service"
-import { getComments, getReplies } from "../../utils/util"
+import { getComments, getReplies, throttle } from "../../utils/util"
 import { msgSecCheck } from '../../services/security.service'
 
 const conditionMapping = {
@@ -184,34 +184,58 @@ Page({
         const cmtId = event.currentTarget.dataset.commentid;
         const cmtrId = event.currentTarget.dataset.userid;
         const currentComment = this.data.comments[commentIndex]
-		const countResult = await db.collection('comments').where({
-            postId: this.data.postData._id,
-            parent: cmtId
-            // _tgtId: cmtrId
-		}).count()
-		const total = countResult.total
-        const isEnd = currentComment.replyOffset >= total
-        const loadlimit = 5
-        console.log("index: " + commentIndex + "cmtId: " + cmtId + "cmtrId: " + cmtrId + "limit: " + loadlimit + "total: " + total)
-        if (!isEnd) {
-            const postReplies = await getReplies(cmtId, cmtrId, loadlimit, currentComment.replyOffset)
-            const currentLength = postReplies.length
-            const newOffset = currentComment.replyOffset + currentLength
-            const replies = postReplies.map(reply => ({
-                ...reply,
-                formatDate: this.parseDate(reply.postDate)
-            }));
-            const updatedComments = [...this.data.comments]
-            updatedComments[commentIndex] = {
-                ...this.data.comments[commentIndex],
-                replies: [...this.data.comments[commentIndex].replies, ...replies],
-                replyOffset: newOffset,
-                showReplies: true
-            };
+
+        const displayRepliesFn = throttle(async (event) => {
+            // Set loading state to true for the current comment
+            const updatedComments = [...this.data.comments];
+            updatedComments[commentIndex].isLoadingReplies = true;
             this.setData({
                 comments: updatedComments
             });
-        }
+      
+            try {
+                const countResult = await db.collection('comments').where({
+                    postId: this.data.postData._id,
+                    parent: cmtId
+                }).count();
+                const total = countResult.total;
+                const isEnd = currentComment.replyOffset >= total;
+                const loadlimit = 5;
+        
+                if (!isEnd) {
+                    const postReplies = await getReplies(cmtId, cmtrId, loadlimit, currentComment.replyOffset);
+                    const currentLength = postReplies.length;
+                    const newOffset = currentComment.replyOffset + currentLength;
+                    const replies = postReplies.map(reply => ({
+                    ...reply,
+                    formatDate: this.parseDate(reply.postDate)
+                    }));
+        
+                    // Update the comment's replies and offset
+                    updatedComments[commentIndex] = {
+                    ...this.data.comments[commentIndex],
+                    replies: [...this.data.comments[commentIndex].replies, ...replies],
+                    replyOffset: newOffset,
+                    showReplies: true,
+                    isLoadingReplies: false // Stop loading
+                    };
+                } else {
+                    updatedComments[commentIndex].isLoadingReplies = false; // No more replies to load
+                }
+                this.setData({
+                    comments: updatedComments
+                });
+            } catch (error) {
+                console.error('Error fetching replies:', error);
+                // Reset loading state in case of error
+                updatedComments[commentIndex].isLoadingReplies = false;
+                this.setData({
+                    comments: updatedComments
+                });
+            }
+        }, 2000); // Wait 2 seconds
+        // Call the throttled function
+        displayRepliesFn(event);
     },
     countComments: function(postId) {
         wx.cloud.callFunction({
@@ -341,7 +365,7 @@ Page({
             updatedComments[commentIndex].isLiked = !isLiked;
             updatedComments[commentIndex].likeCount = newLikeCount;
             if (updatedComments[commentIndex].isLiked) {
-				updatedComments[commentIndex].likeButtonUrl = "/image/saved_button.png"
+				updatedComments[commentIndex].likeButtonUrl = "/image/liked_button.svg"
 			} else {
 				updatedComments[commentIndex].likeButtonUrl = "/image/not_liked_button.svg"
 			}
@@ -376,7 +400,7 @@ Page({
                 updatedComments[parentIndex].replies[commentIndex].isLiked = !isLiked;
                 updatedComments[parentIndex].replies[commentIndex].likeCount = newLikeCount;
                 if (updatedComments[parentIndex].replies[commentIndex].isLiked) {
-                    updatedComments[parentIndex].replies[commentIndex].likeButtonUrl = "/image/saved_button.png"
+                    updatedComments[parentIndex].replies[commentIndex].likeButtonUrl = "/image/liked_button.svg"
                 } else {
                     updatedComments[parentIndex].replies[commentIndex].likeButtonUrl = "/image/not_liked_button.svg"
                 }
