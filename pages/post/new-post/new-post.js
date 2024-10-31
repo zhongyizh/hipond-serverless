@@ -31,6 +31,7 @@ Page({
 		isFromEdit: false,
 		titleLength: 0,
 		textLength: 0,
+		titleDisabled: false,
 		isDisabled: false
     },
     onLoad() {
@@ -72,12 +73,40 @@ Page({
 	},
 	inputTitle: function(res) {
 		const widgetId = res.currentTarget.id;
+		let inputTitle = res.detail.value
 		const titleLength = res.detail.value.length;
+		const isOverLimit = titleLength > 25
 		try {
-			this.data[widgetId] = res.detail.value;
+			if (titleLength >= 25) {
+				inputTitle = inputTitle.substring(0, 25);
+				wx.showToast({
+					title: '最多输入25字',
+					icon: 'none',
+					duration: 700
+				});
+			}
 			this.setData({
-				titleLength: titleLength
-		  	});
+				[widgetId]: inputTitle,
+				titleLength: inputTitle.length,
+				titleDisabled: isOverLimit
+			});
+			// if (titleLength < 25) {
+			// 	this.data[widgetId] = res.detail.value;
+			// 	this.setData({
+			// 		titleLength: titleLength,
+			// 		titleDisabled: disabled
+			// 	});
+			// } else {
+			// 	this.data[widgetId] = res.detail.value.substring(0, 25);
+			// 	this.setData({
+			// 		titleDisabled: disabled
+			// 	});
+			// 	wx.showToast({
+			// 		title: '最多输入25字',
+			// 		icon: 'none',
+			// 		duration: 500
+			// 	});
+			// }
 		}
 		catch {
 			console.log("❌ new-post-listing: upload(): Unrecognized Input Box id");

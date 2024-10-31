@@ -143,6 +143,8 @@
 	letter-spacing: 5%;
 	line-height: 21px;
 	margin-top: 8px;
+	max-width: 100%;
+	text-overflow: ellipsis;
 }
 
 /* Post Location */
