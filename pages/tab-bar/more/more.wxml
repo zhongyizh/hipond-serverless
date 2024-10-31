@@ -1,15 +1,35 @@
 <!--pages/tab-bar/more/more.wxml-->
 <view class="container">
-  <image src="/image/Hipond_Banner.png" style="width: 100%;top: 9.9%;position: absolute;" mode="widthFix"></image>
-  <text class="contact-line-1">联系HIPOND客服</text>
-  <view class="contact-line-2">
-	<image src="/image/wechat.png" style="width: 50rpx; height: 50rpx;"></image>
-	<text style="font-size: 34rpx;font-weight: 700; margin-left: 25rpx; ">微信号：HIPOND</text>
+  <image src="/image/logo_icon_1.svg" style="height: 200rpx; width: 200rpx;" mode="widthFix"></image>
+  <text class="name-text">HIPOND海塘</text>
+  <text wx:if="version" class="version-info"> {{version}}</text>
+  <view class="line-container">
+    <text class="left-text">隐私政策</text>
+    <t-icon style="margin-right: 4%;" name="chevron-right" size="48rpx" data-name="chevron-right" bind:tap="privacyPage" color="#9CA0A0" />
   </view>
-  <image src="/image/service_qrcode.jpg" style="top:54%;position: absolute; height: 170rpx; width: 170rpx;"mode="widthFix"></image>
-  <text style="top:67%;position: absolute; color: #000;font-size: 19rpx;font-weight: 500;letter-spacing: 4rpx;">HIPOND v0.3.0</text>
-  <view class="contact-line-3">
-	<image src="cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/gongzhonghao_qrcode.png" style="width: 256rpx; height: 150rpx;"></image>
-	<image src="cloud://hipond-0gvw9rfhe8bc4b53.6869-hipond-0gvw9rfhe8bc4b53-1322334204/appImages/xiaohongshu_qrcode.png" style="width: 256rpx; height: 150rpx;"></image>
+
+
+  <view class="line-container">
+    <text class="left-text">官方网址</text>
+    <view class="right-container">
+      <text class="right-text">https://hipond.cc/</text>
+      <t-icon name="copy" size="40rpx" bind:click="copyOfficialSite" color="#9CA0A0" />
+    </view>
+  </view>
+
+  <view class="line-container">
+    <text class="left-text">商务合作</text>
+    <view class="right-container">
+      <text class="right-text">info@hipond.cc</text>
+      <t-icon  name="copy" size="40rpx" data-name="copy" bind:click="copyOfficialEmail" color="#9CA0A0" />
+    </view>
+  </view>
+
+  <view class="line-container">
+    <text class="left-text">我们的小红书</text>
+    <view class="right-container">
+      <text class="right-text">9615091209</text>
+      <t-icon  name="copy" size="40rpx" data-name="copy" bind:click="copyRedAccount" color="#9CA0A0" />
+    </view>
   </view>
 </view>
