@@ -28,12 +28,13 @@
 		</view>
 	</view>
 	<view class="body-text-container">
-		<t-textarea class="body-text-textarea"
+		<textarea class="body-text-textarea"
 					id="body"
 					value="{{body}}"
-					placeholder="你今天过得怎么样？" 
+					maxlength="-1"
+					placeholder="你今天过得怎么样？"
 					placeholder-style="color: #DAECEB; font-size: 13px;"
-					bind:change="inputText"
+					bindinput="inputText"
 		/>
 	</view>
 	<view class="word-count-wrapper">

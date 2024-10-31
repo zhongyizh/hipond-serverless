@@ -90,23 +90,6 @@ Page({
 				titleLength: inputTitle.length,
 				titleDisabled: isOverLimit
 			});
-			// if (titleLength < 25) {
-			// 	this.data[widgetId] = res.detail.value;
-			// 	this.setData({
-			// 		titleLength: titleLength,
-			// 		titleDisabled: disabled
-			// 	});
-			// } else {
-			// 	this.data[widgetId] = res.detail.value.substring(0, 25);
-			// 	this.setData({
-			// 		titleDisabled: disabled
-			// 	});
-			// 	wx.showToast({
-			// 		title: '最多输入25字',
-			// 		icon: 'none',
-			// 		duration: 500
-			// 	});
-			// }
 		}
 		catch {
 			console.log("❌ new-post-listing: upload(): Unrecognized Input Box id");
