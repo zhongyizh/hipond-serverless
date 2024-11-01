@@ -52,6 +52,7 @@ page {
 	white-space: normal;
 	line-height: 1.5em; 
 	max-height: 3em; 
+	word-break: break-all;
 	/* padding-right: 39px; */
 }
 

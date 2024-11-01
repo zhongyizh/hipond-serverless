@@ -45,6 +45,7 @@
 .title-row {
 	width: 100%;
 	padding-bottom: 20rpx;
+	word-break: break-all;
 }
 
 .post-text {
@@ -143,6 +144,8 @@
 	letter-spacing: 5%;
 	line-height: 21px;
 	margin-top: 8px;
+	text-overflow: ellipsis;
+	word-break: break-all;
 }
 
 /* Post Location */
@@ -218,10 +221,6 @@
 	color: #486361;
 }
 
-
-
-
-
 .comments-section {
 	border-top: 1px solid #DAECEB;
 	margin-left: 4%;
@@ -254,7 +253,6 @@
 	margin-right: 0%;
 	gap: 5px;
 	padding-top: 10rpx;
-	/* padding-bottom: 10rpx; */
 }
 
 .comment-info-container {
@@ -316,7 +314,6 @@
 }
 
 .cmt-like-number {
-	/* margin-top: 10rpx; */
 	font-size: 9px;
 	color: #666;
 	display: flex;
@@ -347,7 +344,6 @@
 	display: flex;
 	align-items: center;
 	padding-left: 40px;
-	/* margin-left: 65%; */
 }
 
 .nested-replies {
@@ -505,7 +501,6 @@
 	margin: 0 6px 2px 6px;
 }
 
-
 .view-count-container, .save-count-container, .comment-count-container, .edit-container, .delete-container {
     display: flex;
     align-content: center;
@@ -590,18 +585,6 @@
 	float: right;
 	margin-bottom: 20px;
 	margin-left: 85%;
-	/* position: relative;
-
-	text-align: center;
-	align-items: center;
-	right: 10px;
-	bottom: 10px;
-	background-color: #85E4DC;
-	color: white;
-	border: none;
-	border-radius: 5px;
-	padding-right: 15px;
-	font-size: 16px; */
 }
 
 .modal {
