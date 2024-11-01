@@ -7,12 +7,6 @@
 	padding: 0rpx 8rpx 0rpx 8rpx;
 }
 
-/* .upload-wrapper {
-	padding-top: 25rpx;
-	padding-left: 25rpx;
-	width: 300%;
-} */
-
 .upload-component {
 	--td-upload-add-bg-color: #EEF7F6;
 	--td-upload-add-color: #A4C5C2;
@@ -40,7 +34,6 @@
 	width: 100%;
 	background-color: #EEF7F6;
 	border-radius: 25rpx;
-	/* margin-right: 4%; */
 	margin-left: 4%;
 	align-items: center;
 }
@@ -50,7 +43,6 @@
 	padding-right: 16rpx;
 	width: 100%;
 	font-size: 17px;
-	/* color: #BBDAD7; */
 }
 
 .title-input::placeholder {
@@ -83,10 +75,6 @@
 	height: 500rpx;
 	padding: 8rpx;
 	font-size: 13px !important;
-	/* height: 500rpx;
-	width: 100%;
-	padding-top: 10px;
-	font-size: 13px !important; */
 }
 
 .word-count-wrapper {
