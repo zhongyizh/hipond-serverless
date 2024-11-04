@@ -107,7 +107,7 @@ async function editPost(newPostData) {
 	console.log("⏳ post.service.js: editPost(): Optimizing Image Uploads: (filesToKeep, filesToAdd, filesToDelete) = ", filesToKeep, filesToAdd, filesToDelete);
 	// 从数据库中清除掉要被删除的图片
 	if (filesToDelete.size > 0) {
-		await wx.cloud.deleteFile({ 
+		await wx.cloud.deleteFile({
 			fileList: Array.from(filesToDelete)
 		});
 		console.log("🚮 post.service.js: editPost(): Successfully Deleted Old Post Images");

@@ -59,13 +59,13 @@ async function getPaginatedPosts(limit, lastPostDate) {
 	})
 }
 
-async function getPostDisplayData(limit, lastPostDate) {
+async function getPostDisplayData(limit = 20, offset = 0) {
 	return new Promise((resolve, reject) => {
 		wx.cloud.callFunction({
 			name: 'getPostDisplayData',
 			data: {
 				limit: limit,
-				lastPostDate: lastPostDate
+				offset: offset
 			},
 			success: res => {
 				resolve(res.result);
