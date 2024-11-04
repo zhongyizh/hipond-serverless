@@ -40,6 +40,25 @@ async function getLatestPosts(limit, lastPostDate) {
 	})
 }
 
+async function getPaginatedPosts(limit, lastPostDate) {
+	return new Promise((resolve, reject) => {
+		wx.cloud.callFunction({
+			name: 'getPaginatedPosts',
+			data: {
+				limit: limit,
+				lastPostDate: lastPostDate
+			},
+			success: res => {
+				resolve(res.result);
+			},
+			fail: err => {
+				console.error(err)
+				reject(err);
+			}
+		})
+	})
+}
+
 async function getPostDisplayData(limit, lastPostDate) {
 	return new Promise((resolve, reject) => {
 		wx.cloud.callFunction({
@@ -133,6 +152,7 @@ module.exports = {
 	getUserInfo,
 	getMyUserInfo,
 	getLatestPosts,
+	getPaginatedPosts,
 	getPostDisplayData,
 	getPostTitleFromBody,
 	getComments,

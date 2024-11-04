@@ -1,5 +1,5 @@
 // pages/tab-bar/index/index.js
-import { getLatestPosts, getPostDisplayData } from '../../../utils/util'
+import { getLatestPosts, getPaginatedPosts } from '../../../utils/util'
 
 Page({
 	data: {
@@ -17,7 +17,6 @@ Page({
 		}
 	},
 	onShow() {
-		console.log("Index Page onShow")
 		this.getPostList()
 	},
 	onReachBottom() {
@@ -52,7 +51,7 @@ Page({
 			list: [...this.data.list, ...newPostData]
 		})
 		// 获取分页加载的贴子，发贴时间小于当前最后一篇贴子的时间
-		const morePostData = await getPostDisplayData(this.data.maxLimit, lastPostDate)
+		const morePostData = await getPaginatedPosts(this.data.maxLimit, lastPostDate)
 		this.setData({
 			list: [...this.data.list, ...morePostData]
 		})
