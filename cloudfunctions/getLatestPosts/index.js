@@ -13,7 +13,7 @@ exports.main = async (event, context) => {
 	const result = await db.collection('posts').aggregate()
 		.match({
 			isImgChecked: true,
-			postDate: _.lt(lastPostDate)
+			postDate: _.gt(lastPostDate)
 		})
 		.lookup({
 			from: 'userInfo',

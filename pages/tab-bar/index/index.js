@@ -1,12 +1,11 @@
 // pages/tab-bar/index/index.js
-import { getPostDisplayData } from '../../../utils/util'
+import { getLatestPosts, getPostDisplayData } from '../../../utils/util'
 
 Page({
 	data: {
 		list: [],
 		currentTabbarIndex: 0,
 		maxLimit: 20,
-		offset: 0,
 		currentPostsCount: 0
 	},
 	onLoad() {
@@ -18,6 +17,7 @@ Page({
 		}
 	},
 	onShow() {
+		console.log("Index Page onShow")
 		this.getPostList()
 	},
 	onReachBottom() {
@@ -33,23 +33,31 @@ Page({
 		const needRefresh = this.data.currentPostsCount > total
 		if (needRefresh) {
 			this.setData({
-				list: [],
-				offset: 0
+				list: []
 			})
 		}
 		this.setData({
 			currentPostsCount: total
 		})
-		const isEnd = this.data.offset >= total
-		if (!isEnd) {
-			const postData = await getPostDisplayData(this.data.maxLimit, this.data.offset)
-			const currentLength = postData.length
-			const newOffset = this.data.offset + currentLength
-			this.setData({
-				list: [...this.data.list, ...postData],
-				offset: newOffset
-			})
+		const postList = this.data.list
+		let latestPostDate = Date.now()
+		let lastPostDate = Date.now()
+		if (postList.length > 0) {
+			latestPostDate = postList[0].postDate
+			lastPostDate = postList[postList.length - 1].postDate
 		}
+		const newPostData = await getLatestPosts(this.data.maxLimit, latestPostDate)
+		this.setData({
+			list: [...this.data.list, ...newPostData]
+		})
+		console.log("Index page get latest posts latestPostDate = " + latestPostDate)
+		console.log("Index page get latest posts postData.length = " + newPostData.length)
+		const morePostData = await getPostDisplayData(this.data.maxLimit, lastPostDate)
+		this.setData({
+			list: [...this.data.list, ...morePostData]
+		})
+		console.log("Index page get posts lastPostDate = " + lastPostDate)
+		console.log("Index page get posts postData.length = " + morePostData.length)
 	},
 	navigateToDetail(event) {
 		const postIndex = event.currentTarget.dataset.index

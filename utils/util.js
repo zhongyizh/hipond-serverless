@@ -21,14 +21,32 @@ function getMyUserInfo(userid) {
 	})
 }
 
+async function getLatestPosts(limit, lastPostDate) {
+	return new Promise((resolve, reject) => {
+		wx.cloud.callFunction({
+			name: 'getLatestPosts',
+			data: {
+				limit: limit,
+				lastPostDate: lastPostDate
+			},
+			success: res => {
+				resolve(res.result);
+			},
+			fail: err => {
+				console.error(err)
+				reject(err);
+			}
+		})
+	})
+}
 
-async function getPostDisplayData(limit = 20, offset = 0) {
+async function getPostDisplayData(limit, lastPostDate) {
 	return new Promise((resolve, reject) => {
 		wx.cloud.callFunction({
 			name: 'getPostDisplayData',
 			data: {
 				limit: limit,
-				offset: offset
+				lastPostDate: lastPostDate
 			},
 			success: res => {
 				resolve(res.result);
@@ -115,6 +133,7 @@ function throttle(func, delay) {
 module.exports = {
 	getUserInfo,
 	getMyUserInfo,
+	getLatestPosts,
 	getPostDisplayData,
 	getPostTitleFromBody,
 	getComments,
