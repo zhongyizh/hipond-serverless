@@ -24,7 +24,6 @@ async function createPost(newPostData) {
 		console.log("✅ post.service.js: createPost(): Image Security Compliance Check TraceId for " + fileId + " is " + traceId);
 	}
 	// 第三步：更新帖子，添加图片URL
-	console.log("⏳ post.service.js: createPost(): Updating the New Images in database...");
 	const updateResult = await new Promise((resolve, reject) => {
 		db.collection("posts").doc(newPostId).update({
 			data: { imageUrls: newImgUrls },
@@ -32,6 +31,7 @@ async function createPost(newPostData) {
 			fail: err => reject(err)
 		});
 	});
+	console.log("⏳ post.service.js: createPost(): Update new images result: " + updateResult.stats.updated);
 	return updateResult;
 }
 
@@ -107,7 +107,7 @@ async function editPost(newPostData) {
 	console.log("⏳ post.service.js: editPost(): Optimizing Image Uploads: (filesToKeep, filesToAdd, filesToDelete) = ", filesToKeep, filesToAdd, filesToDelete);
 	// 从数据库中清除掉要被删除的图片
 	if (filesToDelete.size > 0) {
-		await wx.cloud.deleteFile({
+		await wx.cloud.deleteFile({ 
 			fileList: Array.from(filesToDelete)
 		});
 		console.log("🚮 post.service.js: editPost(): Successfully Deleted Old Post Images");

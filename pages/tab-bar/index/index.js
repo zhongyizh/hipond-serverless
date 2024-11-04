@@ -29,7 +29,7 @@ Page({
 			isImgChecked: true
 		}).count()
 		const total = countResult.total
-		// 删除贴子后需要刷新
+		// 通过贴子总数判断是否有贴子被删除，删除贴子后需要刷新
 		const needRefresh = this.data.currentPostsCount > total
 		if (needRefresh) {
 			this.setData({
@@ -46,18 +46,16 @@ Page({
 			latestPostDate = postList[0].postDate
 			lastPostDate = postList[postList.length - 1].postDate
 		}
+		// 获取最新的贴子，发贴时间大于当前第一篇贴子的时间
 		const newPostData = await getLatestPosts(this.data.maxLimit, latestPostDate)
 		this.setData({
 			list: [...this.data.list, ...newPostData]
 		})
-		console.log("Index page get latest posts latestPostDate = " + latestPostDate)
-		console.log("Index page get latest posts postData.length = " + newPostData.length)
+		// 获取分页加载的贴子，发贴时间小于当前最后一篇贴子的时间
 		const morePostData = await getPostDisplayData(this.data.maxLimit, lastPostDate)
 		this.setData({
 			list: [...this.data.list, ...morePostData]
 		})
-		console.log("Index page get posts lastPostDate = " + lastPostDate)
-		console.log("Index page get posts postData.length = " + morePostData.length)
 	},
 	navigateToDetail(event) {
 		const postIndex = event.currentTarget.dataset.index
