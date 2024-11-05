@@ -7,6 +7,7 @@ Page({
 		currentTabbarIndex: 0,
 		maxLimit: 20,
 		currentPostsCount: 0,
+		latestPostDate: Date.now(),
 		isEnd: false
 	},
 	onLoad() {
@@ -41,17 +42,15 @@ Page({
 			currentPostsCount: total
 		})
 		const postList = this.data.list
-		let latestPostDate = Date.now()
-		let lastPostDate = Date.now()
-		if (postList.length > 0) {
-			latestPostDate = Math.max(postList[0].postDate, postList[postList.length - 1].postDate)
-			lastPostDate = postList[postList.length - 1].postDate
-		}
+		let lastPostDate = postList.length > 0 ? postList[postList.length - 1].postDate : Date.now()
 		// 获取最新的贴子，发贴时间大于当前最新的贴子的时间
-		const newPostData = await getLatestPosts(this.data.maxLimit, latestPostDate)
-		this.setData({
-			list: [...this.data.list, ...newPostData]
-		})
+		const newPostData = await getLatestPosts(this.data.maxLimit, this.data.latestPostDate)
+		if (newPostData.length > 0) {
+			this.setData({
+				list: [...this.data.list, ...newPostData],
+				latestPostDate: newPostData[0].postData
+			})
+		}
 		// 获取分页加载的贴子，发贴时间小于当前最后一篇贴子的时间
 		if (!this.data.isEnd) {
 			const morePostData = await getPaginatedPosts(this.data.maxLimit, lastPostDate)
