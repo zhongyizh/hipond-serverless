@@ -6,7 +6,8 @@ Page({
 		list: [],
 		currentTabbarIndex: 0,
 		maxLimit: 20,
-		currentPostsCount: 0
+		currentPostsCount: 0,
+		isEnd: false
 	},
 	onLoad() {
 		if(typeof this.getTabBar === 'function' &&
@@ -32,7 +33,8 @@ Page({
 		const needRefresh = this.data.currentPostsCount > total
 		if (needRefresh) {
 			this.setData({
-				list: []
+				list: [],
+				isEnd: false
 			})
 		}
 		this.setData({
@@ -42,19 +44,22 @@ Page({
 		let latestPostDate = Date.now()
 		let lastPostDate = Date.now()
 		if (postList.length > 0) {
-			latestPostDate = postList[0].postDate
+			latestPostDate = Math.max(postList[0].postDate, postList[postList.length - 1].postDate)
 			lastPostDate = postList[postList.length - 1].postDate
 		}
-		// 获取最新的贴子，发贴时间大于当前第一篇贴子的时间
+		// 获取最新的贴子，发贴时间大于当前最新的贴子的时间
 		const newPostData = await getLatestPosts(this.data.maxLimit, latestPostDate)
 		this.setData({
 			list: [...this.data.list, ...newPostData]
 		})
 		// 获取分页加载的贴子，发贴时间小于当前最后一篇贴子的时间
-		const morePostData = await getPaginatedPosts(this.data.maxLimit, lastPostDate)
-		this.setData({
-			list: [...this.data.list, ...morePostData]
-		})
+		if (!this.data.isEnd) {
+			const morePostData = await getPaginatedPosts(this.data.maxLimit, lastPostDate)
+			this.setData({
+				list: [...this.data.list, ...morePostData],
+				isEnd: morePostData.length < this.data.maxLimit
+			})
+		}
 	},
 	navigateToDetail(event) {
 		const postIndex = event.currentTarget.dataset.index
