@@ -33,7 +33,7 @@ Page({
         menuButtonWidth: 0,
         isEditBTNEnabled: false,
         isDeleteBTNEnabled: false,
-        saveButtonUrl: "/image/not_saved_button.png",
+        saveButtonUrl: "/image/not_saved_button.svg",
         postSaved: false,
         showDialog: false,
         conditionDescription: "",
@@ -52,7 +52,8 @@ Page({
         offset: 0,
         currentPostsCount: 0,
         pageurl: "",
-        commentCounts: 0
+        commentCounts: 0,
+        keyboardHeight: 0
     },
 
 	onLoad(options) {
@@ -88,7 +89,7 @@ Page({
 				if (res.result) {
 					this.setData({
                         postSaved: res.result,
-                        saveButtonUrl: "/image/saved_button.png",
+                        saveButtonUrl: "/image/saved_button.svg",
                         "postData.saveCount": this.data.postData.saveCount + 1
 					})
 				}
@@ -120,6 +121,18 @@ Page({
             methodOfDeliver: "Unknown"
           })
         }
+        wx.onKeyboardHeightChange(res => {
+            if (res.height > 0) {
+                this.setData({
+                    keyboardHeight: res.height
+                });
+            } else {
+                // 键盘收起时重置高度
+                this.setData({
+                    keyboardHeight: 0
+                });
+            }
+        });
         
 	},
 	parseDate(date) {
@@ -185,57 +198,57 @@ Page({
         const cmtrId = event.currentTarget.dataset.userid;
         const currentComment = this.data.comments[commentIndex]
 
-        const displayRepliesFn = throttle(async (event) => {
-            // Set loading state to true for the current comment
-            const updatedComments = [...this.data.comments];
-            updatedComments[commentIndex].isLoadingReplies = true;
-            this.setData({
-                comments: updatedComments
-            });
-      
-            try {
-                const countResult = await db.collection('comments').where({
-                    postId: this.data.postData._id,
-                    parent: cmtId
-                }).count();
-                const total = countResult.total;
-                const isEnd = currentComment.replyOffset >= total;
-                const loadlimit = 5;
-        
-                if (!isEnd) {
-                    const postReplies = await getReplies(cmtId, cmtrId, loadlimit, currentComment.replyOffset);
-                    const currentLength = postReplies.length;
-                    const newOffset = currentComment.replyOffset + currentLength;
-                    const replies = postReplies.map(reply => ({
+        if (currentComment.isLoadingReplies) {
+            console.log(`Comment ${cmtId} is already loading replies`);
+            return;
+        }
+        let updatedComments = JSON.parse(JSON.stringify(this.data.comments));
+        updatedComments[commentIndex].isLoadingReplies = true;
+        this.setData({
+            comments: updatedComments
+        });
+    
+        try {
+            const countResult = await db.collection('comments').where({
+                postId: this.data.postData._id,
+                parent: cmtId
+            }).count();
+            const total = countResult.total;
+            const isEnd = currentComment.replyOffset >= total;
+            const loadlimit = 5;
+    
+            if (!isEnd) {
+                const postReplies = await getReplies(cmtId, cmtrId, loadlimit, currentComment.replyOffset);
+                const currentLength = postReplies.length;
+                const newOffset = currentComment.replyOffset + currentLength;
+                const replies = postReplies.map(reply => ({
                     ...reply,
                     formatDate: this.parseDate(reply.postDate)
-                    }));
-        
-                    // Update the comment's replies and offset
-                    updatedComments[commentIndex] = {
-                    ...this.data.comments[commentIndex],
-                    replies: [...this.data.comments[commentIndex].replies, ...replies],
+                }));
+    
+                // Update the comment's replies and offset
+                updatedComments = JSON.parse(JSON.stringify(this.data.comments));
+                updatedComments[commentIndex] = {
+                    ...updatedComments[commentIndex],
+                    replies: [...updatedComments[commentIndex].replies, ...replies],
                     replyOffset: newOffset,
                     showReplies: true,
                     isLoadingReplies: false // Stop loading
-                    };
-                } else {
-                    updatedComments[commentIndex].isLoadingReplies = false; // No more replies to load
-                }
-                this.setData({
-                    comments: updatedComments
-                });
-            } catch (error) {
-                console.error('Error fetching replies:', error);
-                // Reset loading state in case of error
-                updatedComments[commentIndex].isLoadingReplies = false;
-                this.setData({
-                    comments: updatedComments
-                });
+                };
+            } else {
+                updatedComments[commentIndex].isLoadingReplies = false; // No more replies to load
             }
-        }, 2000); // Wait 2 seconds
-        // Call the throttled function
-        displayRepliesFn(event);
+            this.setData({
+                comments: updatedComments
+            });
+        } catch (error) {
+            console.error('Error fetching replies:', error);
+            // Reset loading state in case of error
+            updatedComments[commentIndex].isLoadingReplies = false;
+            this.setData({
+                comments: updatedComments
+            });
+        }
     },
     countComments: function(postId) {
         wx.cloud.callFunction({
@@ -499,7 +512,7 @@ Page({
     savePost() {
 		if (!this.data.postSaved) {
 			this.setData({
-				saveButtonUrl: "/image/saved_button.png",
+				saveButtonUrl: "/image/saved_button.svg",
 				postSaved: true,
 				"postData.saveCount": this.data.postData.saveCount + 1
 			})
@@ -530,7 +543,7 @@ Page({
 			})
 		} else {
 			this.setData({
-				saveButtonUrl: "/image/not_saved_button.png",
+				saveButtonUrl: "/image/not_saved_button.svg",
 				postSaved: false,
 				"postData.saveCount": this.data.postData.saveCount - 1
 			})
@@ -739,6 +752,7 @@ Page({
     },
 
     hideReplyOptions: function(event) {
+        wx.hideKeyboard();
         this.setData({
             showInput: false,
             parent: null,
