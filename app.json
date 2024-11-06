@@ -17,9 +17,7 @@
 	],
 	"window": {
 		"navigationBarTextStyle": "black",
-		"navigationStyle": "custom",
-		"enableShareAppMessage": true,
-		"enableShareTimeline": true
+		"navigationStyle": "custom"
 	},
 	"tabBar": {
 		"custom": true,

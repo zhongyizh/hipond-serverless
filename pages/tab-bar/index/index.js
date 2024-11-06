@@ -1,13 +1,14 @@
 // pages/tab-bar/index/index.js
-import { getPostDisplayData } from '../../../utils/util'
+import { getLatestPosts, getPaginatedPosts } from '../../../utils/util'
 
 Page({
 	data: {
 		list: [],
 		currentTabbarIndex: 0,
 		maxLimit: 20,
-		offset: 0,
-		currentPostsCount: 0
+		currentPostsCount: 0,
+		latestPostDate: Date.now(),
+		isEnd: false
 	},
 	onLoad() {
 		if(typeof this.getTabBar === 'function' &&
@@ -29,25 +30,33 @@ Page({
 			isImgChecked: true
 		}).count()
 		const total = countResult.total
-		// 删除贴子后需要刷新
+		// 通过贴子总数判断是否有贴子被删除，删除贴子后需要刷新
 		const needRefresh = this.data.currentPostsCount > total
 		if (needRefresh) {
 			this.setData({
 				list: [],
-				offset: 0
+				isEnd: false
 			})
 		}
 		this.setData({
 			currentPostsCount: total
 		})
-		const isEnd = this.data.offset >= total
-		if (!isEnd) {
-			const postData = await getPostDisplayData(this.data.maxLimit, this.data.offset)
-			const currentLength = postData.length
-			const newOffset = this.data.offset + currentLength
+		const postList = this.data.list
+		let lastPostDate = postList.length > 0 ? postList[postList.length - 1].postDate : Date.now()
+		// 获取最新的贴子，发贴时间大于当前最新的贴子的时间
+		const newPostData = await getLatestPosts(this.data.maxLimit, this.data.latestPostDate)
+		if (newPostData.length > 0) {
 			this.setData({
-				list: [...this.data.list, ...postData],
-				offset: newOffset
+				list: [...this.data.list, ...newPostData],
+				latestPostDate: newPostData[0].postData
+			})
+		}
+		// 获取分页加载的贴子，发贴时间小于当前最后一篇贴子的时间
+		if (!this.data.isEnd) {
+			const morePostData = await getPaginatedPosts(this.data.maxLimit, lastPostDate)
+			this.setData({
+				list: [...this.data.list, ...morePostData],
+				isEnd: morePostData.length < this.data.maxLimit
 			})
 		}
 	},
