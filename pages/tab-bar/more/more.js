@@ -73,5 +73,9 @@ Page({
 				})
 			}
 		})
+	},
+
+	contactService(){
+		console.log("客服")
 	}
 })
