@@ -20,8 +20,7 @@ Page({
 	},
 
 	privacyPage() {
-		wx.openPrivacyContract({
-		  })
+		wx.openPrivacyContract({})
 	},
 
 	copyOfficialSite() {
@@ -75,7 +74,14 @@ Page({
 		})
 	},
 
-	contactService(){
+	contactService() {
 		console.log("客服")
+		wx.openCustomerServiceChat({
+			extInfo: {
+				url: 'https://work.weixin.qq.com/kfid/kfc54ad60c34a469304'
+			},
+			corpId: 'ww1c8710cb10bd5410',
+			success(res) {}
+		})
 	}
 })
