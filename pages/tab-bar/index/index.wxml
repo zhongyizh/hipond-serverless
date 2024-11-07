@@ -22,7 +22,7 @@
                 <view class="price-tag-label">${{item.price}}</view>
               </view>
               <view class="view-count-container" wx:if="{{!item.price}}">
-                <image class="view-count-image" src="/image/view-count.svg"></image>
+                <image class="view-count-image" src="/image/view_count_index.svg"></image>
                 <text>{{item.viewCount}}</text>
               </view>
             </view>
