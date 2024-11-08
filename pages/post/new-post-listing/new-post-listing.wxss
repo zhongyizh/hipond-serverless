@@ -123,7 +123,6 @@
   align-items: center;
 }
 
-
 checkbox .wx-checkbox-input {
 	width: 28rpx;
 	height: 28rpx;
@@ -210,9 +209,6 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
     justify-content: center;
 }
 
-
-
-  
 .submit-button {
 	border-radius: 50rpx;
 	background-color: #85e4dc;	

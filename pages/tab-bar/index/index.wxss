@@ -43,7 +43,6 @@ page {
 }
 
 .content-title-box {
-	/* position: relative; */
 	display: -webkit-box;
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 2; 
@@ -52,14 +51,13 @@ page {
 	white-space: normal;
 	line-height: 1.5em; 
 	max-height: 3em; 
-	/* padding-right: 39px; */
+	word-break: break-all;
 }
 
 .profile-text {
 	display: flex;
 	flex-direction: row;
 	padding-top: 6px;
-	/* justify-content: center; */
 	align-items: center;
 }
 

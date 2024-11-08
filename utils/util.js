@@ -21,6 +21,43 @@ function getMyUserInfo(userid) {
 	})
 }
 
+async function getLatestPosts(limit, lastPostDate) {
+	return new Promise((resolve, reject) => {
+		wx.cloud.callFunction({
+			name: 'getLatestPosts',
+			data: {
+				limit: limit,
+				lastPostDate: lastPostDate
+			},
+			success: res => {
+				resolve(res.result);
+			},
+			fail: err => {
+				console.error(err)
+				reject(err);
+			}
+		})
+	})
+}
+
+async function getPaginatedPosts(limit, lastPostDate) {
+	return new Promise((resolve, reject) => {
+		wx.cloud.callFunction({
+			name: 'getPaginatedPosts',
+			data: {
+				limit: limit,
+				lastPostDate: lastPostDate
+			},
+			success: res => {
+				resolve(res.result);
+			},
+			fail: err => {
+				console.error(err)
+				reject(err);
+			}
+		})
+	})
+}
 
 async function getPostDisplayData(limit = 20, offset = 0) {
 	return new Promise((resolve, reject) => {
@@ -51,7 +88,8 @@ async function getComments(postId, limit, offset) {
 				offset: offset
 			},
 			success: res => {
-				resolve(res.result);
+				console.log(res.result.commentsWithLikes)
+				resolve(res.result.commentsWithLikes);
 			},
 			fail: err => {
 				console.error(err)
@@ -72,7 +110,8 @@ async function getReplies(cmtId, cmtrId, limit, offset) {
 				offset: offset
 			},
 			success: res => {
-				resolve(res.result);
+				console.log(res.result.commentsWithLikes)
+				resolve(res.result.commentsWithLikes);
 			},
 			fail: err => {
 				console.error(err)
@@ -83,7 +122,6 @@ async function getReplies(cmtId, cmtrId, limit, offset) {
 }
 
 function getPostTitleFromBody(body, length = 24) {
-	// TODO: 好像有一些中文符号没匹配？或者是不用匹配？
 	// 取正文的前一部分作为标题，匹配中文、英文、数字和常见中英文标点符号
 	const pattern = /^[\u4e00-\u9fa5\w\d\s,.?!:;，。？！：；—-‘’“”"()（）【】《》<>【】「」]+/;
 	const match = body.match(pattern);
@@ -99,11 +137,25 @@ function getPostTitleFromBody(body, length = 24) {
 	return title
 }
 
+function throttle(func, delay) {
+	let lastCall = 0;
+	return function(...args) {
+		const now = new Date().getTime();
+		if (now - lastCall >= delay) {
+			lastCall = now;
+			func.apply(this, args);
+		}
+	};
+}
+
 module.exports = {
 	getUserInfo,
 	getMyUserInfo,
+	getLatestPosts,
+	getPaginatedPosts,
 	getPostDisplayData,
 	getPostTitleFromBody,
 	getComments,
-	getReplies
+	getReplies,
+	throttle
 }

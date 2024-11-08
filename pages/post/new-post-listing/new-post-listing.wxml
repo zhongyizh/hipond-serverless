@@ -78,7 +78,6 @@
   <view class="body-text-container">
     <t-textarea class="body-text-textarea" id="body" value="{{body}}" maxlength="200" placeholder="留下更详细的交易细节和物品信息…" placeholder-style="color: #DAECEB; font-size: 26rpx;" bind:change="inputText" disableDefaultPadding="{{true}}" show-confirm-bar />
   </view>
-  <!-- TODO: 添加位置 -->
   <view class="location-container">
     <view class="location-text-wrapper">
       <image wx:if="{{postLocation}}" src="/image/location_icon_light.png" class="location-icon"></image>
