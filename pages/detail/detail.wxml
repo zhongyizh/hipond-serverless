@@ -48,7 +48,7 @@
   </view>
 </view>
 <view wx:if="{{postData.postLocation}}" class="post-location">
-  <image src="/image/location_icon.png" class="location-icon" /> <!-- Add your location icon -->
+  <image src="/image/location_icon.png" class="location-icon" />
   <text>{{postData.postLocation}}</text>
 </view>
 
@@ -68,7 +68,6 @@
 
 <!-- Comment Area -->
 <view class="comments-section">
-  <!-- <view class="horizontal-divider"></view> -->
   <view class="cmt-title">评论</view>
   <view wx:if="{{commentCounts == 0}}" class="empty-comment">这里空空如也~</view>
   <!-- Loop through the list of comments -->

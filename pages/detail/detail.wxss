@@ -135,7 +135,6 @@
 	font-size: 24rpx;
 }
 
-/* Post Body */
 .post-body {
 	align-self: flex-start;
 	font-size: 13px;
@@ -148,7 +147,6 @@
 	word-break: break-all;
 }
 
-/* Post Location */
 .post-location {
 	background-color: #EEF7F6;
 	color: #08605F;
@@ -170,7 +168,6 @@
 	height: 21.14rpx;
   }
 
-/* User Information */
 .user-info {
 	display: flex;
 	align-items: center;
@@ -358,7 +355,6 @@
 	padding-top: 10rpx;
 }
 
-/* Toolbar */
 .bottom-toolbar {
 	position: fixed;
 	bottom: 0;
@@ -545,7 +541,6 @@
 	min-height: 40px;
 	max-height: 120px;
 	overflow-y: auto;
-	/* background-color: #EEF7F6 !important; */
 	--td-textarea-background-color: #EEF7F6;
 	padding: 8px;
 	border: none;
