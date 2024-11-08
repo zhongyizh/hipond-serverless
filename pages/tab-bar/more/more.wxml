@@ -10,9 +10,9 @@
 
 
   <view class="line-container">
-    <text class="left-text">官方网址</text>
+    <text class="left-text">官方网站</text>
     <view class="right-container">
-      <text class="right-text">https://hipond.cc/</text>
+      <text class="right-text" bind:tap="copyOfficialSite" >https://hipond.cc/</text>
       <t-icon name="copy" size="40rpx" bind:tap="copyOfficialSite" color="#9CA0A0" />
     </view>
   </view>
@@ -20,7 +20,7 @@
   <view class="line-container">
     <text class="left-text">商务合作</text>
     <view class="right-container">
-      <text class="right-text">info@hipond.cc</text>
+      <text class="right-text" bind:tap="copyOfficialEmail">contact@hipond.cc</text>
       <t-icon  name="copy" size="40rpx" data-name="copy" bind:tap="copyOfficialEmail" color="#9CA0A0" />
     </view>
   </view>
@@ -28,7 +28,7 @@
   <view class="line-container">
     <text class="left-text">我们的小红书</text>
     <view class="right-container">
-      <text class="right-text">9615091209</text>
+      <text class="right-text" bind:tap="copyRedAccount">9615091209</text>
       <t-icon  name="copy" size="40rpx" data-name="copy" bind:tap="copyRedAccount" color="#9CA0A0" />
     </view>
   </view>
