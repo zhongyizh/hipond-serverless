@@ -70,7 +70,7 @@
 <view class="comments-section">
   <!-- <view class="horizontal-divider"></view> -->
   <view class="cmt-title">评论</view>
-  <view wx:if="{{commentCounts == 0}}" class="empty-comment">这里空空如也~</view>
+  <view wx:if="{{commentCounts == 0}}" class="empty-comment">- 这里空空如也 -</view>
   <!-- Loop through the list of comments -->
   <block wx:for="{{comments}}" wx:key="commentId">
     <view class="comment-item">
@@ -130,6 +130,7 @@
       </view>
     </block>
   </block>
+  <view wx:if="{{commentCounts != 0}}" class="end-comment">- THE END -</view>
 </view>
 
 <!-- Toolbar -->
