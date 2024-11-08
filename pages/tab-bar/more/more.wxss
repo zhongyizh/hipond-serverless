@@ -1,34 +1,87 @@
 /* pages/tab-bar/more/more.wxss */
+page {
+	background: #F8F8F8;
+}
+
 .container {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	background-color: #fff;
+	padding-bottom: 0%;
 }
-.contact-line-1 {
-	color: #85E4DC;
+
+.name-text {
+	margin-top: 5%;
+	color: #000;
 	text-align: center;
-	font-size: 50rpx;
+	font-family: Arial;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+}
+
+.version-info {
+	margin-top: 42rpx;
+	color: var(--Grey-04, #9CA0A0);
+	text-align: center;
+	font-family: Arial;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+	margin-bottom: 8%;
+}
+
+.line-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	margin-bottom: 6%;
+}
+
+.left-text {
+	color: #000;
+	text-align: center;
+	font-family: Arial;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+	letter-spacing: 4rpx;
+	margin-left: 4%;
+}
+
+.right-container {
+	display: flex;
+	align-items: center;
+	margin-right: 4%;
+	gap: 8rpx;
+}
+
+.right-text {
+	color: var(--Grey-04, #9CA0A0);
+	text-align: center;
+	font-family: Arial;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+}
+
+.customer-service {
+	margin-top: 4%;
+	background: #fff;
+	padding: 5%;
+	color: var(--Hipond-Cyan, #85E4DC);
+	font-family: Arial;
+	font-size: 16px;
+	font-style: normal;
 	font-weight: 700;
-	top: 45%;
-	position: absolute;
-}
-
-.contact-line-2 {
-	color: #85E4DC;
-	top: 50%;
-	position: absolute;
-	display: flex;
-	flex-direction: row;
-
-}
-
-.contact-line-3 {
-	top: 74%;
-	position: absolute;
-	display: flex;
-	flex-direction: row;
-	align-items: space;
-	justify-content: space-between; 
-	width: 80%;
-
+	line-height: normal;
+	letter-spacing: 10px;
+	text-indent: 10px;
+	text-align: center;
 }
