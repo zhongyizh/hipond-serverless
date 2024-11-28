@@ -18,24 +18,24 @@
 	<view class="form-title-container">
 		<view class="title-input-wrapper">
 			<input class="title-input" 
-                   id="title"
-                   value="{{title}}"
-				   maxlength="25"
-                   placeholder="添加标题"
-                   placeholder-style="color: #BBDAD7; font-size: 28rpx;"
-                   bindinput="inputTitle"
+					id="title"
+					value="{{title}}"
+					placeholder="添加标题"
+					placeholder-style="color: #BBDAD7"
+					bindinput="inputTitle"
 			/>
+			<text class="title-count">{{25-titleLength}}</text>
 		</view>
 	</view>
 	<view class="body-text-container">
-		<t-textarea class="body-text-textarea" 
-                    id="body"
-                    value="{{body}}"
-                    placeholder="你今天过得怎么样？" 
-                    placeholder-style="color: #DAECEB; font-size: 28rpx;"
-					bind:change="inputText"
+		<textarea class="body-text-textarea"
+					id="body"
+					value="{{body}}"
+					maxlength="-1"
+					placeholder="你今天过得怎么样？"
+					placeholder-style="color: #DAECEB; font-size: 13px;"
+					bindinput="inputText"
 		/>
-		
 	</view>
 	<view class="word-count-wrapper">
 		<text class="word-count {{isDisabled ? 'word-count-red' : ''}}">{{textLength}}/1000</text>

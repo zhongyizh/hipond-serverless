@@ -204,6 +204,7 @@ Page({
 			'postDate': Date.now(),
 			'postType': 'selling',
 			'isImgChecked': false,
+			// TODO: 编辑贴子后viewCount会清零
 			'viewCount': 0,
 			'originalPrice': this.data.originalPrice,
 			'postLocation':this.data.postLocation,

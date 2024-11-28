@@ -45,6 +45,7 @@
 .title-row {
 	width: 100%;
 	padding-bottom: 20rpx;
+	word-break: break-all;
 }
 
 .post-text {
@@ -134,7 +135,6 @@
 	font-size: 24rpx;
 }
 
-/* Post Body */
 .post-body {
 	align-self: flex-start;
 	font-size: 13px;
@@ -143,9 +143,10 @@
 	letter-spacing: 5%;
 	line-height: 21px;
 	margin-top: 8px;
+	text-overflow: ellipsis;
+	word-break: break-all;
 }
 
-/* Post Location */
 .post-location {
 	background-color: #EEF7F6;
 	color: #08605F;
@@ -167,7 +168,6 @@
 	height: 21.14rpx;
   }
 
-/* User Information */
 .user-info {
 	display: flex;
 	align-items: center;
@@ -218,10 +218,6 @@
 	color: #486361;
 }
 
-
-
-
-
 .comments-section {
 	border-top: 1px solid #DAECEB;
 	margin-left: 4%;
@@ -239,6 +235,14 @@
 	padding-bottom: 10rpx;
 }
 
+.empty-comment {
+	font-size: 18px;
+	color: #A4C5C2;
+	font-weight: 700;
+	text-align: center;
+	margin-top: 30px;
+}
+
 .comment-item {
 	display: flex;
 	justify-content: start;
@@ -246,7 +250,6 @@
 	margin-right: 0%;
 	gap: 5px;
 	padding-top: 10rpx;
-	padding-bottom: 10rpx;
 }
 
 .comment-info-container {
@@ -281,13 +284,38 @@
 	justify-content: start;
 }
 
-.cmt-date {
+.cmt-header-container {
+	display: flex;
+	justify-content: space-between;  /* Align date to left and like button to right */
+	align-items: center;  /* Vertically center the text */
+}
+
+.cmt-date, .cmt-header {
 	margin-top: 10rpx;
 	font-size: 9px;
 	color: #666;
 	display: flex;
 	align-items: center;
 	padding-left: 15rpx;
+}
+
+.cmt-like-button {
+	width: 15px;
+	height: 15px;
+	background-size: cover;
+	opacity: .5;
+	color: rgba(0,0,0,.5);
+	display: flex;
+	align-items: center;
+	padding-right: 2px;
+}
+
+.cmt-like-number {
+	font-size: 9px;
+	color: #666;
+	display: flex;
+	align-items: center;
+	padding-right: 0px;
 }
 
 .cmt-delete {
@@ -313,7 +341,6 @@
 	display: flex;
 	align-items: center;
 	padding-left: 40px;
-	/* margin-left: 65%; */
 }
 
 .nested-replies {
@@ -324,14 +351,10 @@
 	display: flex;
 	justify-content: start;
 	margin-left: 4%;
-	margin-right: 4%;
 	gap: 5px;
 	padding-top: 10rpx;
-	/* padding-bottom: 10rpx; */
 }
 
-
-/* Toolbar */
 .bottom-toolbar {
 	position: fixed;
 	bottom: 0;
@@ -395,13 +418,14 @@
 
 .toolbar-right {
 	display: flex;
-	flex-direction: row;
 	align-items: center;
 	justify-content: flex-end;
 	text-align: right;
 	margin-top: 2.5%;
+	letter-spacing: 3rpx;
 	margin-right: 5%;
 	margin-left: 5%;
+	height: auto;
 }
 
 .comment-btn {
@@ -434,70 +458,70 @@
 	margin: 0 6px 2px 6px;
 }
 
-.share-btn,
-.save-button {
-	width: 20px;
-	height: 20px;
-	background-size: cover;
-	opacity: .5;
-	color: rgba(0, 0, 0, .5);
-	margin: 0 6px 2px 6px;
-}
-
-.save-count-text {
-	text-align: right;
-	color: #888;
-	font-size: 14px;
-	max-width: 100rpx;
-	max-height: 20px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.view-count-container {
+.toolbar-left {
+	position: fixed;
+	margin-top: 2.5%;
+	left: 0rpx;
 	display: flex;
-	align-content: center;
+	align-items: center; 
+	justify-content: start;
+	letter-spacing: 3rpx;
+	margin-left: 5%;
+	margin-right: 5%;
+}
 
+.view-count-image, .edit-image, .delete-image, .save-btn, .cmt-btn, .share-image {
+	width: 24px;
+	height: 23px;
+	background-size: cover;
+	opacity: .5;
+	color: rgba(0,0,0,.5);
+    margin: 0 6px 0px 6px;
+}
+
+.view-count-container, .save-count-container, .comment-count-container, .edit-container, .delete-container, .share-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 	text-align: right;
 	color: #888;
-	font-size: 14px;
-	max-width: 100rpx;
-	max-height: 20px;
+	font-size: 10px;
+	max-height: 40px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-.view-count-image {
-	width: 20px;
-	height: 20px;
-	background-size: cover;
-	opacity: .5;
-	color: rgba(0, 0, 0, .5);
-	margin: 0 6px 2px 6px;
-}
-
-.edit-btn,
-.delete-btn {
-	font-size: 10pt;
-	color: #727A7A;
-	font-weight: 700;
-	margin: 1px 6px 0px 6px;
+.edit-btn, .delete-btn, .share-btn {
+    font-size: 10px;
+    color: #727A7A;
+    font-weight: 700;
 }
 
 .input-area {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
+	background-color: #FFFFFF;
 	position: fixed;
-	/* top: 0; */
 	bottom: 0;
 	left: 0;
 	width: 100%;
-	height: 100%;
-	align-items: flex-end;
 	z-index: 1000;
-	margin: 6px 6px 1px 6px;
-	/* padding: 10px; */
+	box-shadow:  0px 0px 30px 10px rgba(0,0,0,0.03);
+	transition: bottom 0.45s ease;
+}
+
+.input-container {
+	width: 95%;
+	background-color: #FFFFFF;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding: 12px;
+	flex-direction: column;
+	position: relative;
+	border-radius: 0px;
+	padding-bottom: 30px;
 }
 
 .input-overlay {
@@ -512,30 +536,35 @@
 .input-box {
 	flex: 1;
 	font-size: 16px;
-	border-radius: 5px;
-	border: 1px solid #ccc;
+	border-radius: 25rpx;
 	resize: none;
-	min-height: 50px;
-	max-height: 50px;
+	min-height: 40px;
+	max-height: 120px;
 	overflow-y: auto;
-	/* Allow vertical scroll for longer content */
-	background-color: #fff;
-	text-align: left;
+	--td-textarea-background-color: #EEF7F6;
+	padding: 8px;
+	border: none;
+	box-sizing: border-box;
+	float: left;
+	width: 100%;
 }
 
 .submit-btn {
-	/* position: relative;
-	width: 20%; */
-
-	width: 20%;
-	height: 50px;
-	background-color: #007aff;
+	width: 62px;
+	height: 30px; /* Match the height of the input-box */
+	padding: 0 15px;  /* Add padding for the button */
+	background-color: #85E4DC;
 	color: white;
-	border-radius: 5px;
-	/* margin-left: 10px; */
-	text-align: center;
-	padding-right: 50rpx;
-	/* padding: 10px 15px; */
+	border: none;
+	border-radius: 25rpx;
+	margin-top: 20rpx;
+	font-size: 16px;
+	display: flex;
+	align-items: center;  /* Center text vertically */
+	justify-content: center;  /* Center text horizontally */
+	float: right;
+	margin-bottom: 20px;
+	margin-left: 85%;
 }
 
 .modal {

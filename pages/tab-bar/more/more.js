@@ -2,21 +2,22 @@
 Page({
 	data: {
 		currentTabbarIndex: 4,
-		version: "V0.4.5"
+		version: "体验版"
 	},
+
 	onLoad() {
 		if (typeof this.getTabBar === 'function' && this.getTabBar()) {
 			this.getTabBar().setData({
 				selected: this.data.currentTabbarIndex
 			})
 		}
-
-		const accountInfo = wx.getAccountInfoSync();
-		console.log(accountInfo)
-		// 保留自动显示版本号，仅正式版可用
-		// this.setData({
-		// 	version: accountInfo.miniProgram.version
-		// })
+		
+		const accountInfo = wx.getAccountInfoSync()
+		if (accountInfo.miniProgram.envVersion === 'release') {
+			this.setData({
+				version: 'V' + accountInfo.miniProgram.version
+			})
+		}
 	},
 
 	privacyPage() {
