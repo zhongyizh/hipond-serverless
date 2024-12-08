@@ -3,6 +3,7 @@ import { ListingConditions } from "../../models/posts.model"
 import { deletePost, createComment, deleteComment } from "../../services/post.service"
 import { getComments, getReplies, throttle } from "../../utils/util"
 import { msgSecCheck } from '../../services/security.service'
+import ActionSheet, { ActionSheetTheme } from 'tdesign-miniprogram/action-sheet/index';
 
 const conditionMapping = {
     "全新/仅开箱": "New/Open-Box",
@@ -446,47 +447,48 @@ Page({
         });
     },
     onTapContact() {
-        // TODO: On Hold/已售出
-        const postData = this.data.postData
-        const phone = postData.phone ? '手机号: ' + postData.phone : '';
-        const email = postData.emailAddress ? '邮箱：' + postData.emailAddress : '';
-        const other = postData.otherContact ? '其他联系方式: ' + postData.otherContact: "";
+        const items = [];
+        if (this.data.postData.isPhoneChecked) {
+        items.push({ label: "手机号: " + this.data.postData.phone, suffixIcon: 'copy' });
+        }
+        if (this.data.postData.isEmailChecked) {
+        items.push({ label: "邮箱: " + this.data.postData.emailAddress, suffixIcon: 'copy' });
+        }
+        if (this.data.postData.isOtherContactChecked) 
+        {
+        items.push({ label: "其他: " + this.data.postData.otherContact, suffixIcon: 'copy' });
+        }
+        ActionSheet.show({
+            theme: ActionSheetTheme.List,
+            selector: '#t-action-sheet',
+            context: this,
+            align: 'center',
+            description: '请选择以下一种联系方式咨询卖家（点击一键复制）',
+            items: items,
+          });
+    },
+    handleSelected(e) {
+        const index = e.detail.index; 
         let contact = '';
-        if(!this.data.postData.isOtherContactChecked)
-        {
-        if (this.data.postData.isPhoneChecked && this.data.postData.isEmailChecked) {
-            contact = phone + '\n' + email;
-        } else if (this.data.postData.isPhoneChecked) {
-            contact = phone;
-        } else if (this.data.postData.isEmailChecked) {
-            contact = email;
+
+        if (index === 0) {
+            contact = this.data.postData.phone;
+        } else if (index === 1) {
+            contact = this.data.postData.emailAddress;
+        } else if (index === 2) {
+            contact = this.data.postData.otherContact;
         }
-        }
-        else
-        {
-            if (this.data.postData.isPhoneChecked && this.data.postData.isEmailChecked) {
-                contact = other + '\n' + phone + '\n' + email;
-            } else if (this.data.postData.isPhoneChecked) {
-                contact =  other + '\n' + phone;
-            } else if (this.data.postData.isEmailChecked) {
-                contact =  other + '\n' + email;
-            }
-            else
-            {
-                contact = other
-            }
-        }
-        console.log('成功复制到剪贴板：' + contact)
+
         wx.setClipboardData({
             data: contact,
-            success: function(){
+            success: function () {
                 wx.showToast({
-                    title: '联系方式已复制',  
-                    icon: 'success',    
+                    title: '联系方式已复制',
+                    icon: 'success',
                     duration: 4000,
                 });
             }
-        })
+        });
     },
     conditionButton() {
       const conditionDescriptions = {
