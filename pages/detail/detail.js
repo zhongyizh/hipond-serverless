@@ -468,17 +468,7 @@ Page({
           });
     },
     handleSelected(e) {
-        const index = e.detail.index; 
-        let contact = '';
-
-        if (index === 0) {
-            contact = this.data.postData.phone;
-        } else if (index === 1) {
-            contact = this.data.postData.emailAddress;
-        } else if (index === 2) {
-            contact = this.data.postData.otherContact;
-        }
-
+        let contact = e.detail.selected.label.split(":").slice(1).join(":").trim();
         wx.setClipboardData({
             data: contact,
             success: function () {
