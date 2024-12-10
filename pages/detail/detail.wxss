@@ -384,7 +384,7 @@
 	letter-spacing: 8rpx;
 }
 
-.contact-button-hold {
+/* .contact-button-hold {
 	background-color: #EEF7F6;
 	color: #486361;
 	margin-top: 2.5%;
@@ -414,7 +414,7 @@
 	align-items: center;
 	justify-content: center;
 	letter-spacing: 8rpx;
-}
+} */
 
 .toolbar-right {
 	display: flex;
