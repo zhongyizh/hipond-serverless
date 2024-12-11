@@ -145,3 +145,9 @@ config.py
 
 # node_modules
 node_modules
+miniprogram_npm
+package-lock.json
+package.json
+
+# miniprogram config files
+project.private.config.json
