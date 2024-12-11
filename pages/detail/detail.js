@@ -35,6 +35,8 @@ Page({
         isDeleteBTNEnabled: false,
         saveButtonUrl: "/image/not_saved_button.svg",
         postSaved: false,
+        likeButtonUrl: "/image/not_liked_button.svg",
+        postLiked: false,
         showDialog: false,
         conditionDescription: "",
         confirmBtn: { content: '确定', variant: 'text' },
@@ -78,7 +80,8 @@ Page({
         this.countComments(postData._id)
         // 加载收藏数量
         this.setData({
-            "postData.saveCount": this.data.postData.saveCount ? this.data.postData.saveCount: 0 
+            "postData.saveCount": this.data.postData.saveCount ? this.data.postData.saveCount: 0,
+            "postData.likeCount": this.data.postData.likeCount ? this.data.postData.likeCount: 0 
         })
         wx.cloud.callFunction({
 			name: 'checkSaveStatus',
@@ -90,7 +93,27 @@ Page({
 					this.setData({
                         postSaved: res.result,
                         saveButtonUrl: "/image/saved_button.svg",
-                        "postData.saveCount": this.data.postData.saveCount + 1
+                        // 我感觉这里不需要加一
+                        "postData.saveCount": this.data.postData.saveCount
+					})
+				}
+			},
+			fail: (err) => {
+				console.error(err);
+			}
+        });
+
+        wx.cloud.callFunction({
+			name: 'checkLikeStatus',
+			data: {
+				postId: this.data.postData._id
+			},
+			success: (res) => {
+				if (res.result) {
+					this.setData({
+                        postLiked: res.result,
+                        likeButtonUrl: "/image/liked_button.svg",
+                        "postData.likeCount": this.data.postData.likeCount
 					})
 				}
 			},
@@ -572,7 +595,73 @@ Page({
 				}
 			})
 		}
-	},
+    },
+
+    likePost() {
+		if (!this.data.postLiked) {
+			this.setData({
+				likeButtonUrl: "/image/liked_button.svg",
+				postLiked: true,
+				"postData.likeCount": this.data.postData.likeCount + 1
+			})
+			wx.cloud.callFunction({
+				name: 'likePost',
+				data: {
+					postId: this.data.postData._id
+				},
+				success: function (res) {
+					if (res.result) {
+						wx.showToast({
+							title: '点赞成功',
+							icon: 'success',
+							duration: 1000,
+							mask: true,
+						})
+					}
+				},
+				fail: function (res) {
+					console.log(res)
+					wx.showToast({
+						title: '点赞失败',
+						icon: 'error',
+						duration: 1000,
+						mask: true,
+					})
+				}
+			})
+		} else {
+			this.setData({
+				likeButtonUrl: "/image/not_liked_button.svg",
+				postLiked: false,
+				"postData.likeCount": this.data.postData.likeCount - 1
+			})
+			wx.cloud.callFunction({
+				name: 'likePost',
+				data: {
+					postId: this.data.postData._id
+				},
+				success: function (res) {
+					if (res.result) {
+						wx.showToast({
+							title: '取消点赞成功',
+							icon: 'success',
+							duration: 1000,
+							mask: true,
+						})
+					}
+				},
+				fail: function (res) {
+					wx.showToast({
+						title: '取消点赞失败',
+						icon: 'error',
+						duration: 1000,
+						mask: true,
+					})
+				}
+			})
+		}
+    },
+
     isOwner: async function() {
         // 先获取当前帖子作者的openId
         let authorOpenId = this.data.postData._openid;
