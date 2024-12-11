@@ -69,7 +69,7 @@
 <!-- Comment Area -->
 <view class="comments-section">
   <view class="cmt-title">评论</view>
-  <view wx:if="{{commentCounts == 0}}" class="empty-comment">这里空空如也~</view>
+  <view wx:if="{{commentCounts == 0}}" class="empty-comment">- 这里空空如也 -</view>
   <!-- Loop through the list of comments -->
   <block wx:for="{{comments}}" wx:key="commentId">
     <view class="comment-item">
@@ -129,6 +129,7 @@
       </view>
     </block>
   </block>
+  <view wx:if="{{commentCounts != 0}}" class="end-comment">- THE END -</view>
 </view>
 
 <!-- Toolbar -->
@@ -165,6 +166,10 @@
   </view>
   <!-- Right toolbar for save, comments and share -->
 	<view class="toolbar-right">
+    <view class="like-count-container" bindtap="likePost">
+      <image class="like-btn" src="{{likeButtonUrl}}"> </image>
+      <text>{{postData.likeCount}}</text>
+    </view>
     <view class="save-count-container" bindtap="savePost">
       <image class="save-btn" src="{{saveButtonUrl}}"> </image>
       <text>{{postData.saveCount}}</text>

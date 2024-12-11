@@ -235,8 +235,8 @@
 	padding-bottom: 10rpx;
 }
 
-.empty-comment {
-	font-size: 18px;
+.empty-comment, .end-comment {
+	font-size: 16px;
 	color: #A4C5C2;
 	font-weight: 700;
 	text-align: center;
@@ -470,7 +470,7 @@
 	margin-right: 5%;
 }
 
-.view-count-image, .edit-image, .delete-image, .save-btn, .cmt-btn, .share-image {
+.view-count-image, .edit-image, .delete-image, .like-btn, .save-btn, .cmt-btn, .share-image {
 	width: 24px;
 	height: 23px;
 	background-size: cover;
@@ -479,7 +479,7 @@
     margin: 0 6px 0px 6px;
 }
 
-.view-count-container, .save-count-container, .comment-count-container, .edit-container, .delete-container, .share-container {
+.view-count-container, .like-count-container, .save-count-container, .comment-count-container, .edit-container, .delete-container, .share-container {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
