@@ -159,9 +159,7 @@ Page({
 			phone: currentUserInfo.phone,
 			nickname: currentUserInfo.nickname,
 			zipcode: currentUserInfo.zipcode,
-			isUserVerified: currentUserInfo.isUserVerified,
-			isPhoneChecked: currentUserInfo.isPhoneChecked,
-			isEmailChecked: currentUserInfo.isEmailChecked
+			
 		}
 		Object.assign(postData, userData)
 		const data = JSON.stringify(postData)
