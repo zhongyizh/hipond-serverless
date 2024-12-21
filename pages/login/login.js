@@ -15,7 +15,7 @@ Page({
 		isVerified: false,
 		isDisabled: true,
 	},
-	async onLoad() {
+	async onShow() {
 		wx.showLoading({
 			title: '获取用户信息中，请耐心等待...',
 			mask: true
@@ -107,8 +107,9 @@ Page({
 		});
 	},
 	studentVeri(){
+		console.log("toveripage")
 		wx.navigateTo({
-			url: '/pages/student-authentication/student-veri' // 跳转到学生认证页面
+			url: '/pages/verification/verification' 
 		  });
 	},
 
