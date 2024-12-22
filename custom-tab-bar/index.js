@@ -69,9 +69,22 @@ Component({
             console.log("用户已填写信息，符合发帖条件");
             return true;
           } else {
-            wx.navigateTo({
-              url: "/pages/login/login",
+            new Promise((resolve, reject) => {
+              wx.showModal({
+                title: "您还未添加联系方式，请完善用户资料后进行发帖",
+                success: function(res) {
+                  resolve(res.confirm);
+                }
+              })
+            }).then(isConfirmed => {
+              if (!isConfirmed) return;
+              wx.navigateTo({
+                url: "/pages/login/login",
+              });
             });
+            // wx.navigateTo({
+            //   url: "/pages/login/login",
+            // });
             return false;
           }
         } catch (error) {
