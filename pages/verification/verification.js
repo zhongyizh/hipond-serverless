@@ -23,6 +23,7 @@ Page({
 				notice: NOTICE_SUCCESS,
 				isSuccessHidden: false
 			})
+			wx.navigateBack()
 		}
 		else {
 			this.setData({

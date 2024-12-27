@@ -70,3 +70,7 @@
 	font-weight: 700;
 	width: 33%;
 }
+
+.confirm-button::after {
+	border: none;
+}

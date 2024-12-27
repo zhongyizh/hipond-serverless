@@ -8,58 +8,79 @@
 		</button>
 	</view>
 	<!-- TODO: 没注册的用户学生认证？ -->
-	<view class="verification" hidden="{{isVerified}}">
+	<!-- <view class="verification" hidden="{{isVerified}}">
 		<navigator url="/pages/verification/verification">
 			<text>点击进行学生认证</text>
 		</navigator>
-	</view>
-	<view class="verified_text" hidden="{{!isVerified}}">
+	</view> -->
+	<!-- <view class="verified_text" hidden="{{!isVerified}}">
 		<text>已完成学生认证</text>
 		<image class="verification_icon" src="/image/student_verification_icon.svg"></image>
-	</view>
-	<view class="info">
-		<view class="info-title">
-			<text>*昵称</text>
+	</view> -->
+	<text class="sub-header">个人资料</text>
+	<view class="box-container">
+		<view class="info">
+			<view class="info-title">
+				<text>昵称*</text>
+			</view>
+			<input model:value="{{nickname}}" type="nickname" placeholder="必填，请输入昵称" bindfocus="handleTouchInput" bindblur="nicknameChange" class="info-text" />
 		</view>
-		<view catch:touchstart="handleTouchInput">
-			<input model:value="{{nickname}}" type="nickname" focus="{{isFocusNickname}}" placeholder="请输入昵称" bindblur="nicknameChange" class="info-text"/>
+		<view class="info-line"></view>
+
+		<view class="info">
+			<view class="info-title">
+				<text>所在地邮编</text>
+			</view>
+			<input bindfocus="handleTouchInput" type="number" bindinput="zipcodeChange" class="info-text" placeholder="请输入5位常住地邮编" type="text" value="{{zipcode}}" />
 		</view>
+		<view class="info-line"></view>
 	</view>
-	<view class="info-line"></view>
-	<view class="info">
-		<view class="info-title">
-			<text>所在地邮编</text>
-		</view>
-		<input bindinput="zipcodeChange" class="info-text" placeholder="请输入常住地邮编" type="text" value="{{zipcode}}"></input>
-	</view>
-	<view class="info-line"></view>
-	<view class="contact-header"><text>*联系方式</text></view>
-	<checkbox-group bindchange="checkboxChange">
+
+	<text class="sub-header">联系方式*</text>
+
+	<text style="color: #727A7A; margin-top: 0;" class="sub-header">*请填写至少一个联系方式</text>
+	<view class="box-container">
 		<view class="info">
 			<view class="info-title">
 				<text>手机号</text>
 			</view>
-			<input bindinput="phoneChange" class="info-text" placeholder="请输入手机号" type="text" value="{{phone}}"></input>
-			<checkbox value="cb-phone" class="cb" checked="{{isPhoneChecked}}"/>
+			<input type="number" bindfocus="handleTouchInput" bindinput="phoneChange" class="info-text" placeholder="请输入手机号" type="text" value="{{phone}}"></input>
 		</view>
 		<view class="info-line"></view>
+
 		<view class="info">
 			<view class="info-title">
 				<text>Email</text>
 			</view>
-			<input bindinput="emailChange" class="info-text" placeholder="请输入邮箱地址" type="text" value="{{emailAddress}}"></input>
-			<checkbox value="cb-email" class="cb" checked="{{isEmailChecked}}"/>
+			<input bindfocus="handleTouchInput" bindinput="emailChange" class="info-text" placeholder="请输入邮箱地址" type="text" value="{{emailAddress}}"></input>
 		</view>
 		<view class="info-line"></view>
 		<view class="info">
 			<view class="info-title">
-				<text>其他联系方式</text>
+				<text>其他</text>
 			</view>
-			<input bindinput="otherContactChange" class="info-text" placeholder="请输入其他联系方式" type="text" value="{{otherContact}}"></input>
-			<checkbox value="cb-other-contact" class="cb" checked="{{isOtherContactChecked}}"/>
+			<input bindfocus="handleTouchInput" bindinput="otherContactChange" class="info-text" placeholder="请输入其他联系方式" type="text" value="{{otherContact}}"></input>
 		</view>
 		<view class="info-line"></view>
-		<view class="bottom-info"><text>* 请勾选至少一项联系方式，有意向的买家将获取此联系方式并联系你进行交易。</text></view>
-	</checkbox-group>
-	<button bindtap="saveUserInfo" class="commit" disabled="{{isDisabled}}">保存</button>
+	</view>
+	<text class="sub-header">认证信息（Suggest）</text>
+	<view wx:if="{{isVerified}}" class="box-container">
+		<view style="justify-content: space-between" class="info">
+			<text class="info-title">学生认证</text>
+			<view style=" display: flex; justify-content: flex-end; align-items: center;  gap: 10rpx;">
+				<text style="color: #85E4DC;font-weight: 400;font-size: 13px;">已认证</text>
+				<image style=" height: 40rpx; width: 40rpx;" src="/image/student_verification_icon.svg" />
+			</view>
+		</view>
+	</view>
+
+	<view wx:if="{{!isVerified}}" class="box-container" bindtap="studentVeri">
+		<view style="justify-content: space-between" class="info">
+			<text class="info-title">学生认证</text>
+			<t-icon size="40rpx" name="chevron-right"/>
+		</view>
+	</view>
+	<button wx:if="{{!isDisabled}}" bindtap="saveUserInfo" class="commit">确认保存</button>
+	<button wx:if="{{isDisabled}}" bindtap="disabledTapped" class="commit" style="background: #A4C5C2">确认保存</button>
+
 </view>
