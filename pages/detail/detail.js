@@ -24,7 +24,6 @@ Page({
 		postData: [],
 		conditionForDisplay: '',
 		conditionIconPath: '',
-        isOwnerFlag: false,
         showModal: false,
         tooltip: false,
         showTooltipOverlay: false,
@@ -174,7 +173,10 @@ Page({
 	},
     async checkOwnership() {
         try {
-            const { isOwner, userOpenId } = await this.isOwner();
+            const userOpenId = await this.getOpenId();
+            let authorOpenId = this.data.postData._openid;
+            console.log("useropenid:", userOpenId)
+            const isOwner = userOpenId == authorOpenId;
             this.setData({
                 isEditBTNEnabled: this.data.postData.isImgChecked && isOwner,
                 isDeleteBTNEnabled: isOwner,
@@ -654,26 +656,16 @@ Page({
 		}
     },
 
-    isOwner: async function() {
-        // 先获取当前帖子作者的openId
-        let authorOpenId = this.data.postData._openid;
+    getOpenId: async function() {
         try {
+            // Checking only openid instead of all the userinfo
             const res = await wx.cloud.callFunction({
-                name: 'getUserInfo',
+                name: 'getOpenId',
             });
-            let userOpenId = res.result._id;
-            console.log("Current User: ", userOpenId, " Post Author: ", authorOpenId);
-            // Compare the userOpenId and authorOpenId and return the userOpenId for further use
-            return {
-                isOwner: userOpenId == authorOpenId,
-                userOpenId: userOpenId
-            };
+            return res.result.openid
         } catch (error) {
             console.error("Failed to get user info: ", error);
-            return {
-                isOwner: false,
-                userOpenId: null
-            };
+            return null
         }
         
     },
@@ -706,9 +698,6 @@ Page({
                         isMailChecked: method[1] == "mail",
                         isPickupChecked: method[2] == "pickup"
 
-
-
-                        
                     }
                 );
             }

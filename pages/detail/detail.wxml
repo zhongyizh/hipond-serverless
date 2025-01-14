@@ -76,7 +76,7 @@
       <!-- Comment details -->
       <image src="{{item.avatarUrl}}" class="cmtavatar"></image>
       <view class="comment-info-container">
-        <text class="username">{{item.nickname}}</text>
+        <text class="username">{{item.nickname?item.nickname:"未登录用户"}}</text>
         <view class="content" bindtap="showReplyOptions" data-parent="{{item.parent}}" data-commentid="{{item._id}}" data-userid="{{item._openid}}" data-nickname="{{item.nickname}}">
           {{item.body}}
         </view>
@@ -98,7 +98,7 @@
         <view class="nested-comment-item">
           <image src="{{item.avatarUrl}}" class="cmtavatar"></image>
           <view class="comment-info-container">
-            <text class="username">{{item.nickname}} 回复 {{item._tgtusername}}</text>
+            <text class="username">{{item.nickname?item.nickname:"未登录用户"}} 回复 {{item._tgtusername?item._tgtusername:"未登录用户"}}</text>
             <view class="content" bindtap="showReplyOptions" data-parent="{{item.parent}}" data-commentid="{{item._id}}" data-userid="{{item._openid}}" data-nickname="{{item.nickname}}">
               {{item.body}}
             </view>
