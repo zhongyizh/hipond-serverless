@@ -61,6 +61,9 @@ exports.main = async (event, context) => {
 				comment.isLiked = false;
 				comment.likeButtonUrl = "/image/not_liked_button.svg";
 			}
+			if (!comment.nickname) {
+				comment.avatarUrl = "/image/avatar_icon_default_show.png"
+			}
 			return comment;
 		});
 		console.log('comments: ', commentsWithLikes);

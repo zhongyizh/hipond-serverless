@@ -1,10 +1,3 @@
-async function getUserInfo(userid) {
-	const db = wx.cloud.database();
-	const userInfo = await db.collection('userInfo').doc(userid).get()
-	const userData = userInfo.data
-	return userData
-}
-
 function getMyUserInfo(userid) { 
 	return new Promise((resolve, reject) => {
 		wx.cloud.callFunction({
@@ -149,7 +142,6 @@ function throttle(func, delay) {
 }
 
 module.exports = {
-	getUserInfo,
 	getMyUserInfo,
 	getLatestPosts,
 	getPaginatedPosts,

@@ -46,11 +46,7 @@ Component({
         const index = data.index, url = data.url;
   
         if (this.data.list[index].isSpecial) {
-          // 对于特殊按钮调用 checkUserInfo
-          const isUserEligible = await this.checkUserInfo();
-          if (isUserEligible) {
-            wx.navigateTo({ url });
-          }
+          wx.navigateTo({ url });
         } else {
           wx.switchTab({ url });
         }
@@ -72,7 +68,6 @@ Component({
             wx.navigateTo({
               url: "/pages/login/login",
             });
-            return false;
           }
         } catch (error) {
           wx.hideLoading();

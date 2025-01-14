@@ -97,18 +97,25 @@ Page({
 		}
 	},
 	async getMySaves() {
-		const db = wx.cloud.database()
-		const tempSavedList = []
-		for (const id of this.data.savedIdList) {
-			const tempPost = await db.collection('posts').where({
-				_id: id
-			}).get()
-			tempSavedList.push(tempPost.data[0])
+		try {
+			const res = await wx.cloud.callFunction({
+				name: "getSavedPosts",
+				data: { savedIdList: this.data.savedIdList } // Pass saved IDs
+			});
+	
+			if (res.result.success) {
+				this.setData({
+					savedPost: res.result.data
+				});
+			} else {
+				console.error("Error fetching saved posts:", res.result.error);
+				wx.showToast({ title: "Failed to load posts", icon: "none" });
+			}
+		} catch (error) {
+			console.error("Cloud function call failed:", error);
+			wx.showToast({ title: "Error loading posts", icon: "none" });
 		}
-		this.setData({
-			savedPost: tempSavedList
-		})
-  },
+  	},
 	async getMyProfile() {
 		// 要先执行这个，这个拿了userInfo里面有openid！
 		wx.showLoading({
@@ -139,7 +146,13 @@ Page({
 	async getTagsCount() {
 		// TODO: 不知道为什么_openid: undefined也能拿到数据
 		const db = wx.cloud.database()
-		const userId = this.data.userInfo._id ? this.data.userInfo._id : ''
+		let userId = this.data.userInfo._id ? this.data.userInfo._id : ''
+		if (userId.length === 0) {
+			const res = await wx.cloud.callFunction({
+                name: 'getOpenId',
+            });
+            userId = res.result.openid;
+		}
     	// 分别计算两种帖子的数量
 		const lifeCount = await db.collection('posts').where({
 			_openid: userId,
@@ -151,13 +164,12 @@ Page({
 		}).count()
 		const saveRecord = await db.collection('saveList').where({
 			_id: userId
-    }).get()
-    if (saveRecord.data.length != 0)
-    {
-      this.setData({
-        savedIdList: saveRecord.data[0].list
-      })
-    }
+    	}).get()
+		if (saveRecord.data.length != 0) {
+			this.setData({
+				savedIdList: saveRecord.data[0].list
+			})
+		}
 		
 		let newTags = this.data.tags
 		newTags[0].count = lifeCount.total
