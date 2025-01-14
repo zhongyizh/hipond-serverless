@@ -473,13 +473,13 @@ Page({
     },
     onTapContact() {
         const items = [];
-        if (this.data.postData.isPhoneChecked) {
+        if (this.data.postData.phone) {
         items.push({ label: "手机号: " + this.data.postData.phone, suffixIcon: 'copy' });
         }
-        if (this.data.postData.isEmailChecked) {
+        if (this.data.postData.emailAddress) {
         items.push({ label: "邮箱: " + this.data.postData.emailAddress, suffixIcon: 'copy' });
         }
-        if (this.data.postData.isOtherContactChecked) 
+        if (this.data.postData.otherContact) 
         {
         items.push({ label: "其他: " + this.data.postData.otherContact, suffixIcon: 'copy' });
         }
