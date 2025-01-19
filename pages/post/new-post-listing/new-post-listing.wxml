@@ -1,14 +1,7 @@
 <!--pages/post/new-post-listing/new-post-listing.wxml-->
 <t-navbar left-arrow />
 
-<t-dialog
-  visible="{{showActSheet}}"
-  title="Hipond物品新旧程度评判标准"
-  confirm-btn="{{ confirmBtn }}"
-  bind:confirm="onConfirm"
-  confirm-btn-disabled="{{confirmBtnDisabled}}"
-  style="--td-button-primary-text-color	: #576B95"
->
+<t-dialog visible="{{showConditionExp}}" title="Hipond物品新旧程度评判标准" confirm-btn="{{ confirmBtn }}" bind:confirm="onConfirm" confirm-btn-disabled="{{confirmBtnDisabled}}" style="--td-button-primary-text-color	: #576B95">
   <scroll-view slot="content" type="list" scroll-y class="long-content">
     <view class="content-container">
       <view class="item"><text class="bold">New/Open-Box：</text>全新或仅开箱</view>
@@ -20,47 +13,63 @@
   </scroll-view>
 </t-dialog>
 
-<view class="new-listing-page-container">
+<view class="upper-box">
+
+  <input class="title-input" id="title" value="{{title}}" placeholder="标题" placeholder-class="input-placeholder" bindinput="inputText" />
+
+  <t-textarea class="body-text-textarea" id="body" value="{{body}}" maxlength="200" placeholder="物品描述" placeholder-style="color: #9CA0A0; font-size: 26rpx;" bind:change="inputText" disableDefaultPadding="{{true}}" show-confirm-bar indicator />
+
   <t-upload class="upload-component" media-type="{{['image']}}" files="{{fileList}}" gridConfig="{{gridConfig}}" max="9" size-limit="{{sizeLimit}}" bind:remove="handleRemove" bind:add="handleAdd" />
-  <view class="form-title-container">
-    <view class="title-input-wrapper">
-      <input class="title-input" id="title" value="{{title}}" placeholder="写标题更容易成功卖出哦" placeholder-style="color: #BBDAD7; font-size: 34rpx;" bindinput="inputText" />
+
+  <view class="location-container">
+    <view class="location-text-wrapper">
+      <image wx:if="{{postLocation}}" src="/image/location_icon_light.png" class="location-icon"></image>
+      <text class="location-text">{{postLocation}}</text>
     </view>
-    <view class="money-input-wrapper">
-      <view class="money-sign">
-        <text style="color: #00B1A2; font-size: 26rpx;">$</text>
-      </view>
-      <input class="money-input" id="price" value="{{price}}" placeholder="价格*" bindinput="inputText">
-      </input>
-    </view>
+    <button class="location-button" bind:tap="chooseLocation">
+      <image src="/image/location_grey.png" class="location-icon"></image>
+      <text wx:if="{{postLocation}}">修改位置</text>
+      <text wx:else>添加位置</text>
+    </button>
   </view>
-  <view class="listing-options-container">
+</view>
+
+<view class="lower-box">
+  <!-- <view class="listing-options-container">
     <view class="condition-dropdown" bindtap="showActionSheet">
       <view class="dropdown-label">{{condition}}</view>
     </view>
 
+  </view> -->
+  <t-action-sheet id="t-action-sheet" usingCustomNavbar bind:selected="handleSelected" />
+  <t-cell class="condition-box" title="物品状态" hover note="{{condition}}" arrow bind:click="onTapCondition" />
+  <view class="line-container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+    <text class="left-text">价格</text>
+    <view class="right-container">
+      <text class="right-text">$</text>
+      <input class="money-input" id="price" value="{{price}}" type="digit" placeholder="00.00" bindinput="inputText" style="text-align: right;"></input>
+    </view>
   </view>
-  <!-- TODO: 急售 -->
-  <!-- <picker class="expiration-dropdown" mode="date" value="{{ddl}}" start="{{ddl}}" end="2050-12-31" bindchange="bindDateChange" bindcancel="">
+</view>
+
+
+<view class="deliver-method-contaienr">
+  <text style="margin-left: 4%;">发货方式</text>
+  <t-radio-group t-class="horizontal-box" value="{{value1}}" bind:change="onChange1">
+    <view wx:for="{{['自取', '送货']}}" wx:key="index" class="card {{value1 == index ? 'card--active' : ''}}">
+      <t-icon wx:if="{{value1 == index}}" name="check" t-class="card__icon" />
+      <t-radio value="{{index}}" label="{{item}}" icon="none" borderless />
+    </view>
+  </t-radio-group>
+
+</view>
+<!-- TODO: 急售 -->
+<!-- <picker class="expiration-dropdown" mode="date" value="{{ddl}}" start="{{ddl}}" end="2050-12-31" bindchange="bindDateChange" bindcancel="">
 			<view class="dropdown-label">{{displayDDL}}</view>
 		</picker> -->
-  <view class="deliver-method-contaienr">
 
-    <view style="display: flex; flex-direction: row;">
-      <text style="color: #599596; font-size: 26rpx">交易方式*</text>
-      <text style="color: #BBDAD7; font-size: 26rpx">(可多选)</text>
-    </view>
-    <checkbox-group style="margin-top: -1%;" bindchange="checkboxChange">
-      <checkbox value="pickup" checked="{{isPickupChecked}}" />
-      <text style="color: #BBDAD7; font-size: 26rpx; margin-right: 10rpx;">自取</text>
-      <checkbox value="deliver" checked="{{isDeliverChecked}}" />
-      <text style="color: #BBDAD7; font-size: 26rpx; margin-right: 10rpx;">送货</text>
-      <checkbox value="mail" checked="{{isMailChecked}}" />
-      <text style="color: #BBDAD7; font-size: 26rpx; margin-right: 10rpx;">邮寄</text>
-    </checkbox-group>
-  </view>
 
-  <view class="original-price-contaienr">
+<!-- <view class="original-price-contaienr">
 
     <view style="display: flex; flex-direction: row;  height: 56rpx;">
       <text style="color: #599596; font-size: 26rpx">原价</text>
@@ -74,21 +83,8 @@
       <input class="money-input" id="originalPrice" value="{{originalPrice}}" placeholder="原价" bindinput="inputText">
       </input>
     </view>
-  </view>
-  <view class="body-text-container">
-    <t-textarea class="body-text-textarea" id="body" value="{{body}}" maxlength="200" placeholder="留下更详细的交易细节和物品信息…" placeholder-style="color: #DAECEB; font-size: 26rpx;" bind:change="inputText" disableDefaultPadding="{{true}}" show-confirm-bar />
-  </view>
-  <view class="location-container">
-    <view class="location-text-wrapper">
-      <image wx:if="{{postLocation}}" src="/image/location_icon_light.png" class="location-icon"></image>
-      <text class="location-text">{{postLocation}}</text>
-    </view>
-    <button class="location-button" plain="{{true}}" bind:tap="chooseLocation">
-        <image src="/image/location_icon_light.png" class="location-icon"></image>
-        <text wx:if="{{postLocation}}">修改位置</text>
-        <text wx:else>添加位置</text>
-    </button>
-  </view>
+  </view> -->
 
-  <button class="submit-button" bind:tap="upload">发 布</button>
-</view>
+
+
+<button class="submit-button" bind:tap="upload">发 布</button>
