@@ -123,6 +123,8 @@ page {
 .condition-box {
   border-radius: 20rpx;
   --td-cell-title-font-size	: 28rpx;
+  --td-cell-note-color: #283248;
+  --td-cell-note-font-size: 28rpx;
 }
 
 .line-container {
@@ -194,6 +196,8 @@ page {
   gap: 12px;
   flex-shrink: 0;
   margin-right: 4%;
+  
+
 }
 .horizontal-box .card {
   flex: 0 0 200rpx;
@@ -211,11 +215,13 @@ page {
   width: 200%;
   height: 80rpx;  
   background-color: #fff;
+  --td-radio-font-size: 28rpx;
 }
 
 
 .card--active {
   border-color: var(--td-brand-color, #00B1A2);
+  
 }
 
 .card--active::after {
@@ -228,6 +234,7 @@ page {
   border-width: 28px 28px 28px 0;
   border-style: solid;
   border-color: var(--td-brand-color, #00B1A2) transparent transparent transparent;
+  
 }
 
 .card__icon {

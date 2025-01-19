@@ -48,9 +48,6 @@ Page({
 			message: '图片大小不超过5MB'
 		},
 		isFromEdit: false,
-		isDeliverChecked: false,
-		isPickupChecked: false,
-		isMailChecked: false,
 		postLocation: ""
 	},
 	async onLoad() {
@@ -127,14 +124,9 @@ Page({
 		});
 	},
 
-	onChange(e) {
+	onChangeDeliver(e) {
 		this.setData({
-			value: e.detail.value
-		});
-	},
-	onChange1(e) {
-		this.setData({
-			value1: e.detail.value
+			DeliverIndex: e.detail.value
 		});
 	},
 	onTapCondition(e) {
@@ -169,18 +161,6 @@ Page({
 			condition: e.detail.selected.label
 		})
     },
-	checkboxChange: function (e) {
-		const items = e.detail.value;
-		const isChecked = (id) => items.includes(id);
-		const isDeliverChecked = isChecked("deliver");
-		const isPickupChecked = isChecked("pickup");
-		const isMailChecked = isChecked("mail");
-		this.setData({
-			isDeliverChecked: isDeliverChecked,
-			isPickupChecked: isPickupChecked,
-			isMailChecked: isMailChecked
-		});
-	},
 	inputText: function (res) {
 		console.log(res.detail.value)
 		const widgetId = res.currentTarget.id;
@@ -247,11 +227,8 @@ Page({
 			'viewCount': 0,
 			'originalPrice': this.data.originalPrice,
 			'postLocation': this.data.postLocation,
-			'method': !this.data.isDeliverChecked && !this.data.isMailChecked && !this.data.isPickupChecked ? "" : [
-				this.data.isDeliverChecked ? 'deliver' : '',
-				this.data.isMailChecked ? 'mail' : '',
-				this.data.isPickupChecked ? 'pickup' : ''
-			]
+			'method': [this.data.DeliverIndex ? '':'deliver', '', this.data.DeliverIndex ? 'pickup' :'']
+			//为保持数据库原有['deliver','mail','pickup']格式
 		}
 		var images = this.data.fileList
 		if (!this.validateForm([payload, images])) return false

@@ -42,6 +42,7 @@
 
   </view> -->
   <t-action-sheet id="t-action-sheet" usingCustomNavbar bind:selected="handleSelected" />
+
   <t-cell class="condition-box" title="物品状态" hover note="{{condition}}" arrow bind:click="onTapCondition" />
   <view class="line-container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
     <text class="left-text">价格</text>
@@ -55,9 +56,9 @@
 
 <view class="deliver-method-contaienr">
   <text style="margin-left: 4%;">发货方式</text>
-  <t-radio-group t-class="horizontal-box" value="{{value1}}" bind:change="onChange1">
-    <view wx:for="{{['自取', '送货']}}" wx:key="index" class="card {{value1 == index ? 'card--active' : ''}}">
-      <t-icon wx:if="{{value1 == index}}" name="check" t-class="card__icon" />
+  <t-radio-group t-class="horizontal-box" value="{{DeliverIndex}}" bind:change="onChangeDeliver">
+    <view wx:for="{{['自取', '送货']}}" wx:key="index" class="card {{DeliverIndex == index ? 'card--active' : ''}}">
+      <t-icon wx:if="{{DeliverIndex == index}}" name="check" t-class="card__icon" />
       <t-radio value="{{index}}" label="{{item}}" icon="none" borderless />
     </view>
   </t-radio-group>
