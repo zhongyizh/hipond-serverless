@@ -130,15 +130,11 @@ function getPostTitleFromBody(body, length = 24) {
 	return title
 }
 
-function throttle(func, delay) {
-	let lastCall = 0;
-	return function(...args) {
-		const now = new Date().getTime();
-		if (now - lastCall >= delay) {
-			lastCall = now;
-			func.apply(this, args);
-		}
-	};
+function requestSubscribe() {
+	// 评论和回复提醒消息订阅
+	wx.requestSubscribeMessage({
+		tmplIds: ['HibnKMtUXNnGm-zsmA9Ui3dJZFC3pukyanTb9tBY404', 'ko8wE9VPrWPxIG-dxmmqNfrG235V9C_gPADDR8aUTR0']
+	})
 }
 
 module.exports = {
@@ -149,5 +145,5 @@ module.exports = {
 	getPostTitleFromBody,
 	getComments,
 	getReplies,
-	throttle
+	requestSubscribe
 }

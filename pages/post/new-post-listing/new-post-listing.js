@@ -1,5 +1,5 @@
 // pages/post/new-post-listing/new-post-listing.js
-import { getPostTitleFromBody } from '../../../utils/util'
+import { getPostTitleFromBody, requestSubscribe } from '../../../utils/util'
 import { msgSecCheck } from '../../../services/security.service'
 import { createPost, editPost } from "../../../services/post.service"
 
@@ -256,6 +256,7 @@ Page({
 				icon: 'success',
 				duration: 3000
 			});
+			requestSubscribe();
 		} catch (error) {
 			console.error("Upload failed: ", error);
 			wx.hideLoading();

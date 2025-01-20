@@ -1,7 +1,7 @@
 // pages/detail/detail.js
 import { ListingConditions } from "../../models/posts.model"
 import { deletePost, createComment, deleteComment } from "../../services/post.service"
-import { getComments, getReplies, throttle } from "../../utils/util"
+import { getComments, getReplies } from "../../utils/util"
 import { msgSecCheck } from '../../services/security.service'
 import ActionSheet, { ActionSheetTheme } from 'tdesign-miniprogram/action-sheet/index';
 

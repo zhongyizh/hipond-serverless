@@ -185,6 +185,7 @@ Page({
 				icon: 'success',
 				duration: 3000
 			});
+			requestSubscribe();
 		} catch (error) {
 			console.error("Upload failed: ", error);
 			wx.hideLoading();
