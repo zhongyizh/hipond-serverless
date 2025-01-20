@@ -81,7 +81,6 @@ async function getComments(postId, limit, offset) {
 				offset: offset
 			},
 			success: res => {
-				console.log(res.result.commentsWithLikes)
 				resolve(res.result.commentsWithLikes);
 			},
 			fail: err => {
@@ -130,13 +129,6 @@ function getPostTitleFromBody(body, length = 24) {
 	return title
 }
 
-function requestSubscribe() {
-	// 评论和回复提醒消息订阅
-	wx.requestSubscribeMessage({
-		tmplIds: ['HibnKMtUXNnGm-zsmA9Ui3dJZFC3pukyanTb9tBY404', 'ko8wE9VPrWPxIG-dxmmqNfrG235V9C_gPADDR8aUTR0']
-	})
-}
-
 module.exports = {
 	getMyUserInfo,
 	getLatestPosts,
@@ -144,6 +136,5 @@ module.exports = {
 	getPostDisplayData,
 	getPostTitleFromBody,
 	getComments,
-	getReplies,
-	requestSubscribe
+	getReplies
 }

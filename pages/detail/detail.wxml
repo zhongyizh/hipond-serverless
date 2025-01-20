@@ -77,7 +77,7 @@
       <image src="{{item.avatarUrl}}" class="cmtavatar"></image>
       <view class="comment-info-container">
         <text class="username">{{item.nickname?item.nickname:"未登录用户"}}</text>
-        <view class="content" bindtap="showReplyOptions" data-parent="{{item.parent}}" data-commentid="{{item._id}}" data-userid="{{item._openid}}" data-nickname="{{item.nickname}}">
+        <view class="content" bindtap="showReplyOptions" data-parent="{{item.parent}}" data-commentid="{{item._id}}" data-userid="{{item._openid}}" data-nickname="{{item.nickname}}" data-body="{{item.body}}">
           {{item.body}}
         </view>
         <view class="cmt-header-container">
@@ -99,7 +99,7 @@
           <image src="{{item.avatarUrl}}" class="cmtavatar"></image>
           <view class="comment-info-container">
             <text class="username">{{item.nickname?item.nickname:"未登录用户"}} 回复 {{item._tgtusername?item._tgtusername:"未登录用户"}}</text>
-            <view class="content" bindtap="showReplyOptions" data-parent="{{item.parent}}" data-commentid="{{item._id}}" data-userid="{{item._openid}}" data-nickname="{{item.nickname}}">
+            <view class="content" bindtap="showReplyOptions" data-parent="{{item.parent}}" data-commentid="{{item._id}}" data-userid="{{item._openid}}" data-nickname="{{item.nickname}}" data-body="{{item.body}}">
               {{item.body}}
             </view>
             <view class="cmt-header-container">

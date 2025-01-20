@@ -1,4 +1,4 @@
-import { requestSubscribe } from '../utils/util'
+import { requestSubscribe } from '../services/notification.service'
 
 Component({
     data: {
