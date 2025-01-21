@@ -3,7 +3,19 @@ const cloud = require('wx-server-sdk')
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV }) // 使用当前云环境
 
-// 云函数入口函数
+function truncateContent(body, maxLength = 20) {
+    // 如果文本长度小于或等于 maxLength，直接返回
+    if (body.length <= maxLength) {
+        return body;
+    }
+
+    // 截取内容并确保加上省略号的总长度不超过 maxLength
+    const truncatedLength = maxLength - 3; // 为省略号留出 3 个字符空间
+    const truncatedContent = body.slice(0, truncatedLength);
+
+    return truncatedContent + '...';
+}
+
 async function getNickname(userId) {
 	// 根据openid获取用户昵称
 	const db = cloud.database()
@@ -19,6 +31,7 @@ async function getNickname(userId) {
 	return userName
 }
 
+// 云函数入口函数
 exports.main = async (event, context) => {
 	const db = cloud.database()
 	const wxContext = cloud.getWXContext()
@@ -35,6 +48,12 @@ exports.main = async (event, context) => {
 			value: nickname
 		}
 	}
+	for (const key in message) {
+        if (message.hasOwnProperty(key) && key.startsWith('thing')) {
+            // 对 thing 开头的 key 的 value 进行处理，缩减至少于20个字符
+            message[key].value = truncateContent(message[key].value, 20);
+        }
+    }
 
 
     try {
