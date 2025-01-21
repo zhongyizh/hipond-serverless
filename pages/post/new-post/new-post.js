@@ -1,5 +1,6 @@
 // pages/post/new-post/new-post.js
 import { getPostTitleFromBody } from '../../../utils/util'
+import { requestSubscribe } from '../../../services/notification.service'
 import { msgSecCheck } from '../../../services/security.service'
 import { createPost, editPost } from "../../../services/post.service"
 import { ListingConditions } from '../../../models/posts.model';

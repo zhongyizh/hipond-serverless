@@ -1,5 +1,6 @@
 // pages/post/new-post-listing/new-post-listing.js
-import { getPostTitleFromBody, requestSubscribe } from '../../../utils/util'
+import { getPostTitleFromBody } from '../../../utils/util'
+import { requestSubscribe } from '../../../services/notification.service'
 import { msgSecCheck } from '../../../services/security.service'
 import { createPost, editPost } from "../../../services/post.service"
 
