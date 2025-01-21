@@ -7,8 +7,9 @@
 	filter: drop-shadow(0 -2px 10px rgba(0,0,0,.06));
 	left: 0;
 	padding-bottom: env(safe-area-inset-bottom);
-	position: fixed;
+	position: absolute;
 	right: 0;
+	z-index: 9999;
 }
 
 .tab-bar,.tab-bar-item {
