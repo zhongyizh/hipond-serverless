@@ -148,6 +148,9 @@ Page({
 		var images = this.data.fileList
 		if (!this.validateForm([payload, images])) return false
 		
+		// 帖子的评论和回复提醒消息订阅
+		requestSubscribe();
+		
 		wx.showLoading({
 			title: '上传中...',
 			mask: true
@@ -186,7 +189,6 @@ Page({
 				icon: 'success',
 				duration: 3000
 			});
-			requestSubscribe();
 		} catch (error) {
 			console.error("Upload failed: ", error);
 			wx.hideLoading();
