@@ -4,11 +4,24 @@ const notificationTypeMap = new Map([
     ["newReply", "ko8wE9VPrWPxIG-dxmmqNfrG235V9C_gPADDR8aUTR0"]
 ]); 
 
-function requestSubscribe() {
+async function requestSubscribe() {
 	// 评论和回复提醒消息订阅
-	wx.requestSubscribeMessage({
-		tmplIds: [notificationTypeMap.get("newComment"), notificationTypeMap.get("newReply")]
-	})
+    return new Promise((resolve, reject) => {
+        wx.requestSubscribeMessage({
+            tmplIds: [
+                notificationTypeMap.get("newComment"),
+                notificationTypeMap.get("newReply")
+            ],
+            success: (res) => {
+                console.log("requestSubscribe success:", res);
+                resolve(res);
+            },
+            fail: (err) => {
+                console.error("requestSubscribe fail:", err);
+                reject(err);
+            }
+        });
+    });
 }
 
 async function setNotification(data) {

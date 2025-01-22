@@ -48,7 +48,7 @@ Component({
           wx.navigateTo({ url });
         } else {
           if (this.data.list[index].text === "更多") {
-            requestSubscribe()
+            await requestSubscribe();
           }
           wx.switchTab({ url });
         }
