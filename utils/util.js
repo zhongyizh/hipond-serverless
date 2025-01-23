@@ -1,10 +1,3 @@
-async function getUserInfo(userid) {
-	const db = wx.cloud.database();
-	const userInfo = await db.collection('userInfo').doc(userid).get()
-	const userData = userInfo.data
-	return userData
-}
-
 function getMyUserInfo(userid) { 
 	return new Promise((resolve, reject) => {
 		wx.cloud.callFunction({
@@ -88,7 +81,6 @@ async function getComments(postId, limit, offset) {
 				offset: offset
 			},
 			success: res => {
-				console.log(res.result.commentsWithLikes)
 				resolve(res.result.commentsWithLikes);
 			},
 			fail: err => {
@@ -137,25 +129,12 @@ function getPostTitleFromBody(body, length = 24) {
 	return title
 }
 
-function throttle(func, delay) {
-	let lastCall = 0;
-	return function(...args) {
-		const now = new Date().getTime();
-		if (now - lastCall >= delay) {
-			lastCall = now;
-			func.apply(this, args);
-		}
-	};
-}
-
 module.exports = {
-	getUserInfo,
 	getMyUserInfo,
 	getLatestPosts,
 	getPaginatedPosts,
 	getPostDisplayData,
 	getPostTitleFromBody,
 	getComments,
-	getReplies,
-	throttle
+	getReplies
 }

@@ -1,4 +1,4 @@
-import { getMyUserInfo } from '../utils/util'
+import { requestSubscribe } from '../services/notification.service'
 
 Component({
     data: {
@@ -44,44 +44,13 @@ Component({
       async switchTab(e) {
         const data = e.currentTarget.dataset;
         const index = data.index, url = data.url;
-  
         if (this.data.list[index].isSpecial) {
-          // 对于特殊按钮调用 checkUserInfo
-          const isUserEligible = await this.checkUserInfo();
-          if (isUserEligible) {
-            wx.navigateTo({ url });
-          }
+          wx.navigateTo({ url });
         } else {
-          wx.switchTab({ url });
-        }
-      },
-      
-      async checkUserInfo() {
-        wx.showLoading({
-          title: "获取用户信息中，请耐心等待...",
-          mask: true,
-        });
-        try {
-          const userData = await getMyUserInfo();
-          wx.hideLoading();
-  
-          if (userData && userData.nickname && (userData.phone || userData.emailAddress)) {
-            console.log("用户已填写信息，符合发帖条件");
-            return true;
-          } else {
-            wx.navigateTo({
-              url: "/pages/login/login",
-            });
-            return false;
+          if (this.data.list[index].text === "更多") {
+            await requestSubscribe();
           }
-        } catch (error) {
-          wx.hideLoading();
-          console.error("获取用户信息失败:", error);
-          wx.showToast({
-            title: "获取用户信息失败",
-            icon: "none",
-          });
-          return false;
+          wx.switchTab({ url });
         }
       },
     },

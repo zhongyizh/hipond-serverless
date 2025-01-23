@@ -67,6 +67,10 @@ exports.main = async (event, context) => {
 				comment.isLiked = false
 				comment.likeButtonUrl = "/image/not_liked_button.svg"
 			};
+			if (!comment.nickname) {
+				comment.avatarUrl = "/image/avatar_icon_default_show.png"
+				comment.nickname = "未登录用户"
+			}
 			// comment.isLiked = likeRes.data.length > 0; 
 			return comment;
 		});

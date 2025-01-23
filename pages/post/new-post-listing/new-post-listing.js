@@ -1,18 +1,9 @@
 // pages/post/new-post-listing/new-post-listing.js
-import {
-	getPostTitleFromBody
-} from '../../../utils/util'
-import {
-	msgSecCheck
-} from '../../../services/security.service'
-import {
-	createPost,
-	editPost
-} from "../../../services/post.service"
-import ActionSheet, {
-	ActionSheetTheme
-} from 'tdesign-miniprogram/action-sheet/index';
-
+import { getPostTitleFromBody } from '../../../utils/util'
+import { requestSubscribe } from '../../../services/notification.service'
+import { msgSecCheck } from '../../../services/security.service'
+import { createPost, editPost } from "../../../services/post.service"
+import ActionSheet, {ActionSheetTheme} from 'tdesign-miniprogram/action-sheet/index'
 
 const errMsg = new Map([
 	["price", "请输入价格"],
@@ -266,7 +257,10 @@ Page({
 		}
 		var images = this.data.fileList
 		if (!this.validateForm([payload, images])) return false
-
+    
+		// 帖子的评论和回复提醒消息订阅
+		requestSubscribe();
+    
 		wx.showLoading({
 			title: '上传中...',
 			mask: true

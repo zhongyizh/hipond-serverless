@@ -1,8 +1,9 @@
 // pages/detail/detail.js
 import { ListingConditions } from "../../models/posts.model"
+import { getComments, getReplies } from "../../utils/util"
 import { deletePost, createComment, deleteComment } from "../../services/post.service"
-import { getComments, getReplies, throttle } from "../../utils/util"
 import { msgSecCheck } from '../../services/security.service'
+import { notificationTypeMap, sendNotification, setNotification } from '../../services/notification.service'
 import ActionSheet, { ActionSheetTheme } from 'tdesign-miniprogram/action-sheet/index';
 
 const conditionMapping = {
@@ -24,7 +25,6 @@ Page({
 		postData: [],
 		conditionForDisplay: '',
 		conditionIconPath: '',
-        isOwnerFlag: false,
         showModal: false,
         tooltip: false,
         showTooltipOverlay: false,
@@ -48,6 +48,7 @@ Page({
         parent: null,
         inputContent: '',
         replyToCmt: null, // stores comment ID when replying
+        replyToContent: null,
         replyToUser: null,
         inputPlaceholder: "说点什么...",
         inputValue: '',
@@ -174,7 +175,10 @@ Page({
 	},
     async checkOwnership() {
         try {
-            const { isOwner, userOpenId } = await this.isOwner();
+            const userOpenId = await this.getOpenId();
+            let authorOpenId = this.data.postData._openid;
+            console.log("useropenid:", userOpenId)
+            const isOwner = userOpenId == authorOpenId;
             this.setData({
                 isEditBTNEnabled: this.data.postData.isImgChecked && isOwner,
                 isDeleteBTNEnabled: isOwner,
@@ -320,6 +324,7 @@ Page({
 		var payload = {
             'parent': this.data.parent ? this.data.parent: "Post",
             '_tgtCmtId': this.data.replyToCmt ? this.data.replyToCmt: "Post",
+            '_tgtContent': this.data.replyToContent ? this.data.replyToContent : this.data.postData.title,
             '_tgtId': this.data.replyToUser ? this.data.replyToUser: "Author",
 			'body': this.data.inputValue,
 			'location': '',
@@ -351,13 +356,18 @@ Page({
 			else console.log("✅ detail.js: upload(): Text Content Check Passed!");
             
 			// 发布评论
-			await createComment(payload);
+            await createComment(payload);
 			
 			wx.showToast({
 				title: '评论成功',
 				icon: 'success',
 				duration: 3000
-			});
+            });
+            
+            // 推送消息
+            const notificationData= await this.createNotificationData(payload);
+            const notificationId = await setNotification(notificationData);
+            await sendNotification(notificationId);
 		} catch (error) {
 			console.error("Upload failed: ", error);
 			wx.hideLoading();
@@ -654,26 +664,16 @@ Page({
 		}
     },
 
-    isOwner: async function() {
-        // 先获取当前帖子作者的openId
-        let authorOpenId = this.data.postData._openid;
+    getOpenId: async function() {
         try {
+            // Checking only openid instead of all the userinfo
             const res = await wx.cloud.callFunction({
-                name: 'getUserInfo',
+                name: 'getOpenId',
             });
-            let userOpenId = res.result._id;
-            console.log("Current User: ", userOpenId, " Post Author: ", authorOpenId);
-            // Compare the userOpenId and authorOpenId and return the userOpenId for further use
-            return {
-                isOwner: userOpenId == authorOpenId,
-                userOpenId: userOpenId
-            };
+            return res.result.openid
         } catch (error) {
             console.error("Failed to get user info: ", error);
-            return {
-                isOwner: false,
-                userOpenId: null
-            };
+            return null
         }
         
     },
@@ -706,9 +706,6 @@ Page({
                         isMailChecked: method[1] == "mail",
                         isPickupChecked: method[2] == "pickup"
 
-
-
-                        
                     }
                 );
             }
@@ -815,6 +812,7 @@ Page({
         const rawparent = event.currentTarget.dataset.parent
         var parent = null
         const commentId = event.currentTarget.dataset.commentid
+        const commentBody = event.currentTarget.dataset.body
         const userId = event.currentTarget.dataset.userid
         const nickname = event.currentTarget.dataset.nickname
         if (rawparent == "Post") {
@@ -826,6 +824,7 @@ Page({
             showInput: true,
             parent: parent ? parent : null,
             replyToCmt: commentId ? commentId : null,
+            replyToContent: commentBody ? commentBody : null,
             replyToUser: userId ? userId : null,
             inputPlaceholder: nickname ? `@${nickname}` : '说点什么...', // Update placeholder
             prefix: nickname ? `@${nickname} ` : ''
@@ -838,6 +837,7 @@ Page({
             showInput: false,
             parent: null,
             replyToCmt: null,
+            replyToContent: null,
             replyToUser: null,
             inputPlaceholder: '说点什么...',
             prefix: ''
@@ -887,4 +887,48 @@ Page({
             url: '/pages/tab-bar/index/index',
         });
     },
+
+    createNotificationData: async function(payload) {
+        let isNewComment = payload.parent === "Post"
+        const type = isNewComment ? "newComment" : "newReply"
+        const toUser = isNewComment ? this.data.postData._openid : payload._tgtId
+        const templateId = notificationTypeMap.get(type)
+        const detailData = JSON.stringify(this.data.postData)
+        const page = `/pages/detail/detail?data=${detailData}`
+        let message = {}
+        if (isNewComment) {
+            message = {
+                "thing1": {
+                    "value": payload._tgtContent
+                },
+                "thing2": {
+                    "value": payload.body
+                },
+                "time3": {
+                    "value": this.parseDate(payload.postDate)
+                }
+            }
+        }
+        else {
+            message = {
+                "thing8": {
+                    "value": payload._tgtContent
+                },
+                "thing2": {
+                    "value": payload.body
+                },
+                "date3": {
+                    "value": this.parseDate(payload.postDate)
+                }
+            }
+        }
+        return {
+            toUser: toUser,
+            templateId: templateId,
+            page: page,
+            data : message,
+            type: type,
+            isRead: false
+        }
+    }
 })

@@ -148,6 +148,7 @@ node_modules
 miniprogram_npm
 package-lock.json
 package.json
+npmSubPackage
 
 # miniprogram config files
 project.private.config.json

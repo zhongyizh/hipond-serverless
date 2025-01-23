@@ -54,7 +54,6 @@ async function createComment(newCmtData) {
     if (newCmtData.parent) {
         // Increment the repliesCount of the target comment
         console.log("⏳ post.service.js: createComment(): Incrementing repliesCount for comment: ", newCmtData.parent);
-        console.log(newCmtData.parent);
         await new Promise((resolve, reject) => {
 			wx.cloud.callFunction({
 				name: 'incrementReplyCount',
