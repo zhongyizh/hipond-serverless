@@ -21,7 +21,7 @@
   <view class="title-row">
     <text class="post-text">{{postData.title}}</text>
     <view class="price-container" wx:if="{{postData.price}}">
-      <text wx:if="{{postData.originalPrice}}" class="original-price">原价${{postData.originalPrice}}</text>
+      <!-- <text wx:if="{{postData.originalPrice}}" class="original-price">原价${{postData.originalPrice}}</text> -->
       <text class="price-tag">价格${{postData.price}}</text>
     </view>
   </view>
