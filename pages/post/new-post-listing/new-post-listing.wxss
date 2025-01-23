@@ -25,12 +25,25 @@ page {
   margin-right: 4%;
   padding-bottom: 4%;
 }
+.input-container {
+  position: relative;
+}
 
 .title-input {
+  width: 100%;
+  padding-right: 60px; /* 给字数统计留出空间 */
   padding-left: 4.5%;
   padding-top: 4%;
   font-size: 26rpx;
   color: #283248;
+}
+
+.char-counter {
+  position: absolute;
+  right: 10px;
+  top: 45%;
+  font-size: 26rpx;
+  color: #9CA0A0;
 }
 
 .input-placeholder {
@@ -43,14 +56,14 @@ page {
   --td-textarea-text-color: #283248;
 }
 
-.body-text-textarea, .body-text-textarea textarea {
+.body-text-textarea,
+.body-text-textarea textarea {
   font-size: 26rpx;
 }
 
 .upload-wrapper {
-  padding-top: 25rpx;
-  padding-left: 25rpx;
-  width: 300%;
+  width: 100%;
+  width: 100%;
 }
 
 .upload-component {
@@ -59,7 +72,8 @@ page {
   --td-upload-add-icon-font-size: 20px;
   --td-upload-radius: 25rpx;
   margin-left: 4%;
-  margin-right: 4%;
+  width: 275%;
+  height: 100%;
 }
 
 
@@ -109,7 +123,7 @@ page {
 }
 
 .location-button::after {
-  border: none; 
+  border: none;
 }
 
 .lower-box {
@@ -122,7 +136,7 @@ page {
 
 .condition-box {
   border-radius: 20rpx;
-  --td-cell-title-font-size	: 28rpx;
+  --td-cell-title-font-size: 28rpx;
   --td-cell-note-color: #283248;
   --td-cell-note-font-size: 28rpx;
 }
@@ -157,19 +171,26 @@ page {
 }
 
 .right-text {
-  color: var(--Grey-04, #9CA0A0);
+  color: var(--Grey-04, #283248);
   text-align: center;
   font-family: Arial;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  margin-left: 75%;
+  margin-left: 70%;
 }
 
-.money-input {}
+.money-input {
+  font-size: 26rpx;
+  margin-left: -4%;
+  color: #283248;
+  text-align: right;
+}
 
-
+.money-placeholder{
+  color: #283248;
+}
 
 .dropdown-label {
   width: 100%;
@@ -196,9 +217,10 @@ page {
   gap: 12px;
   flex-shrink: 0;
   margin-right: 4%;
-  
+
 
 }
+
 .horizontal-box .card {
   flex: 0 0 200rpx;
 }
@@ -206,14 +228,14 @@ page {
 .card {
   position: relative;
   display: flex;
-  align-items: center;  
-  justify-content: center;  
+  align-items: center;
+  justify-content: center;
   border-radius: 12rpx;
   overflow: hidden;
   box-sizing: border-box;
   border: 3rpx solid var(--td-bg-color-container, #fff);
   width: 200%;
-  height: 80rpx;  
+  height: 80rpx;
   background-color: #fff;
   --td-radio-font-size: 28rpx;
 }
@@ -221,7 +243,7 @@ page {
 
 .card--active {
   border-color: var(--td-brand-color, #00B1A2);
-  
+
 }
 
 .card--active::after {
@@ -234,7 +256,7 @@ page {
   border-width: 28px 28px 28px 0;
   border-style: solid;
   border-color: var(--td-brand-color, #00B1A2) transparent transparent transparent;
-  
+
 }
 
 .card__icon {
@@ -261,6 +283,6 @@ page {
   width: 92%;
 }
 
-.submit-button::after{
+.submit-button::after {
   border: none;
 }

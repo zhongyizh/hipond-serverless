@@ -9,15 +9,17 @@ import {
 	createPost,
 	editPost
 } from "../../../services/post.service"
-import ActionSheet, { ActionSheetTheme } from 'tdesign-miniprogram/action-sheet/index';
+import ActionSheet, {
+	ActionSheetTheme
+} from 'tdesign-miniprogram/action-sheet/index';
 
 
 const errMsg = new Map([
-	["body", "需要物品描述"],
 	["price", "请输入价格"],
 	["image", "请选至少一张图"],
-	["method", "请选择交易方式"],
-	["condition", "请选择新旧程度"]
+	["title", "请输入标题"]
+	// ["method", "请选择交易方式"],
+	// ["condition", "请选择新旧程度"]
 ]);
 
 Page({
@@ -34,13 +36,12 @@ Page({
 		title: '',
 		body: '',
 		price: '',
-		originalPrice: '',
 		// View Models
 		originalCopy: {}, // Store the copy of the original post upon editing.
 		gridConfig: {
-			column: 3,
-			width: 213,
-			height: 213,
+			column: 9,
+			width: 200,
+			height: 200,
 		},
 		sizeLimit: {
 			size: 5,
@@ -51,29 +52,29 @@ Page({
 		postLocation: ""
 	},
 	async onLoad() {
-		await wx.cloud.callFunction({
-			name: 'newUserCheck',
-			data: {},
-			success: res => {
-				if (res.result) {
-					console.log("This is a new user.", res)
+		// await wx.cloud.callFunction({
+		// 	name: 'newUserCheck',
+		// 	data: {},
+		// 	success: res => {
+		// 		if (res.result) {
+		// 			console.log("This is a new user.", res)
 
-					this.setData({
-						showActSheet: true,
-					})
-					setTimeout(() => {
-						this.setData({
-							confirmBtnDisabled: false
-						});
-					}, 3000);
-				} else {
-					console.log("This is an old user.", res)
-				}
-			},
-			fail: err => {
-				console.error('Failed to check if the user is new user:', err);
-			}
-		});
+		// 			this.setData({
+		// 				showActSheet: true,
+		// 			})
+		// 			setTimeout(() => {
+		// 				this.setData({
+		// 					confirmBtnDisabled: false
+		// 				});
+		// 			}, 3000);
+		// 		} else {
+		// 			console.log("This is an old user.", res)
+		// 		}
+		// 	},
+		// 	fail: err => {
+		// 		console.error('Failed to check if the user is new user:', err);
+		// 	}
+		// });
 		// 发帖编辑功能的实现
 		// 通过一个event来从「详情页」传数据到「编辑页」：
 		// 获取所有打开的EventChannel事件
@@ -90,15 +91,15 @@ Page({
 			console.log("new-post-listing.js: onLoad(): onPageEdit triggered: this.data:", this.data);
 		})
 	},
-	onConfirm() {
-		// 如果按钮仍然禁用，则直接返回
-		if (this.data.confirmBtnDisabled) {
-			return;
-		}
-		this.setData({
-			showActSheet: false
-		});
-	},
+	// onConfirm() {
+	// 	// 如果按钮仍然禁用，则直接返回
+	// 	if (this.data.confirmBtnDisabled) {
+	// 		return;
+	// 	}
+	// 	this.setData({
+	// 		showActSheet: false
+	// 	});
+	// },
 	handleAdd(e) {
 		const {
 			fileList
@@ -131,65 +132,99 @@ Page({
 	},
 	onTapCondition(e) {
 		ActionSheet.show({
-            theme: ActionSheetTheme.List,
-            selector: '#t-action-sheet',
-            context: this,
-            align: 'center',
-            description: '新旧程度',
-			items: [
-				{
-				  label: '全新',
-				  suffixIcon: 'none'
+			theme: ActionSheetTheme.List,
+			selector: '#t-action-sheet',
+			context: this,
+			align: 'center',
+			description: '新旧程度',
+			items: [{
+					label: '全新',
+					suffixIcon: 'none'
 				},
 				{
-				  label: '几乎全新',
-				  suffixIcon: 'none'
+					label: '几乎全新',
+					suffixIcon: 'none'
 				},
 				{
-				  label: '轻微使用痕迹',
-				  suffixIcon: 'none'
+					label: '轻微使用痕迹',
+					suffixIcon: 'none'
 				},
 				{
-				  label: '明显使用痕迹',
-				  suffixIcon: 'none'
+					label: '明显使用痕迹',
+					suffixIcon: 'none'
 				},
-			  ],
-          });
+			],
+		});
 	},
 	handleSelected(e) {
 		this.setData({
 			condition: e.detail.selected.label
 		})
-    },
+	},
 	inputText: function (res) {
-		console.log(res.detail.value)
 		const widgetId = res.currentTarget.id;
 		try {
-			this.data[widgetId] = res.detail.value;
+			this.setData({
+				[widgetId]: res.detail.value,
+			});
 		} catch {
 			console.log("❌ new-post-listing: upload(): Unrecognized Input Box id");
 		}
 	},
+
+	// 聚焦时显示字数统计
+	showCounter: function () {
+		this.setData({
+			showCounter: true,
+		});
+	},
+
+	// 失焦时隐藏字数统计
+	hideCounter: function () {
+		this.setData({
+			showCounter: false,
+		});
+	},
+
+	showIndicator: function () {
+		this.setData({
+			showIndicator: true,
+		});
+	},
+
+	// 失焦时隐藏 indicator
+	hideIndicator: function () {
+		this.setData({
+			showIndicator: false,
+		});
+	},
+
 	validateForm: function (payloads) {
+		const missingFields = []; // 存储缺少的字段
+
+		// 检查第一个对象中的字段
 		for (const [key, value] of Object.entries(payloads[0])) {
-			if (errMsg.has(key))
-				if (value == "") {
-					wx.showToast({
-						title: errMsg.get(key),
-						icon: 'error',
-						duration: 2000
-					});
-					return false;
-				}
+			if (errMsg.has(key) && value === "") {
+				missingFields.push(errMsg.get(key));
+			}
 		}
+
+		// 检查第二个对象（如图片列表）
 		if (payloads[1].length <= 0) {
+			missingFields.push(errMsg.get("image"));
+		}
+
+		// 如果有缺少的字段
+		if (missingFields.length > 0) {
+			const message = `${missingFields.join("、")}，即可发布哦~`; // 动态拼接提示语
 			wx.showToast({
-				title: errMsg.get("image"),
-				icon: 'error',
+				title: message,
+				icon: 'none',
 				duration: 2000
 			});
 			return false;
 		}
+
 		return true;
 	},
 
@@ -219,15 +254,14 @@ Page({
 			'body': this.data.body,
 			'price': this.data.price,
 			'location': '',
-			'condition': this.data.condition !== '物品新旧程度*' ? this.data.condition : '',
+			'condition': this.data.condition,
 			'postDate': Date.now(),
 			'postType': 'selling',
 			'isImgChecked': false,
 			// TODO: 编辑贴子后viewCount会清零
 			'viewCount': 0,
-			'originalPrice': this.data.originalPrice,
 			'postLocation': this.data.postLocation,
-			'method': [this.data.DeliverIndex ? '':'deliver', '', this.data.DeliverIndex ? 'pickup' :'']
+			'method': [this.data.DeliverIndex ? '' : 'deliver', '', this.data.DeliverIndex ? 'pickup' : '']
 			//为保持数据库原有['deliver','mail','pickup']格式
 		}
 		var images = this.data.fileList

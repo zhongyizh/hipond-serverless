@@ -1,7 +1,8 @@
 <!--pages/post/new-post-listing/new-post-listing.wxml-->
 <t-navbar left-arrow />
 
-<t-dialog visible="{{showConditionExp}}" title="Hipond物品新旧程度评判标准" confirm-btn="{{ confirmBtn }}" bind:confirm="onConfirm" confirm-btn-disabled="{{confirmBtnDisabled}}" style="--td-button-primary-text-color	: #576B95">
+<!-- 物品成色弹窗 -->
+<!-- <t-dialog visible="{{showConditionExp}}" title="Hipond物品新旧程度评判标准" confirm-btn="{{ confirmBtn }}" bind:confirm="onConfirm" confirm-btn-disabled="{{confirmBtnDisabled}}" style="--td-button-primary-text-color	: #576B95">
   <scroll-view slot="content" type="list" scroll-y class="long-content">
     <view class="content-container">
       <view class="item"><text class="bold">New/Open-Box：</text>全新或仅开箱</view>
@@ -11,15 +12,24 @@
       <view class="item"><text class="bold">Fair：</text>部分功能有故障或缺少部分部件，不影响正常使用</view>
     </view>
   </scroll-view>
-</t-dialog>
+</t-dialog> -->
 
 <view class="upper-box">
 
-  <input class="title-input" id="title" value="{{title}}" placeholder="标题" placeholder-class="input-placeholder" bindinput="inputText" />
+  <view class="input-container">
+    <input class="title-input" id="title" value="{{title}}" placeholder="标题" placeholder-class="input-placeholder" bindinput="inputText" bindfocus="showCounter" bindblur="hideCounter" maxlength="20" />
+    <text wx:if="{{showCounter}}" class="char-counter">{{title.length}}/20</text>
+  </view>
 
-  <t-textarea class="body-text-textarea" id="body" value="{{body}}" maxlength="200" placeholder="物品描述" placeholder-style="color: #9CA0A0; font-size: 26rpx;" bind:change="inputText" disableDefaultPadding="{{true}}" show-confirm-bar indicator />
+  <t-textarea class="body-text-textarea" id="body" value="{{body}}" maxlength="200" placeholder="物品描述" placeholder-style="color: #9CA0A0; font-size: 26rpx;" bind:change="inputText" bind:focus="showIndicator" bind:blur="hideIndicator" disableDefaultPadding="{{true}}" show-confirm-bar indicator="{{showIndicator}}" />
+  
+  <scroll-view class="upload-wrapper" scroll-x enable-flex style="flex-direction: row;">
+    <t-upload class="upload-component" media-type="{{['image']}}" files="{{fileList}}" gridConfig="{{gridConfig}}" max="9" size-limit="{{sizeLimit}}" bind:remove="handleRemove" bind:add="handleAdd">
+      <image src="/image/upload button.png" style="width: 200rpx; height: 200rpx;" slot="add-content"></image>
+    </t-upload>
 
-  <t-upload class="upload-component" media-type="{{['image']}}" files="{{fileList}}" gridConfig="{{gridConfig}}" max="9" size-limit="{{sizeLimit}}" bind:remove="handleRemove" bind:add="handleAdd" />
+
+  </scroll-view>
 
   <view class="location-container">
     <view class="location-text-wrapper">
@@ -48,7 +58,7 @@
     <text class="left-text">价格</text>
     <view class="right-container">
       <text class="right-text">$</text>
-      <input class="money-input" id="price" value="{{price}}" type="digit" placeholder="00.00" bindinput="inputText" style="text-align: right;"></input>
+      <input class="money-input" id="price" value="{{price}}" type="digit" placeholder="00.00" placeholder-class="money-placeholder" bindinput="inputText"></input>
     </view>
   </view>
 </view>
@@ -68,23 +78,6 @@
 <!-- <picker class="expiration-dropdown" mode="date" value="{{ddl}}" start="{{ddl}}" end="2050-12-31" bindchange="bindDateChange" bindcancel="">
 			<view class="dropdown-label">{{displayDDL}}</view>
 		</picker> -->
-
-
-<!-- <view class="original-price-contaienr">
-
-    <view style="display: flex; flex-direction: row;  height: 56rpx;">
-      <text style="color: #599596; font-size: 26rpx">原价</text>
-      <text style="color: #BBDAD7; font-size: 26rpx">(选填)</text>
-    </view>
-
-    <view class="money-input-wrapper" style="margin-top: -4%;">
-      <view class="money-sign">
-        <text style="color: #00B1A2; font-size: 26rpx;">$</text>
-      </view>
-      <input class="money-input" id="originalPrice" value="{{originalPrice}}" placeholder="原价" bindinput="inputText">
-      </input>
-    </view>
-  </view> -->
 
 
 
