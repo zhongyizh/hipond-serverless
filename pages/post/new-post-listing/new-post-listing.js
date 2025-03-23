@@ -1,9 +1,20 @@
 // pages/post/new-post-listing/new-post-listing.js
-import { getPostTitleFromBody } from '../../../utils/util'
-import { requestSubscribe } from '../../../services/notification.service'
-import { msgSecCheck } from '../../../services/security.service'
-import { createPost, editPost } from "../../../services/post.service"
-import ActionSheet, {ActionSheetTheme} from 'tdesign-miniprogram/action-sheet/index'
+import {
+	getPostTitleFromBody
+} from '../../../utils/util'
+import {
+	requestSubscribe
+} from '../../../services/notification.service'
+import {
+	msgSecCheck
+} from '../../../services/security.service'
+import {
+	createPost,
+	editPost
+} from "../../../services/post.service"
+import ActionSheet, {
+	ActionSheetTheme
+} from 'tdesign-miniprogram/action-sheet/index'
 
 const errMsg = new Map([
 	["price", "请输入价格"],
@@ -69,6 +80,10 @@ Page({
 		// 发帖编辑功能的实现
 		// 通过一个event来从「详情页」传数据到「编辑页」：
 		// 获取所有打开的EventChannel事件
+		wx.setNavigationBarTitle({
+			title: '动态设置的标题',
+		  });
+		  
 		const eventChannel = this.getOpenerEventChannel();
 		// 监听 index页面定义的 toB 事件
 		eventChannel.on('onPageEdit', (res) => {
@@ -155,6 +170,22 @@ Page({
 	inputText: function (res) {
 		const widgetId = res.currentTarget.id;
 		try {
+			if (widgetId == 'price') {
+
+				if (parseFloat(res.detail.value) > 9999) {
+					wx.showToast({
+						title: '价值不能超过 9999',
+						icon: 'none',
+						duration: 2000,
+					});
+
+					this.setData({
+						price: '', // 清除输入
+					});
+					return; // 结束函数执行
+				}
+			}
+
 			this.setData({
 				[widgetId]: res.detail.value,
 			});
@@ -257,10 +288,10 @@ Page({
 		}
 		var images = this.data.fileList
 		if (!this.validateForm([payload, images])) return false
-    
+
 		// 帖子的评论和回复提醒消息订阅
 		requestSubscribe();
-    
+
 		wx.showLoading({
 			title: '上传中...',
 			mask: true

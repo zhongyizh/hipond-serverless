@@ -1,5 +1,5 @@
 <!--pages/post/new-post-listing/new-post-listing.wxml-->
-<t-navbar left-arrow />
+<t-navbar left-arrow title="出闲置" style="--td-navbar-title-font-size: 30rpx; --td-navbar-title-font-weight: 400" />
 
 <!-- 物品成色弹窗 -->
 <!-- <t-dialog visible="{{showConditionExp}}" title="Hipond物品新旧程度评判标准" confirm-btn="{{ confirmBtn }}" bind:confirm="onConfirm" confirm-btn-disabled="{{confirmBtnDisabled}}" style="--td-button-primary-text-color	: #576B95">
@@ -21,7 +21,7 @@
     <text wx:if="{{showCounter}}" class="char-counter">{{title.length}}/20</text>
   </view>
 
-  <t-textarea class="body-text-textarea" id="body" value="{{body}}" maxlength="200" placeholder="物品描述" placeholder-style="color: #9CA0A0; font-size: 26rpx;" bind:change="inputText" bind:focus="showIndicator" bind:blur="hideIndicator" disableDefaultPadding="{{true}}" show-confirm-bar indicator="{{showIndicator}}" />
+  <t-textarea class="body-text-textarea" id="body" value="{{body}}" maxlength="1000" placeholder="物品描述" placeholder-style="color: #9CA0A0; font-size: 26rpx; line-height: 1.5;" bind:change="inputText" bind:focus="showIndicator" bind:blur="hideIndicator" disableDefaultPadding="{{true}}" show-confirm-bar indicator="{{showIndicator}}" />
   
   <scroll-view class="upload-wrapper" scroll-x enable-flex style="flex-direction: row;">
     <t-upload class="upload-component" media-type="{{['image']}}" files="{{fileList}}" gridConfig="{{gridConfig}}" max="9" size-limit="{{sizeLimit}}" bind:remove="handleRemove" bind:add="handleAdd">
